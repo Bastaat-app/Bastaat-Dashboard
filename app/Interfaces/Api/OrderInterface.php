@@ -4,11 +4,16 @@ namespace App\Interfaces\Api;
 
 use Illuminate\Http\Request;
 
-interface  CategoryInterface
+interface  OrderInterface
 {
 
-    public function list_cats(Request $request) ;
-    public function get_cat($id) ;
+    public function cart_order( Request $request) ;
+    public function get_pervious_address($user_id) ;
+    public function track_order($order_id,$user_id) ;
+    public function list_($request,$user_id) ;
+    public function cancel_order($order_id) ;
+
+
 
 
 }

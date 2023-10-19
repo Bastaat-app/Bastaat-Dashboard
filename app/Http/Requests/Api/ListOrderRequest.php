@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 use App\Modules\Core\HTTPResponseCodes;
-class OrderRequest extends FormRequest
+class ListOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,17 +27,10 @@ class OrderRequest extends FormRequest
     {
 
         return [
-
-            'order_amount' => 'required',
-           // 'payment_method'=>'required|in:cash_on_delivery,digital_payment,wallet',
-            'restaurant_id' => 'required',
-            'address' => 'required_if:address_id,null',
-            'address_id'=>'required_if:address,null',
-            'longi' => 'required',
-            'lati' => 'required',
-             'cart_items'=>'required'
-
-
+          //  'name' => 'required|min:4|nullable',
+            'limit' => 'required',
+            'offset'=>'required',
+            'current_order'=>'required|boolean'
         ];
 
     }
@@ -68,14 +61,10 @@ class OrderRequest extends FormRequest
 
     public function messages(){
         return[
-            'order_amount.required' => __('order_amount is required'),
-            // 'payment_method.required'=>__('payment_method is required'),
-            'restaurant_id.required' => __('restaurant_id is required'),
-            'address.required_if' => __('address is required'),
-            'address_id.required_if' => __('address is required'),
-            'longi.required' => __('longitude is required'),
-            'lati.required' => __(' latitude is required'),
-            'cart_items.required'=>__(' cart items required')
+            'limit.required' => __('limit is required'),
+            'offset.required' => __('offset is required'),
+            'current_order.required' => __('current_order is required'),
+            'current_order.boolean' => __('current_order is boolean'),
 
         ];
     }

@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\V1\BannerController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CompilationController;
 use App\Http\Controllers\Api\V1\FoodController;
+use App\Http\Controllers\Api\V1\OrderControler;
+use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\RestaurantController;
 use App\Http\Controllers\Api\V1\ZoneController;
 
@@ -67,10 +69,32 @@ Route::namespace('Api\V1')->prefix('food')->group (function() {
     Route::get('/list', [FoodController::class, 'get_food'])->name('list-food');
     Route::get('/single-food', [FoodController::class, 'single_food'])->name('single-food');
 });
-Route::namespace('Api\V1')->prefix('order')->group (function() {
-    Route::get('/list', [orderController::class, ''])->name('list-food');
-    Route::get('/single-food', [FoodController::class, 'single_food'])->name('single-food');
+Route::namespace('Api\V1')->prefix('order')->middleware('auth_api')->group (function() {
+
+    Route::post('/cart', [OrderController::class, 'cart_order'])->name('cart-order');
+    Route::get('/pervious-address',[OrderController::class,'get_pervious_address'])->name('pervious-address');
+    Route::get('/track-order',[OrderController::class,'track_order'])->name('track-order');
+    Route::get('/list',[OrderController::class,'list_'])->name('list-order');
+    Route::get('/cancel-order',[OrderController::class,'cancel_order'])->name('cancel-order');
+  //  Route::get('/single-food', [FoodController::class, 'single_food'])->name('single-food');
 });
+
+Route::namespace('Api\V1\Auth')->prefix('auth')->group (function() {
+
+    route::post('login','AuthUserController@login')->name('login_api')->withoutMiddleware([auth::class,'auth_api']);
+    route::post('logout','AuthUserController@logout')->name('logout_api');
+    route::post('register','AuthUserController@register')->name('register')->withoutMiddleware([auth::class,'auth_api']);
+    route::post('verify','AuthUserController@verify')->name('verify')->withoutMiddleware([auth::class,'auth_api']);
+
+    route::post('forgetPassword','AuthUserController@forgetPassword')->name('forgetPassword')->withoutMiddleware([auth::class,'auth_api']);
+
+    route::post('validatePassowrd','AuthUserController@validatePassowrd')->name('validatePassowrd')->withoutMiddleware([auth::class,'auth_api']);
+    route::get('get-user-data','AuthUserController@getData')->name('getUserData');
+    route::post('refresh','AuthUserController@refresh')->name('refresh_api')/*->withoutMiddleware([auth::class,'auth_api'])*/;
+    route::post('refresh','AuthUserController@refresh')->name('refresh_api')/*->withoutMiddleware([auth::class,'auth_api'])*/;
+    route::post('check-login','AuthUserController@checkLogin')->name('check-login')/*->withoutMiddleware([auth::class,'auth_api'])*/;
+});
+
 /*get banners*/
 
 

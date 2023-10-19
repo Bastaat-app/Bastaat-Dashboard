@@ -27,16 +27,15 @@ class OrderRequest extends FormRequest
     {
 
         return [
-
+          //  'name' => 'required|min:4|nullable',
+            //'id' => 'required',
             'order_amount' => 'required',
-           // 'payment_method'=>'required|in:cash_on_delivery,digital_payment,wallet',
+            'payment_method'=>'required|in:cash_on_delivery,digital_payment,wallet',
             'restaurant_id' => 'required',
-            'address' => 'required_if:address_id,null',
-            'address_id'=>'required_if:address,null',
-            'longi' => 'required',
-            'lati' => 'required',
+            'address' => 'required',
+            'longitude' => 'required',
+            'latitude' => 'required',
              'cart_items'=>'required'
-
 
         ];
 
@@ -68,13 +67,18 @@ class OrderRequest extends FormRequest
 
     public function messages(){
         return[
+            'id.required' => __('category_id is required'),
+
+        ];
+        return [
+            //  'name' => 'required|min:4|nullable',
+            //'id' => 'required',
             'order_amount.required' => __('order_amount is required'),
-            // 'payment_method.required'=>__('payment_method is required'),
+            'payment_method.required'=>__('payment_method is required'),
             'restaurant_id.required' => __('restaurant_id is required'),
-            'address.required_if' => __('address is required'),
-            'address_id.required_if' => __('address is required'),
-            'longi.required' => __('longitude is required'),
-            'lati.required' => __(' latitude is required'),
+            'address.required' => __('address is required'),
+            'longitude.required' => __('longitude is required'),
+            'latitude.required' => __(' latitude is required'),
             'cart_items.required'=>__(' cart items required')
 
         ];

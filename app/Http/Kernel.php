@@ -41,6 +41,7 @@ class Kernel extends HttpKernel
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
+            \App\Http\Middleware\AuthApi::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -65,6 +66,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'vendor' => \App\Http\Middleware\VendorMiddleware::class,
+        'auth_api'=>\App\Http\Middleware\AuthApi::class,
 
         //'vendor.api' => \App\Http\Middleware\VendorTokenIsValid::class,
 
