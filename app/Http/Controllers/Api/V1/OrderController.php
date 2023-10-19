@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CancleOrderRequest;
 use App\Http\Requests\Api\ListOrderRequest;
 use App\Http\Requests\Api\OrderRequest;
+use App\Http\Requests\Api\SingleOrderRequest;
 use App\Http\Requests\Api\TrackOrderRequest;
 use App\Modules\Core\HTTPResponseCodes;
 use App\Repositories\Api\OrderRepository;
@@ -151,6 +152,27 @@ class OrderController extends Controller
             ],HTTPResponseCodes::Sucess['code']);
         }
      }
+
+    public function get_order_details(SingleOrderRequest $request){
+        try {
+            $single_order = new OrderRepository();
+            $details=$single_order->get_order_details($request->order_id);
+            return response()->json([
+                'status' => HTTPResponseCodes::Sucess['status'],
+                'message' => HTTPResponseCodes::Sucess['message'],
+                'errors' => [],
+                'data' => $details,
+                'code' => HTTPResponseCodes::Sucess['code']
+            ], HTTPResponseCodes::Sucess['code']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' =>false,
+                'errors'=>__('error when retrieve data'),
+                'message' =>HTTPResponseCodes::BadRequest['message'],
+                'code'=>HTTPResponseCodes::BadRequest['code']
+            ],HTTPResponseCodes::Sucess['code']);
+        }
+    }
 
 
 }

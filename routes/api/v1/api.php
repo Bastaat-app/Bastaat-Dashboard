@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\V1\FoodController;
 use App\Http\Controllers\Api\V1\OrderControler;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\RestaurantController;
+use App\Http\Controllers\Api\V1\ReviewController;
+use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\ZoneController;
 
 use Illuminate\Support\Facades\Route;
@@ -76,9 +78,25 @@ Route::namespace('Api\V1')->prefix('order')->middleware('auth_api')->group (func
     Route::get('/track-order',[OrderController::class,'track_order'])->name('track-order');
     Route::get('/list',[OrderController::class,'list_'])->name('list-order');
     Route::get('/cancel-order',[OrderController::class,'cancel_order'])->name('cancel-order');
+    Route::get('/get-order-details',[OrderController::class,'get_order_details'])->name('get-order-details');
   //  Route::get('/single-food', [FoodController::class, 'single_food'])->name('single-food');
 });
 
+Route::namespace('Api\V1')->prefix('user')->middleware('auth_api')->group (function() {
+
+    Route::post('/add-address', [UserController::class,'add_new_address'])->name('add-address');
+    Route::post('/update-address',[UserController::class,'update_address'])->name('update-address');
+    Route::post('/delete-address',[UserController::class,'delete_address'])->name('delete_address');
+    Route::get('/info',[UserController::class,'info'])->name('user-info');
+});
+
+Route::namespace('Api\V1')->prefix('review')->middleware('auth_api')->group (function() {
+
+    Route::post('/review-restaurant', [ReviewController::class,'review'])->name('review-restaurant');
+    Route::post('/add-restaurant-review',[ReviewController::class,'add_restaurant_review'])->name('add-restaurant-review');
+    Route::get('/get-restaurant-review',[ReviewController::class,'get_restaurant_review'])->name('get-restaurant-review');
+
+});
 Route::namespace('Api\V1\Auth')->prefix('auth')->group (function() {
 
     route::post('login','AuthUserController@login')->name('login_api')->withoutMiddleware([auth::class,'auth_api']);

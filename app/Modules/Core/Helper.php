@@ -60,7 +60,7 @@ class Helper
         return ['rating'=>$rating, 'total'=>$total_submit];
     }
 
-    public  function update_restaurant_rating($ratings, $product_rating)
+    public  static function update_restaurant_rating($ratings, $product_rating)
     {
         $restaurant_ratings = [1=>0 , 2=>0, 3=>0, 4=>0, 5=>0];
         if($ratings)
@@ -333,4 +333,5 @@ class Helper
         }
         return 404; //not found
     }
+
 }

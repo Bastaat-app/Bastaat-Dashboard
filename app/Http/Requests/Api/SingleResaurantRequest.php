@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 use App\Modules\Core\HTTPResponseCodes;
-class OrderRequest extends FormRequest
+class SingleResaurantRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,15 +28,7 @@ class OrderRequest extends FormRequest
 
         return [
           //  'name' => 'required|min:4|nullable',
-            //'id' => 'required',
-            'order_amount' => 'required',
-            'payment_method'=>'required|in:cash_on_delivery,digital_payment,wallet',
             'restaurant_id' => 'required',
-            'address' => 'required',
-            'longitude' => 'required',
-            'latitude' => 'required',
-             'cart_items'=>'required'
-
         ];
 
     }
@@ -67,19 +59,7 @@ class OrderRequest extends FormRequest
 
     public function messages(){
         return[
-            'id.required' => __('category_id is required'),
-
-        ];
-        return [
-            //  'name' => 'required|min:4|nullable',
-            //'id' => 'required',
-            'order_amount.required' => __('order_amount is required'),
-            'payment_method.required'=>__('payment_method is required'),
             'restaurant_id.required' => __('restaurant_id is required'),
-            'address.required' => __('address is required'),
-            'longitude.required' => __('longitude is required'),
-            'latitude.required' => __(' latitude is required'),
-            'cart_items.required'=>__(' cart items required')
 
         ];
     }

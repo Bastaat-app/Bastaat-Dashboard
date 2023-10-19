@@ -12,6 +12,7 @@ interface  OrderInterface
     public function track_order($order_id,$user_id) ;
     public function list_($request,$user_id) ;
     public function cancel_order($order_id) ;
+    public function get_order_details($order_id) ;
 
 
 

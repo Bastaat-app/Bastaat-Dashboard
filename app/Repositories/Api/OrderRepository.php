@@ -216,5 +216,15 @@ class OrderRepository implements OrderInterface
            return $order;
     }
 
+    public function get_order_details($order_id)
+    {
+        // TODO: Implement get_order_details() method.
+        $details = OrderDetail::where(['order_id' =>$order_id])->get();
+        foreach ($details as $det) {
+            $det['product_details'] = json_decode($det['product_details'], true);
+        }
+        return $details;
+    }
+
 
 }

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 use App\Modules\Core\HTTPResponseCodes;
-class ReviewRequest extends FormRequest
+class AddressRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,8 +28,14 @@ class ReviewRequest extends FormRequest
 
         return [
 
-            'restaurant_id' => 'required',
-            'rating' => 'required|numeric|max:5',
+            'address' => 'required|nullable',
+            'floor'=>'required|nullable',
+            'contact_person_number' => 'required',
+            'road' => 'required',
+            'house' => 'required|nullable',
+            'lati' => 'required',
+            'longi'=>'required',
+
 
         ];
 
@@ -61,8 +67,18 @@ class ReviewRequest extends FormRequest
 
     public function messages(){
         return[
-            'restaurant_id.required' => __('restaurant_id is required'),
-            'rating.required' => __('rating is required'),
+            'id.required' => __('category_id is required'),
+
+        ];
+        return [
+
+            'contact_person_number.required' => __('contact_person_number is required'),
+            'road.required'=>__('road is required'),
+            'house.required' => __(' house is required'),
+            'address.required' => __('address is required'),
+            'floor.required' => __('floor is required'),
+            'lati.required' => __('latitudeis required'),
+            'longi.required' => __('  longitude is required'),
 
         ];
     }
