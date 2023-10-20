@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Api;
 use App\CentralLogics\Helpers;
+use App\Http\Resources\Api\CategoryResource;
 use App\Interfaces\Api\BannerInterface;
 use App\Interfaces\Api\CategoryInterface;
 use App\Models\Banner;
@@ -15,9 +16,21 @@ class CategoryRepository implements CategoryInterface
 
     public function list_cats(Request $request)
     {
+
         // TODO: Implement list_cats() method.
-            $categories = Category::where(['position'=>0,'status'=>1])->orderBy('priority','desc')->get();
-            return $categories;
+            $categories = Category::where(['position'=>0,'status'=>1])->where(function($query) use($request){
+
+                 if($request->has('category_ids')){
+                     $category_ids=  $request->category_ids;
+                 //  print_r($category_ids); exit;
+
+                     $query->whereIn('id',$category_ids);
+                 }
+
+            })->
+
+            orderBy('priority','desc')->where('compilation_id',$request->id)->get();
+            return  CategoryResource::collection($categories);
 
     }
 

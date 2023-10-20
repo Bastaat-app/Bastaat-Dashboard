@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 use App\Modules\Core\HTTPResponseCodes;
-class CategoryRequest extends FormRequest
+class LatestRestaurantRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +27,14 @@ class CategoryRequest extends FormRequest
     {
 
         return [
-          //  'name' => 'required|min:4|nullable',
-            'id' => 'required',
+            'offset' => 'required|nullable',
+            'limit' => 'required',
+            'zone_id'=>'required_if:longi,null',
+            'longi' => 'required_if:zone_id,null',
+            'lati' => 'required_if:zone_id,null',
+            'compilation_id'=>'required'
+
+
 
         ];
 
@@ -60,7 +66,10 @@ class CategoryRequest extends FormRequest
 
     public function messages(){
         return[
-            'id.required' => __('category_id || compilation_id is required'),
+            'limit.required' => __('limit is required'),
+            'zone_id.required_if' => __('zone_id or location is required'),
+            'longi.required_if' => __('longitude is required whem zone is null'),
+            'lati.required_if' => __(' latitude is required is required whem zone is null'),
 
         ];
     }

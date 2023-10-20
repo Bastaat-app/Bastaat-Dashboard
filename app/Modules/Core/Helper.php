@@ -17,17 +17,15 @@ class Helper
                     unset($item['opening_time']);
                 }
                 if ($item->closeing_time) {
-                    $item['available_time_ends'] = $item->closeing_time->format('H:i');
+                    $item['available_time_ends'] = $item->closeing_time->format('H:i')??"00:00:00";
                     unset($item['closeing_time']);
                 }
 
                 $ratings =Helper::calculate_restaurant_rating($item['rating']);
 
                 unset($item['rating']);
-                $item['avg_rating'] = $ratings['rating'];
-                $item['rating_count '] = $ratings['total'];
-                unset($item['campaigns']);
-                unset($item['pivot']);
+                $item['avg_rating'] = $ratings['rating']??0;
+                $item['rating_count'] = $ratings['total']??0;
                 if(isset($item['distance']))
                     $item['distance_time']=ceil (($item['distance']/80)*60);
                 array_push($storage, $item);
@@ -45,9 +43,11 @@ class Helper
             $ratings = Helper::calculate_restaurant_rating($data['rating']);
             unset($data['rating']);
             $data['avg_rating'] = $ratings['rating'];
-            $data['rating_count '] = $ratings['total'];
+            $data['rating_count'] = $ratings['total'];
+            if(isset($data->distance))
+                $data['distance_time']=ceil (($data->distance/80)*60);
 
-            unset($data['pivot']);
+
         }
 
 
@@ -332,6 +332,110 @@ class Helper
             }
         }
         return 404; //not found
+    }
+    public static function product_data_formatting($data, $multi_data = false, $trans = false, $local = 'en')
+    {
+        $storage = [];
+        if ($multi_data == true) {
+            foreach ($data as $item) {
+                $variations = [];
+                if ($item->title) {
+                    $item['name'] = $item->title ??"";
+                    unset($item['title']);
+                }
+                if ($item->start_time) {
+                    $item['available_time_starts'] = $item->start_time->format('H:i');
+                    unset($item['start_time']);
+                }
+                if ($item->end_time) {
+                    $item['available_time_ends'] = $item->end_time->format('H:i');
+                    unset($item['end_time']);
+                }
+
+                if ($item->start_date) {
+                    $item['available_date_starts'] = $item->start_date->format('Y-m-d');
+                    unset($item['start_date']);
+                }
+                if ($item->end_date) {
+                    $item['available_date_ends'] = $item->end_date->format('Y-m-d');
+                    unset($item['end_date']);
+                }
+                $categories = [];
+                foreach (json_decode($item['category_ids']) as $value) {
+                    $categories[] = ['id' => (string)$value->id, 'position' => $value->position];
+                }
+                $item['category_ids'] = $categories;
+                $item['attributes'] = json_decode($item['attributes']);
+                $item['choice_options'] = json_decode($item['choice_options']);
+                foreach (json_decode($item['variations'], true) as $var) {
+                    array_push($variations, [
+                        'type' => $var['type'],
+                        'price' => (float)$var['price']
+                    ]);
+                }
+                $item['variations'] = $variations;
+                $item['restaurant_name'] = $item->restaurant->name;
+                 $item['restaurant_opening_time'] = $item->restaurant->opening_time ? $item->restaurant->opening_time->format('H:i') : null;
+                $item['restaurant_closing_time'] = $item->restaurant->closeing_time ? $item->restaurant->closeing_time->format('H:i') : null;
+                $item['schedule_order'] = $item->restaurant->schedule_order;
+                $item['rating_count'] = (int)($item->rating ? array_sum(json_decode($item->rating, true)) : 0);
+                $item['avg_rating'] = (float)($item->avg_rating ? $item->avg_rating : 0);
+
+
+                unset($item['restaurant']);
+                unset($item['rating']);
+                array_push($storage, $item);
+            }
+            $data = $storage;
+        } else {
+            $variations = [];
+            $categories = [];
+            foreach (json_decode($data['category_ids']) as $value) {
+                $categories[] = ['id' => (string)$value->id, 'position' => $value->position];
+            }
+            $data['category_ids'] = $categories;
+            // $data['category_ids'] = json_decode($data['category_ids']);
+            $data['attributes'] = json_decode($data['attributes']);
+            $data['choice_options'] = json_decode($data['choice_options']);
+             foreach (json_decode($data['variations'], true) as $var) {
+                array_push($variations, [
+                    'type' => $var['type'],
+                    'price' => (float)$var['price']
+                ]);
+            }
+            if ($data->title) {
+                $data['name'] = $data->title;
+                unset($data['title']);
+            }
+            if ($data->start_time) {
+                $data['available_time_starts'] = $data->start_time->format('H:i');
+                unset($data['start_time']);
+            }
+            if ($data->end_time) {
+                $data['available_time_ends'] = $data->end_time->format('H:i');
+                unset($data['end_time']);
+            }
+            if ($data->start_date) {
+                $data['available_date_starts'] = $data->start_date->format('Y-m-d');
+                unset($data['start_date']);
+            }
+            if ($data->end_date) {
+                $data['available_date_ends'] = $data->end_date->format('Y-m-d');
+                unset($data['end_date']);
+            }
+            $data['variations'] = $variations;
+            $data['restaurant_name'] = $data->restaurant->name;
+           $data['restaurant_opening_time'] = $data->restaurant->opening_time ? $data->restaurant->opening_time->format('H:i') : null;
+            $data['restaurant_closing_time'] = $data->restaurant->closeing_time ? $data->restaurant->closeing_time->format('H:i') : null;
+            $data['schedule_order'] = $data->restaurant->schedule_order;
+            $data['rating_count'] = (int)($data->rating ? array_sum(json_decode($data->rating, true)) : 0);
+            $data['avg_rating'] = (float)($data->avg_rating ? $data->avg_rating : 0);
+
+            unset($data['restaurant']);
+            unset($data['rating']);
+        }
+
+        return $data;
     }
 
 }

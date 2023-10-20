@@ -33,6 +33,13 @@ class FoodController extends Controller
             $location= array('lat' => $request['lati'], 'lng' => $request['longi']);
         $food=new FoodRepository();
        $foods= $food->get_food($zone_ids,$restaurant_id,$category_ids,$limit,$offset,$location);
+        return response()->json([
+            'status' => HTTPResponseCodes::Sucess['status'],
+            'message'=>HTTPResponseCodes::Sucess['message'],
+            'errors' => [],
+            'data' => $foods,
+            'code'=>HTTPResponseCodes::Sucess['code']
+        ],HTTPResponseCodes::Sucess['code']);
 
 
     }

@@ -16,6 +16,7 @@ class Compilation extends Model
         'priority'=>'int'
 
     ];
+    public $appends = [ 'image_url'];
 
     protected $fillable = [
         'title',
@@ -26,6 +27,10 @@ class Compilation extends Model
         'priority'
 
     ];
+    public function getImageUrlAttribute()
+    {
+        return asset('images/compilaion/'.$this->image);
+    }
 
     public function compilaionRestaurant(){
         return $this->hasMany(Restaurant::class, 'compilaion_id');

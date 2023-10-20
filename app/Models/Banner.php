@@ -33,7 +33,7 @@ class Banner extends Model
 		'status' => 'bool',
 		'zone_id' => 'int'
 	];
-
+    public $appends = [ 'image_url'];
 	protected $fillable = [
 		'title',
 		'type',
@@ -43,6 +43,10 @@ class Banner extends Model
 		'zone_id'
 	];
 
+    public function getImageUrlAttribute()
+    {
+        return asset('images/banner/'.$this->image);
+    }
     public function zone()
     {
         return $this->belongsTo(Zone::class);

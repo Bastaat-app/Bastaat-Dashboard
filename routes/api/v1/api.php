@@ -44,8 +44,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\V1'], function () {
 
 /* get zones*/
 Route::get('/zones', [ZoneController::class, 'get_zones']);
-Route::get('/get-banner', [BannerController::class, 'get_banner']);
-Route::namespace('Api\V1')->prefix('category')->group (function() {
+Route::get('/get-banner', [BannerController::class, 'get_banner'])->withoutMiddleware('auth_api');
+Route::namespace('Api\V1')->prefix('category')->withoutMiddleware('auth_api')->group (function() {
 
 
     Route::get('/list', [CategoryController::class, 'list_cats']);
@@ -56,18 +56,18 @@ Route::namespace('Api\V1')->prefix('category')->group (function() {
 Route::namespace('Api\V1')->prefix('restaurants')->group (function() {
 
 
-    Route::get('/list', [RestaurantController::class, 'list_rest'])->name('restaurants');
-    Route::get('/popular', [RestaurantController::class, 'get_popular_restaurants'])->name('popular-restaurants');
-    Route::get('/details/{id}', [RestaurantController::class, 'get_details'])->name('details-restaurants');
-    Route::get('/latest', [RestaurantController::class, 'get_latest'])->name('latest-restaurants');
+    Route::get('/list', [RestaurantController::class, 'list_rest'])->name('restaurants')->withoutMiddleware('auth_api');
+    Route::get('/popular', [RestaurantController::class, 'get_popular_restaurants'])->name('popular-restaurants') ->withoutMiddleware('auth_api');;
+    Route::get('/details/{id}', [RestaurantController::class, 'get_details'])->name('details-restaurants')->withoutMiddleware('auth_api');;
+    Route::get('/latest', [RestaurantController::class, 'get_latest'])->name('latest-restaurants')->withoutMiddleware('auth_api');
 
 });
 
 Route::namespace('Api\V1')->prefix('compilations')->group (function() {
-    Route::get('/list', [CompilationController::class, 'list'])->name('list-compilaions');
+    Route::get('/list', [CompilationController::class, 'list'])->name('list-compilaions')->withoutMiddleware('auth_api');
 });
 
-Route::namespace('Api\V1')->prefix('food')->group (function() {
+Route::namespace('Api\V1')->prefix('food')->withoutMiddleware('auth_api')->group (function() {
     Route::get('/list', [FoodController::class, 'get_food'])->name('list-food');
     Route::get('/single-food', [FoodController::class, 'single_food'])->name('single-food');
 });

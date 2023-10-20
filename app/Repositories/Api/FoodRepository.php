@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories\Api;
+use App\Http\Resources\Api\ListFoodResource;
 use App\Interfaces\Api\FoodInterface;
 use App\Models\Food;
 use Illuminate\Http\Request;
@@ -32,13 +33,13 @@ class FoodRepository implements FoodInterface
                 }
             })*/
             ->paginate($limit, ['*'], 'page', $offset);
-
-        $data =  [
+        return ListFoodResource::collection($foods);
+       /* $data =  [
             'total_size' => $foods->total(),
             'limit' => $limit,
             'offset' => $offset,
             'products' => $foods->items()
-        ];
+        ];*/
 
         return($data);exit;
 

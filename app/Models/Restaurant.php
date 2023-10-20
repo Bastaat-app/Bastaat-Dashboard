@@ -125,7 +125,7 @@ class Restaurant extends Model
 		'minimum_shipping_charge',
 		'per_km_shipping_charge'
 	];
-    protected $appends = ['gst_status','gst_code'];
+    protected $appends = ['gst_status','gst_code','logo_url','cover_photo_url'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -135,6 +135,15 @@ class Restaurant extends Model
     protected $hidden = [
         'gst'
     ];
+
+    public function getLogoUrlAttribute()
+    {
+        return asset('images/restaurant/'.$this->logo);
+    }
+    public function getCoverPhotoUrlAttribute()
+    {
+        return asset('images/restaurant/'.$this->cover_photo);
+    }
 
     public function vendor()
     {
@@ -219,7 +228,7 @@ class Restaurant extends Model
 * cos( radians( restaurants.longitude ) - radians(' . $location['lng']  . ') ) 
 + sin( radians(' . $location['lat']  . ') ) * sin( radians( restaurants.latitude ) ) ) )');
         $allow=config('allow_distance');
-     return   $query->selectRaw("*,{$sqlDistance} AS distance")->havingRaw("distance <= 10");
+     return   $query->selectRaw(" {$sqlDistance} AS distance")->havingRaw("distance <= 10");
     }
 
 

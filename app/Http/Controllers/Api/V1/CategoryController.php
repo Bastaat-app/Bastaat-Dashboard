@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
-    public function list_cats(Request $request)
+    public function list_cats(CategoryRequest $request)
     {
 
 
