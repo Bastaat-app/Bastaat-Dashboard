@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CancleOrderRequest;
 use App\Http\Requests\Api\ListOrderRequest;
 use App\Http\Requests\Api\OrderRequest;
+use App\Http\Requests\Api\SingleAddressRequest;
 use App\Http\Requests\Api\SingleOrderRequest;
 use App\Http\Requests\Api\TrackOrderRequest;
 use App\Modules\Core\HTTPResponseCodes;
@@ -65,11 +66,40 @@ class OrderController extends Controller
              ],HTTPResponseCodes::Sucess['code']);
          }*/
      }
-     public function track_order(TrackOrderRequest $request){
+     public function get_address(SingleAddressRequest $request){
+
+        $user_id=Auth('api')->user()->id;
+        $address_id=$request->address_id;
+
+
+        //  try {
+        $pervious_add=new OrderRepository();
+        $address=$pervious_add->get_address($user_id,$address_id);
+        return response()->json([
+            'status' => HTTPResponseCodes::Sucess['status'],
+            'message'=>HTTPResponseCodes::Sucess['message'],
+            'errors' => [],
+            'data' => $address,
+            'code'=>HTTPResponseCodes::Sucess['code']
+        ],HTTPResponseCodes::Sucess['code']);
+
+        /* } catch (\Exception $e) {
+             return response()->json([
+                 'status' =>false,
+                 'errors'=>__('error when retrieve data'),
+                 'message' =>HTTPResponseCodes::BadRequest['message'],
+                 'code'=>HTTPResponseCodes::BadRequest['code']
+             ],HTTPResponseCodes::Sucess['code']);
+         }*/
+    }
+
+
+
+    public function track_order(TrackOrderRequest $request){
 
 
         $order_id=$request->order_id;
-        $user_id=$request->user_id;
+        $user_id=auth('api')->user()->id;
        // try {
             $track = new OrderRepository();
             $order_track = $track->track_order($order_id, $user_id);
@@ -102,9 +132,10 @@ class OrderController extends Controller
      }
 
      public function list_(ListOrderRequest $request){
-
+       // print_r($request->all());
+//exit;
         $user_id=auth('api')->user()->id;
-        try {
+       // try {
             $list_obj = new OrderRepository();
             $list = $list_obj->list_($request, $user_id);
             return response()->json([
@@ -114,14 +145,14 @@ class OrderController extends Controller
                 'data' => $list,
                 'code' => HTTPResponseCodes::Sucess['code']
             ], HTTPResponseCodes::Sucess['code']);
-       } catch (\Exception $e) {
+      /* } catch (\Exception $e) {
              return response()->json([
                  'status' =>false,
                  'errors'=>__('error when retrieve data'),
                  'message' =>HTTPResponseCodes::BadRequest['message'],
                  'code'=>HTTPResponseCodes::BadRequest['code']
              ],HTTPResponseCodes::Sucess['code']);
-         }
+         }*/
 
      }
 
@@ -140,7 +171,7 @@ class OrderController extends Controller
                 'status' => HTTPResponseCodes::Sucess['status'],
                 'message' => HTTPResponseCodes::Sucess['message'],
                 'errors' => [],
-                'data' => $cancle,
+                'data' => [],
                 'code' => HTTPResponseCodes::Sucess['code']
             ], HTTPResponseCodes::Sucess['code']);
         } catch (\Exception $e) {

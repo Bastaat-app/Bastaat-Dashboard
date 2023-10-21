@@ -3,6 +3,9 @@
 namespace App\Repositories\Api;
 
 
+use App\Http\Resources\Api\AddressResource;
+use App\Http\Resources\Api\ListOrderResource;
+use App\Http\Resources\Api\TrackOrderResource;
 use App\Interfaces\Api\OrderInterface;
 use App\Models\Coupon;
 use App\Models\CustomerAddress;
@@ -163,19 +166,35 @@ class OrderRepository implements OrderInterface
     {
         // TODO: Implement get_pervious_address() method.
 
-      return   CustomerAddress::where('user_id',$user_id)->get();
+     // return
+         $adds= CustomerAddress::where('user_id',$user_id)->get();
+         return AddressResource::collection($adds);
+    }
+    public function get_address($user_id,$address_id)
+    {
+        // TODO: Implement get_pervious_address() method.
+
+        // return
+        $adds= CustomerAddress::where(['user_id'=>$user_id,'id'=>$address_id])->get()->first();
+
+        return  new AddressResource($adds);
     }
     public function track_order($order_id,$user_id)
     {
         // TODO: Implement track_order() method.
+       // DB::enableQueryLog();
         $order = Order::with(['restaurant'])->withCount('details')->where(['id' => $order_id, 'user_id' => $user_id])->first();
+
+        // $query= DB::getQueryLog();
+      //print_R($orderc); exit;
         if ($order) {
-            $order['restaurant'] = $order['restaurant'] ? Helper::restaurant_data_formatting($order['restaurant']) : $order['restaurant'];
-            $order['delivery_address'] = $order['delivery_address']?json_decode($order['delivery_address']):$order['delivery_address'];
+            return  new TrackOrderResource($order);
+          //  $order['restaurant'] = $order['restaurant'] ? Helper::restaurant_data_formatting($order['restaurant']) : $order['restaurant'];
+          //  $order['delivery_address'] = $order['delivery_address']?json_decode($order['delivery_address']):$order['delivery_address'];
         } else {
             return false;
         }
-
+;
         return ($order);
     }
 
@@ -183,10 +202,12 @@ class OrderRepository implements OrderInterface
     public function list_($request, $user_id)
     {
         // TODO: Implement list() method.
-
+ //DB::enableQueryLog();
         $order = Order::with(['restaurant'])->where (function ($query) use($request){
             if($request->has('current_order')&& ($request->current_order==1)){
                 $query->whereIn('order_status',array('pending','processing','picked_up'));
+            }elseif ($request->has('latest_order')){
+                $query->where('order_status',array('delivered'));
             }else{
                 $query->whereIn('order_status',array('delivered','canceled'));
             }
@@ -195,13 +216,17 @@ class OrderRepository implements OrderInterface
         })->where('user_id' , $user_id)
            -> withCount('details')
         ->paginate($request->limit, ['*'], 'page', $request->offset);
+       // print_r($order); exit;
+   //  $query=   DB::getQueryLog($order);
+    // print_r($query); exit;
 
-        return [
+       return ListOrderResource::collection($order);
+      /*  return [
             'total_size' =>$order->total(),
             'limit' => $request->limit,
             'offset' =>  $request->offset,
             'restaurants' => $order->items()
-        ];
+        ];*/
 
     }
 
@@ -213,7 +238,7 @@ class OrderRepository implements OrderInterface
            return false;
 
           Order::where('id',$order_id)->update(['order_status'=>'canceled','canceled'=>now()]);
-           return $order;
+           return true;
     }
 
     public function get_order_details($order_id)

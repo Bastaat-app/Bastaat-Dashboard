@@ -75,6 +75,7 @@ Route::namespace('Api\V1')->prefix('order')->middleware('auth_api')->group (func
 
     Route::post('/cart', [OrderController::class, 'cart_order'])->name('cart-order');
     Route::get('/pervious-address',[OrderController::class,'get_pervious_address'])->name('pervious-address');
+    Route::get('/get-address',[OrderController::class,'get_address'])->name('get-address');
     Route::get('/track-order',[OrderController::class,'track_order'])->name('track-order');
     Route::get('/list',[OrderController::class,'list_'])->name('list-order');
     Route::get('/cancel-order',[OrderController::class,'cancel_order'])->name('cancel-order');

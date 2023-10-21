@@ -88,7 +88,11 @@ class Food extends Model
 		'rating'
 	];
 
-
+    protected $appends = ['image_url'];
+    public function getImageUrlAttribute()
+    {
+        return asset('images/products/'.$this->image);
+    }
     public function scopeActive($query)
     {
         return $query->where('status', 1)->whereHas('restaurant', function ($query) {

@@ -23,6 +23,7 @@ class FoodRepository implements FoodInterface
            })
             ->when($category_ids, function($query)use($category_ids){
                 $query->whereHas('category',function($q)use($category_ids){
+                //   print_r($category_ids); exit;
                     return  $q->where('categories.id',$category_ids)->orWhere('parent_id',$category_ids);
                 });
             })

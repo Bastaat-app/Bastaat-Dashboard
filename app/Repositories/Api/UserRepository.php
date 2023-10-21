@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Api;
 use App\CentralLogics\Helpers;
+use App\Http\Resources\Api\UserInfoResource;
 use App\Interfaces\Api\BannerInterface;
 use App\Interfaces\Api\CategoryInterface;
 use App\Interfaces\Api\UseInterface;
@@ -67,7 +68,7 @@ class UserRepository implements UseInterface
         // TODO: Implement info() method.
         $user_id=auth('api')->user()->id;
         $user_info=User::where('id',$user_id)->first();
-        return($user_info);
+        return new UserInfoResource($user_info);
     }
 
 
