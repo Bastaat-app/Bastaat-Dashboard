@@ -34,14 +34,15 @@ class Banner extends Model
 		'zone_id' => 'int'
 	];
     public $appends = [ 'image_url'];
-	protected $fillable = [
+	/*protected $fillable = [
 		'title',
 		'type',
 		'image',
 		'status',
 		'data',
 		'zone_id'
-	];
+	];*/
+	protected  $guarded=['id'];
 
     public function getImageUrlAttribute()
     {

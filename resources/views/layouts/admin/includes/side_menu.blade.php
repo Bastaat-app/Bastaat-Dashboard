@@ -69,7 +69,7 @@
             </li>
 
             <li class="menu-item">
-                <a href="banners-list.html" class="menu-link">
+                <a href="{{route('admin.banner.index')}}" class="menu-link">
                     <span class="menu-icon"><i data-feather="target"></i></span>
                     <span class="menu-text"> إنشاء إعلانات</span>
                 </a>
@@ -96,13 +96,13 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="cats.html" class="menu-link">
+                <a href="{{route('admin.compilation.index')}}" class="menu-link">
                     <span class="menu-icon"><i data-feather="grid"></i></span>
                     <span class="menu-text"> التصنيفات</span>
                 </a>
             </li>
             <li class="menu-item">
-                <a href="create-cats.html" class="menu-link">
+                <a href="{{route('admin.compilation.create')}}" class="menu-link">
                     <span class="menu-icon"><i data-feather="target"></i></span>
                     <span class="menu-text"> إضافة تصنيف</span>
                 </a>

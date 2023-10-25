@@ -35,6 +35,7 @@ class BaseRepository implements AdminRepositoryInterface
 
     public function update($id, Request $request = null, $data = null)
     {
+        print_r($request->all()); exit;
 
         if ($request != null)
             $data = $this->setDataPayload($request, 'update');

@@ -3,25 +3,26 @@
 namespace App\Repositories\Admin\SingleRebo;
 
 //use App\Http\Requests\Admin\CityRequest;
-use App\Models\Banner;
 
+
+use App\Models\Compilation;
 use App\Repositories\Admin\BaseRepository;
 use App\Traits\UploadAttachTrait;
 use Illuminate\Http\Request;
 
-class BannerRepository extends BaseRepository
+class CompilationRepository extends BaseRepository
 {
     use UploadAttachTrait;
 
     public function __construct()
     {
-        parent::__construct(new Banner());
+        parent::__construct(new Compilation());
 
     }
     public function store(Request $request = null, $data = null)
     {
         if($request->has('image')) {
-            $images = ($this->upload($request->image, 'banner'));
+            $images = ($this->upload($request->image, 'compilation'));
             unset($request->image);
         }
         // $request->image=$images;
@@ -41,7 +42,7 @@ class BannerRepository extends BaseRepository
     {
 
        if($request->has('image')) {
-           $images = ($this->upload($request->image, 'banner'));
+           $images = ($this->upload($request->image, 'compilation'));
            unset($request->image);
        }
         // $request->image=$images;

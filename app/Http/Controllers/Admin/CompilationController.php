@@ -5,32 +5,32 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Compilation;
 use App\Models\Zone;
-use App\Repositories\Admin\SingleRebo\BannerRepository;
+use App\Repositories\Admin\SingleRebo\CompilationRepository;
 use App\Traits\UploadAttachTrait;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Models\Banner;
+
 use App\Models\Restaurant;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use App\CentralLogics\Helpers;
 
-class BannerController extends BaseController
+class CompilationController extends BaseController
 {
     use UploadAttachTrait;
     protected $view;
     protected $repository;
 
-    public function __construct(BannerRepository $repository)
+    public function __construct(CompilationRepository $repository)
     {
         parent::__construct($repository);
-        $this->view = 'admin-views.banner.';
+        $this->view = 'admin-views.compilation';
 
     }
     public function index(Request $request, $with = [], $withCount = [], $filter = '', $paginate = 10, $whereHas = [])
     {
-       $banners = parent::index($request, [], [], '', 10, []);
+       $compilations= parent::index($request, [], [], '', 10, []);
 
        /* if ($request->filled("export_excel") && $request->export_excel == true) {
 
@@ -49,7 +49,7 @@ class BannerController extends BaseController
         }
 
         */
-        return view($this->view . 'index', compact('banners'));
+        return view($this->view . '.index', compact('compilations'));
     }
 
     public function create()
@@ -58,24 +58,22 @@ class BannerController extends BaseController
         $zones=Zone::get();
         $compilations=Compilation::where('status',1)->get();
         $places=Restaurant::where('status',1)->get();
-        return view($this->view . 'create', compact('compilations','places','zones'));
+        return view($this->view . '.create', compact('compilations','places','zones'));
     }
 
     public function store(Request $request)
     {
         parent::store($request);
-       return redirect(route('admin.banner.index'));
+       return redirect(route('admin.compilation.index'));
     }
 
     public function edit($id)
     {
        // $governorates = Governorate::orderBy('name_' . app()->getLocale())->get();
         //$record = parent::show($id, 'city');
-        $banner= parent::show($id);
-        $zones=Zone::get();
-        $compilations=Compilation::where('status',1)->get();
-        $places=Restaurant::where('status',1)->get();
-        return view($this->view . 'edit', compact('banner','compilations','places','zones'));
+        $record= parent::show($id);
+
+        return view($this->view . '.edit', compact('record'));
     }
 
     public function update(Request $request, $id)
@@ -86,7 +84,7 @@ class BannerController extends BaseController
 
 
         parent::update($request, $id);
-       return redirect(route('admin.banner.index'));
+       return redirect(route('admin.compilation.index'));
     }
     /*function index(Request $request)
     {

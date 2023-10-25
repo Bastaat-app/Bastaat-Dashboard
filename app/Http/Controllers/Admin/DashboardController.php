@@ -21,7 +21,8 @@ class DashboardController extends Controller
     }
     public function dashboard(Request $request)
     {
-        $params = [
+
+      /*  $params = [
             'zone_id' => $request['zone_id'] ?? 'all',
             'statistics_type' => $request['statistics_type'] ?? 'overall',
             'user_overview' => $request['user_overview'] ?? 'overall',
@@ -30,8 +31,9 @@ class DashboardController extends Controller
         session()->put('dash_params', $params);
         $data = self::dashboard_data();
         $total_sell = $data['total_sell'];
-        $commission = $data['commission'];
-        return view('admin-views.dashboard', compact('data', 'total_sell', 'commission', 'params'));
+        $commission = $data['commission'];*/
+
+        return view('admin-views.index'/*, compact('data', 'total_sell', 'commission', 'params')*/);
     }
 
     public function order(Request $request)

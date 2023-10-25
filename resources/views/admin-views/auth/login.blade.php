@@ -94,7 +94,7 @@
                                     </div>
 
                                     <div class="text-center d-grid">
-                                        <a href="basta-index.html" class="btn btn-primary" type="submit"> تسجيل دخول </a>
+                                        <button type="submit"  class="btn btn-primary" type="submit"> تسجيل دخول </button>
                                     </div>
 
                                 </form>

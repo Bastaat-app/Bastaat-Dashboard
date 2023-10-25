@@ -5,19 +5,19 @@
 
 @section('content')
 
-        <!-- start page title -->
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title-box">
-                    <h4 class="page-title">تعديل إعلانات</h4>
-                </div>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">تعديل إعلانات</h4>
             </div>
         </div>
-        <!-- end page title -->
-        <div class="row">
-            <div class="col-12">
-                <form action="{{route('admin.banner.update', [$banner->id])}}" method="post" id="banner_form"   enctype="multipart/form-data">
-                    @csrf
+    </div>
+    <!-- end page title -->
+    <div class="row">
+        <div class="col-12">
+            <form action="{{route('admin.banner.store')}}" method="post" id="banner_form"   enctype="multipart/form-data">
+                @csrf
                 <div class="card">
 
                     <div class="card-body">
@@ -27,7 +27,7 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label for="projectname" class="form-label">إسم الإعلان</label>
-                                    <input type="text"  value="{{ $banner->title }}" name="title"  class="form-control" placeholder="اكتب هنا اسم الإعلان">
+                                    <input type="text"   name="title"  class="form-control" placeholder="اكتب هنا اسم الإعلان">
                                 </div>
                                 <div class="mb-3">
                                     <label for="selectmethod" class="form-label">المنطقة</label>
@@ -36,7 +36,7 @@
 
                                         @foreach($zones as $zone)
 
-                                                <option value="{{$zone['id']}}" {{$zone->id == $banner->zone_id?'selected':''}}>{{$zone['name']}}</option>
+                                            <option value="{{$zone['id']}}" >{{$zone['name']}}</option>
                                         @endforeach
                                     </select>
 
@@ -47,7 +47,7 @@
                                                onchange="loadFile(event)"  />
                                         <img id="output" alt=""
                                              style=" height: 110px; width: 100%; object-fit: contain;"
-                                             src="{{asset($banner->image)}}"/>
+                                             src=""/>
                                         <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل صورة الإعلان بحجم لا يتعدي ال ١ ميجا</p>
                                     </div>
                                 </div>
@@ -60,8 +60,8 @@
                                         <option>اختر اسم التصنيف</option>
                                         @foreach($compilations as $compilation)
 
-                                            <option value="{{$compilation->id}}" {{$compilation->id == $banner->compilation_id?'selected':''}}>{{$compilation->title}}</option>
-                                         @endforeach
+                                            <option value="{{$compilation->id}}" >{{$compilation->title}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -70,7 +70,7 @@
                                         <option>اختر اسم المكان</option>
                                         @foreach($places as $place)
 
-                                            <option value="{{$place['id']}}" {{$place->id == $banner->place_id?'selected':''}}>{{$place['name']}}</option>
+                                            <option value="{{$place['id']}}" >{{$place['name']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -94,11 +94,11 @@
                     </div>
                 </div>
                 <!-- cta -->
-                </form>
-            </div>
-            <!-- end col-->
+            </form>
         </div>
-        <!-- end row-->
+        <!-- end col-->
+    </div>
+    <!-- end row-->
 
 @endsection
 @section('script')
@@ -113,7 +113,7 @@
                 };
 
             } else {
-                output.src = '{{$banner->image}}';
+                output.src = '';
             }
 
         };

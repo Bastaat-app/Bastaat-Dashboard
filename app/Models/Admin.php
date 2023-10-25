@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Class Admin
@@ -27,8 +28,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class Admin extends Model
+
+class Admin extends Authenticatable
 {
+   // use Notifiable;
 	protected $table = 'admins';
 
 	protected $casts = [

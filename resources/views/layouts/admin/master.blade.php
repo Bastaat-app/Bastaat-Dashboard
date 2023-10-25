@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 
-@include('layouts.includes.head')
+@include('layouts.admin.includes.head')
 
 
 
@@ -16,7 +16,7 @@
     <?php $segment=Request::segment(2); ?>
     @if(($segment != "login") && ($segment != "form_email"))
 
-        @include('layouts.includes.side_menu')
+        @include('layouts.admin.includes.side_menu')
 
 
     @endif
@@ -24,7 +24,7 @@
         <?php $segment=Request::segment(2); ?>
         @if(($segment != "login") && ($segment != "form_email"))
 
-            @include('layouts.includes.nav')
+            @include('layouts.admin.includes.nav')
 
 
 
@@ -41,7 +41,7 @@
             </div>
         </div>
                 <!-- Start Footer here -->
-            @include('layouts.includes.footer')
+
             <!-- End Footer -->
 
 
@@ -50,7 +50,7 @@
     <!-- END wrapper -->
 
     <!-- Start Footer Script here -->
-    @include('layouts.includes.scripts')
+    @include('layouts.admin.includes.scripts')
     <!-- End Footer Script -->
 
     @yield('script')
