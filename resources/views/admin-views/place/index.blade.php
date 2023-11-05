@@ -4,13 +4,12 @@
 @endsection
 
 @section('content')
-
     <!-- start page title -->
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
                 <div class="page-title-right">
-                    <a href="{{route('admin.place.index')}}" class="btn btn-primary waves-effect waves-light">
+                    <a href="{{route('admin.place.create')}}" class="btn btn-primary waves-effect waves-light">
                         <i class="mdi mdi-plus-circle me-1"></i> إضافة صاحب محل </a>
                 </div>
                 <h4 class="page-title">أصحاب المحلات</h4>
@@ -32,7 +31,7 @@
                             <div class="col-6">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">58,947</span>
+                                        <span data-plugin="counterup">{{$data['place_count']}}</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate">الاماكن</p>
                                 </div>
@@ -56,7 +55,7 @@
                             <div class="col-6">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">1,845</span>
+                                        <span data-plugin="counterup">{{$data['place_active_count']}}</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate">الاماكن المفعلة</p>
                                 </div>
@@ -80,7 +79,7 @@
                             <div class="col-6">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">825</span>
+                                        <span data-plugin="counterup">{{$data['place_inactive_count']}}</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate"> غير مفعلة</p>
                                 </div>
@@ -104,7 +103,7 @@
                             <div class="col-6">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">2,430</span>
+                                        <span data-plugin="counterup">{{$data['place_recent_count']}}</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate">اماكن جديدة</p>
                                 </div>
@@ -156,36 +155,35 @@
                             </tr>
                             </thead>
                             <tbody>
-
                             @foreach($places as $place)
                             <tr>
                                 <td>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck2">
-                                        <label class="form-check-label" for="customCheck2">&nbsp;{{$place->id}}</label>
+                                        <input type="checkbox"  name="id" value="{{$place->id}}"class="form-check-input" id="customCheck2">
+                                        <label class="form-check-label" for="customCheck2">&nbsp;</label>
                                     </div>
                                 </td>
                                 <td class="table-user">
-                                    <img src="{{asset($place->image_url)}}" alt="table-user" class="me-2 rounded-circle">
+                                    <img src="{{asset($place->image)}}" alt="table-user" class="me-2 rounded-circle"   onerror="this.src='{{asset('assets/images/logo.png')}}'" >
                                     <a href="javascript:void(0);" class="text-body fw-semibold">{{$place->name}}</a>
                                 </td>
-                                <td> {{$place->name}} </td>
+                                <td>@if(($place->vendor)!=null){{$place->vendor->f_name}}  {{$place->vendor->l_name}}@endif</td>
                                 <td> {{$place->address}} </td>
-                                <td> {{$place->compilation_id}} </td>
-                                <td> {{$place->created_at}} </td>
-                                <td>٤٣٢ منتج</td>
-                                <td>٢٣٤ ريال</td>
+                                <td> {{$place->compilation->title}} </td>
+                                <td> {{$place->created_at}}</td>
+                                <td>@if(isset($place->foods_count)){{$place->foods_count}} @endif</td>
+                                <td></td>
                                 <td>
-                                    <input type="checkbox" checked data-plugin="switchery" data-color="#1bb99a" />
+                                    <input type="checkbox" @if($place->status==1) checked @endif  data-plugin="switchery" data-color="#1bb99a" />
                                 </td>
                                 <td>
                                     <a href="./place-detail.html" class="action-icon">
                                         <i class="mdi mdi-eye"></i>
                                     </a>
-                                    <a href="./create-place.html" class="action-icon">
+                                    <a href="{{route('admin.place.edit',['id'=>$place->id])}}" class="action-icon">
                                         <i class="mdi mdi-square-edit-outline"></i>
                                     </a>
-                                    <a data-bs-toggle="modal" href="#exampleModalToggle" role="button" class="action-icon">
+                                    <a data-bs-toggle="modal" href="#exampleModalToggle" role="button" delete-id={{$place->id}} class="action-icon">
                                         <i class="mdi mdi-delete"></i>
                                     </a>
                                 </td>
@@ -195,7 +193,13 @@
                             </tbody>
                         </table>
                     </div>
-                    <ul class="pagination pagination-rounded justify-content-end mb-0">
+
+                    @if(!request()->filled("print"))
+                        <div class="pagination pagination-rounded justify-content-end mb-0">
+                            {!! $places->withQueryString()->links() !!}
+                        </div>
+                    @endif
+                   {{-- <ul class="pagination pagination-rounded justify-content-end mb-0">
                         <li class="page-item">
                             <a class="page-link" href="javascript: void(0);" aria-label="Previous">
                                 <span aria-hidden="true">«</span>
@@ -223,7 +227,7 @@
                                 <span class="visually-hidden">Next</span>
                             </a>
                         </li>
-                    </ul>
+                    </ul>--}}
                 </div>
                 <!-- end card-body-->
             </div>
@@ -232,4 +236,55 @@
         <!-- end col -->
     </div>
     <!-- end row -->
+<!-- all models -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalToggleLabel">هل تريد حذف المكان ؟</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"> بمجرد الضغط علي تأكيد سوف يتم مسح المكان نهائياً </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">تأكيد الحذف</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+@endsection
+
+@section('script')
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+    let url;
+    let id;
+    $("#exampleModalToggle").on('show.bs.modal', function(event) {
+
+    var button = $(event.relatedTarget) //Button that triggered the modal
+
+    var id = button.attr('delete-id');
+    url = '{{ route("admin.place.delete", ":id") }}';
+    url = url.replace(':id', id);
+
+    });
+    $("#exampleModalToggle .btn-danger").click(function(){
+        alert(url);
+
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            data:{id:id},
+           headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(result) {
+                // Do something with the result
+                location.reload();
+            }
+        });
+    });
+
+    </script>
 @endsection

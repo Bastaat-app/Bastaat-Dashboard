@@ -98,7 +98,7 @@ class OrderRepository implements OrderInterface
         }
         if(isset($request['address']))
         {
-            $user_id=Auth('api')->user()->id;
+            $user_id=Auth()->user()->id;
 
             $address_data=json_decode($request['address']);
            $address_data->user_id= $user_id;//array('user_id'=>$user_id,'contact_person_number'=>'ahmed','address'=>'tiyleklj','contact_person_name'=>'contact_person_name','floor'=>'floor','road','house'=>'house');
@@ -116,7 +116,7 @@ class OrderRepository implements OrderInterface
         DB::beginTransaction();
         try {
             $order = new Order();
-            $order->user_id = auth('api')->user()->id;
+            $order->user_id = auth()->user()->id;
             $order->order_amount = $request['order_amount'];
             $order->coupon_discount_amount = $coupon_discount_amount;
             if (isset($request['address'])) {

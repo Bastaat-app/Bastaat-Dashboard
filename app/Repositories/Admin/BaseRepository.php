@@ -127,7 +127,7 @@ class BaseRepository implements AdminRepositoryInterface
             return $query->get();
         }
 
-        return $query->paginate(config('app.pagination'));
+        return $query->paginate(config('app.default_pagination'));
     }
 
 

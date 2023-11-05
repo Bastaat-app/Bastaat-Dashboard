@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Facade;
 
 return [
-'default_pagination'=>15,
+'default_pagination'=>10,
 'allow_distance'=>10,
     /*
     |--------------------------------------------------------------------------

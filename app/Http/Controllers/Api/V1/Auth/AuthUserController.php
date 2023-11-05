@@ -46,10 +46,12 @@ class AuthUserController extends Controller
           }*/
 
         $validated=$request->all();
-        $user = User::where('phone', $validated['phone'])->first();
 
 
-        if (!$user) {
+        //  $user = User::where('phone', $validated['phone'])->first();
+
+
+        if (!Auth::attempt($validated)) {
 
             return response()->json([
                 'status' =>HTTPResponseCodes::UnAuth['status'],
@@ -60,27 +62,29 @@ class AuthUserController extends Controller
             ],HTTPResponseCodes::Sucess['code']);
         }
 
-        if (Hash::check($request->password, $user->password)) {
-            $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-            $user['token']= $token;
+        // if (Hash::check($request->password, $user->password)) {
+        $user = Auth::user();
+        $token = $user->createToken('AuthToken')->accessToken;
+        //  $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+        $user['token']= $token;
 
-            return response()->json([
-                'status' =>HTTPResponseCodes::Sucess['status'],
-                'data' => new UserResource($user),
-                'errors'=>[],
-                'message'=> HTTPResponseCodes::Sucess['message'],
-                'code'=>HTTPResponseCodes::Sucess['code']
-            ],HTTPResponseCodes::Sucess['code']);
-            return response($response, 200);
-        } else {
-            return response()->json([
-                'status' =>HTTPResponseCodes::UnAuth['status'],
+        return response()->json([
+            'status' =>HTTPResponseCodes::Sucess['status'],
+            'data' => new UserResource($user),
+            'errors'=>[],
+            'message'=> HTTPResponseCodes::Sucess['message'],
+            'code'=>HTTPResponseCodes::Sucess['code']
+        ],HTTPResponseCodes::Sucess['code']);
+        return response($response, 200);
+        // } else {
+        /* return response()->json([
+             'status' =>HTTPResponseCodes::UnAuth['status'],
 
-                'errors'=>[],
-                'message' => HTTPResponseCodes::UnAuth['message'],
-                'code'=>HTTPResponseCodes::UnAuth['code']
-            ],HTTPResponseCodes::Sucess['code']);
-        }
+             'errors'=>[],
+             'message' => HTTPResponseCodes::UnAuth['message'],
+             'code'=>HTTPResponseCodes::UnAuth['code']
+         ],HTTPResponseCodes::Sucess['code']);
+     }*/
         //$user['expired']= auth('api')->factory()->getTTL()*60;
 
     }
@@ -233,8 +237,8 @@ class AuthUserController extends Controller
      */
     public function logout()
     {
-
-        $ee=  Auth::guard('api')->logout();
+        exit;
+        $ee=  Auth::logout();
 
         return response()->json([
             'status' => HTTPResponseCodes::Sucess['status'],
@@ -249,8 +253,8 @@ class AuthUserController extends Controller
      */
     public function refresh()
     {
-        $user=Auth::guard('api')->user();
-        $user['token']=Auth::guard('api')->refresh();
+        $user=Auth::user();
+        $user['token']=Auth::refresh();
         return response()->json([
             'status' => HTTPResponseCodes::Sucess['status'],
             'data' => new UserResource($user),
@@ -420,7 +424,7 @@ class AuthUserController extends Controller
      */
     protected function getData(){
 
-        $user= Auth::guard('api')->user();
+        $user= Auth::user();
         if($user!=null) {
             return response()->json([
                 'status' => HTTPResponseCodes::Sucess['status'],
@@ -441,9 +445,9 @@ class AuthUserController extends Controller
 
     public function store_device_token(Request $request){
 
-        $token_db= User::where('id',auth::guard('api')->user()->id)->value('device_token');
+        $token_db= User::where('id',auth::user()->id)->value('device_token');
         if(is_null($token_db)){
-            user::where('id',auth::guard('api')->user()->id)->update(['device_token'=>$request['token']]);
+            user::where('id',auth::user()->id)->update(['device_token'=>$request['token']]);
         }
         return response()->json([
             'status' => HTTPResponseCodes::Sucess['status'],

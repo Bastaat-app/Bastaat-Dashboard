@@ -11,12 +11,16 @@ trait LocationTrait
 {
     public function get_zone_from_location($data)
     {
-
         $point = new Point($data['latitude'], $data['longitude']);
         $zone_ids = array_column(Zone::contains('coordinates', $point)->latest()->get(['id'])->toArray(), 'id');;
 
-        if(empty($zone_ids))
-            $zone_ids= array_column(Zone::orderByDistance('coordinates', $point, 'asc')->latest()->get(['id'])->take(2)->toArray(), 'id');
+       if(empty($zone_ids)) {
+           $zone_ids = array_column(Zone::orderByDistance('coordinates', $point, 'desc')->latest()->get(['id'])/*->take()*/ ->toArray(), 'id');
+          if(!empty($zone_ids))
+           $zone_ids=array_slice($zone_ids, 0, 1);
+           //if(isset($zone_ids[0]))
+             //  $zone_ids=$zone_ids[0];
+       }
 
 
         return $zone_ids;

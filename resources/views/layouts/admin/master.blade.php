@@ -5,75 +5,62 @@
 
 
 
-<!-- body start -->
-<body class="loading" data-layout='{"mode": "{{$color_scheme_mode}}", "width": "fluid", "menuPosition": "fixed", "sidebar": { "color": "{{$color_scheme_mode}}", "size": "default", "showuser": false}, "topbar": {"color": "{{$color_scheme_mode == 'dark' ? 'light' : 'dark'}}"}, "showRightSidebarOnPageLoad": true}'>
+<body>
 <!-- Begin page -->
 <div id="wrapper">
-
-    <!-- ============================================================== -->
-    <!-- Start Page Content here -->
-    <!-- ============================================================== -->
+    <!-- ========== Menu ========== -->
     <?php $segment=Request::segment(2); ?>
     @if(($segment != "login") && ($segment != "form_email"))
-
-        @include('layouts.admin.includes.side_menu')
-
-
+            @include('layouts.admin.includes.side_menu')
     @endif
+
+<!-- ============================================================== -->
+    <!-- Start Page Content here -->
+    <!-- ============================================================== -->
     <div class="content-page">
         <?php $segment=Request::segment(2); ?>
         @if(($segment != "login") && ($segment != "form_email"))
+              @include('layouts.admin.includes.nav')
+            @endif
 
-            @include('layouts.admin.includes.nav')
-
-
-
-
-        @endif
         <div class="content">
-
             <!-- Start Content-->
             <div class="container-fluid">
                 <!-- start page title -->
 
-            @yield('content')
+                    @yield('content')
                 <!-- end page-->
             </div>
+            <!-- End Content-->
         </div>
-                <!-- Start Footer here -->
 
-            <!-- End Footer -->
-
-
+        <!-- Start Footer here -->
+        @include('layouts.admin.includes.footer')
+    <!-- End Footer -->
     </div>
 </div>
-    <!-- END wrapper -->
-
-    <!-- Start Footer Script here -->
-    @include('layouts.admin.includes.scripts')
-    <!-- End Footer Script -->
-
-    @yield('script')
-    @stack('script')
+@include('layouts.admin.includes.scripts')
+@yield('script')
+@stack('script')
 
 
 
-    @if(request()->filled("print"))
-        <script>
-            window.print();
-            // self.focus();
-            // window.onafterprint = function(){
-            //     window.close();
-            // }
-        </script>
-        <style>
-            @media print {
-                form, input, button, .btn, .hidden-print{
-                    display: none !important;
-                }
+@if(request()->filled("print"))
+    <script>
+        window.print();
+        // self.focus();
+        // window.onafterprint = function(){
+        //     window.close();
+        // }
+    </script>
+    <style>
+        @media print {
+            form, input, button, .btn, .hidden-print{
+                display: none !important;
             }
-        </style>
-    @endif
+        }
+    </style>
+@endif
 </body>
-
 </html>
+

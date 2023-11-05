@@ -17,13 +17,13 @@ class AuthApi
     public function handle(Request $request, Closure $next)
     {
 
-        if(Auth::guard('api')->check()){
+        if(Auth::check()){
 
-            Auth::shouldUse("api");
             $request->user()->last_login=date("Y-m-d H:i:s");
             $request->user()->save();
             return $next($request);
         }
+
         return response()->json([
             'status' =>HTTPResponseCodes::UnAuth['status'],
             'message' => HTTPResponseCodes::UnAuth['message'],

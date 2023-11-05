@@ -9,6 +9,7 @@ namespace App\Models;
 use App\Scopes\ZoneScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -58,6 +59,7 @@ use Illuminate\Support\Facades\DB;
  */
 class Restaurant extends Model
 {
+    use SoftDeletes;
 	protected $table = 'restaurants';
 
 	protected $casts = [
@@ -164,6 +166,10 @@ class Restaurant extends Model
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+    public function compilation()
+    {
+        return $this->hasOne(Compilation::class,'id','compilation_id');
     }
 
     public function discount()

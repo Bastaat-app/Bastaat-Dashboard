@@ -24,7 +24,7 @@ class UserRepository implements UseInterface
         // TODO: Implement list_cats() method.
         if($request->has('address_id'))
             $address_id=$request->address_id;
-        $address[ 'user_id']=auth('api')->user()->id;
+        $address[ 'user_id']=auth()->user()->id;
         if($request->has('contact_person_number'))
         $address[ 'contact_person_number']=$request->contact_person_number;
         if($request->has('address'))
@@ -44,7 +44,7 @@ class UserRepository implements UseInterface
 
 
         if($type=='update') {
-            $id = auth('api')->user()->id;
+            $id = auth()->user()->id;
             DB::table('customer_addresses')->where(['id'=> $address_id,'user_id'=>$id])->update($address);
         }else{
             DB::table('customer_addresses')->insert($address);
@@ -56,8 +56,8 @@ class UserRepository implements UseInterface
     public function delete_address($address_id)
     {
         // TODO: Implement delete_address() method.
-        if (DB::table('customer_addresses')->where(['id' => $address_id, 'user_id' => auth('api')->user()->id])->first()) {
-            DB::table('customer_addresses')->where(['id' => $address_id, 'user_id' => auth('api')->user()->id])->delete();
+        if (DB::table('customer_addresses')->where(['id' => $address_id, 'user_id' => auth()->user()->id])->first()) {
+            DB::table('customer_addresses')->where(['id' => $address_id, 'user_id' => auth()->user()->id])->delete();
             return true;
         }
         return false;
@@ -66,7 +66,7 @@ class UserRepository implements UseInterface
     public function info($request)
     {
         // TODO: Implement info() method.
-        $user_id=auth('api')->user()->id;
+        $user_id=auth()->user()->id;
         $user_info=User::where('id',$user_id)->first();
         return new UserInfoResource($user_info);
     }

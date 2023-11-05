@@ -71,3 +71,40 @@ body.authentication-bg {
 .stats{
     margin-top: 30px;
 }
+.cart-icon{padding-top:5px;}
+.inline-time{display: inline-block;width: 50%;}
+.search-group .input-group-btn {
+    display: inline-block!important;
+    margin-right: -4px!important;
+}
+.search-group .input-group-btn>.btn {
+    height: 38px;
+    padding-top: 3px;
+    padding-bottom: 4px;
+    background: #00343d;
+    color: #fff;
+    margin-right: 2px;
+}
+.bootstrap-select.btn-group .btn .filter-option {
+    display: inline-block;
+    overflow: hidden;
+    width: 100%;
+    text-align: right;
+    text-overflow: ellipsis;
+}
+.search-group .bootstrap-select {
+    display: inline-block!important;
+    margin-right: -4px!important;
+    border-right: 1px solid #eee;
+}
+.search-select {
+    border: none;
+    background: #f8f8f8;
+    border-right: 1px solid #ebebeb;
+    padding-right: 16px;
+    color: #6c6c6c;
+}
+.search-select:hover,.search-select:focus{
+    border: none;
+}
+#searchbox{width: 350px;}

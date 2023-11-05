@@ -43,7 +43,7 @@ class OrderController extends Controller
 
      public function get_pervious_address(Request $request){
 
-         $user_id=Auth('api')->user()->id;
+         $user_id=Auth()->user()->id;
 
 
        //  try {
@@ -68,7 +68,7 @@ class OrderController extends Controller
      }
      public function get_address(SingleAddressRequest $request){
 
-        $user_id=Auth('api')->user()->id;
+        $user_id=Auth()->user()->id;
         $address_id=$request->address_id;
 
 
@@ -99,7 +99,7 @@ class OrderController extends Controller
 
 
         $order_id=$request->order_id;
-        $user_id=auth('api')->user()->id;
+        $user_id=auth()->user()->id;
        // try {
             $track = new OrderRepository();
             $order_track = $track->track_order($order_id, $user_id);
@@ -132,9 +132,8 @@ class OrderController extends Controller
      }
 
      public function list_(ListOrderRequest $request){
-       // print_r($request->all());
-//exit;
-        $user_id=auth('api')->user()->id;
+
+        $user_id=auth()->user()->id;
        // try {
             $list_obj = new OrderRepository();
             $list = $list_obj->list_($request, $user_id);

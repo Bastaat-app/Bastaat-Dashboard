@@ -62,7 +62,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
         Route::get('edit/{id}', 'PlaceController@edit')->name('edit');
         Route::post('update/{id}', 'PlaceController@update')->name('update');
         Route::get('status/{id}/{status}', 'PlaceController@status')->name('status');
-        Route::delete('delete/{id}', 'PlaceController@delete')->name('delete');
+        Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');
         Route::post('search', 'PlaceController@search')->name('search');
     });
 

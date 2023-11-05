@@ -48,11 +48,12 @@ class BaseController extends Controller
 
     public function destroy($id)
     {
+
         $item = $this->repository->delete($id);
-        if ($item) {
-            session()->flash('success', __('deleted successfully'));
-        }
-        return back();
+     //   if ($item) {
+        //    session()->flash('success', __('deleted successfully'));
+      //  }
+        return  session()->flash('success', __('deleted successfully'));
     }
 
 

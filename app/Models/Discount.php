@@ -59,6 +59,7 @@ class Discount extends Model
         return $this->belongsTo(Restaurant::class);
     }
 
+
     public function scopeValidate($query)
     {
         $query->whereDate('start_date','<=',date('Y-m-d'))->whereDate('end_date','>=',date('Y-m-d'))->whereTime('start_time','<=',date('H:i:s'))->whereTime('end_time','>=',date('H:i:s'));
