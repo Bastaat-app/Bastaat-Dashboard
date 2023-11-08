@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Compilation;
 use App\Models\Zone;
 use App\Repositories\Admin\SingleRebo\CompilationRepository;
+use App\Repositories\Admin\SingleRebo\CustomerRepository;
 use App\Repositories\Admin\SingleRebo\PlaceRepository;
 use App\Traits\UploadAttachTrait;
 use Illuminate\Support\Facades\Validator;
@@ -17,13 +18,13 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use App\CentralLogics\Helpers;
 
-class PlaceController extends BaseController
+class OrderController extends BaseController
 {
     use UploadAttachTrait;
     protected $view;
     protected $repository;
 
-    public function __construct(PlaceRepository $repository)
+    public function __construct(CustomerRepository $repository)
     {
         parent::__construct($repository);
         $this->view = 'admin-views.place';
@@ -96,14 +97,6 @@ class PlaceController extends BaseController
     public  function details($id){
        $data= $this->repository->details($id);
        return view($this->view . '.details', compact('data'));
-    }
-    public function change_status(Request $request)
-    {
-       $status= $request['status'];
-       $id= $request['id'];
-     //  $status= !$status;
-        $data= $this->repository->change_status($id,$status);
-        return redirect(route('admin.place.details',['id'=>$id]));
     }
     /*function index(Request $request)
     {

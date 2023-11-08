@@ -60,10 +60,38 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
         Route::get('create', [PlaceController::class ,'create'])->name('create');
         Route::post('store', 'PlaceController@store')->name('store');
         Route::get('edit/{id}', 'PlaceController@edit')->name('edit');
+        Route::get('details/{id}', 'PlaceController@details')->name('details');
         Route::post('update/{id}', 'PlaceController@update')->name('update');
+        Route::post('change_status', 'PlaceController@change_status')->name('change-status');
         Route::get('status/{id}/{status}', 'PlaceController@status')->name('status');
         Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');
         Route::post('search', 'PlaceController@search')->name('search');
+    });
+    Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
+
+        Route::get('/', [CustumerController::class ,'index'])->name('index');
+      //  Route::get('create', [CustumerController::class ,'create'])->name('create');
+      //  Route::post('store', 'PlaceController@store')->name('store');
+       // Route::get('edit/{id}', 'PlaceController@edit')->name('edit');
+        Route::get('details/{id}', 'CustumerController@details')->name('details');
+      //  Route::post('update/{id}', 'PlaceController@update')->name('update');
+      //  Route::get('status/{id}/{status}', 'PlaceController@status')->name('status');
+      //  Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');
+     //   Route::post('search', 'PlaceController@search')->name('search');
+    });
+
+
+    Route::group(['prefix' => 'order', 'as' => 'order.'], function () {
+
+        Route::get('/', [OrderController::class ,'index'])->name('index');
+        //  Route::get('create', [CustumerController::class ,'create'])->name('create');
+        //  Route::post('store', 'PlaceController@store')->name('store');
+        // Route::get('edit/{id}', 'PlaceController@edit')->name('edit');
+        Route::get('details/{id}', 'OrderController@details')->name('details');
+        //  Route::post('update/{id}', 'PlaceController@update')->name('update');
+        //  Route::get('status/{id}/{status}', 'PlaceController@status')->name('status');
+        //  Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');
+        //   Route::post('search', 'PlaceController@search')->name('search');
     });
 
 });

@@ -42,7 +42,7 @@ class RestaurantWallet extends Model
 		'pending_withdraw',
 		'collected_cash'
 	];
-
+    protected $appends = ['balance'];
     public function getBalanceAttribute()
     {
         return $this->total_earning - ($this->total_withdrawn + $this->pending_withdraw + $this->collected_cash);
