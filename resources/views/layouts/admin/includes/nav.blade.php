@@ -79,7 +79,7 @@
                     <i class="ri-moon-line font-22"></i>
                 </div>
             </li>
-            <!-- User Dropdown -->
+            <!-- customer Dropdown -->
             <li class="dropdown">
                 <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <img src="{{asset('assets/images/users/user-1.jpg')}}" alt="user-image" class="rounded-circle">

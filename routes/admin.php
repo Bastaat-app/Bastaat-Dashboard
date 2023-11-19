@@ -2,8 +2,12 @@
 
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CompilationController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PlaceController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\CustomerController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -42,6 +46,17 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
          Route::delete('delete/{banner}', 'BannerController@delete')->name('delete');
          Route::post('search', 'BannerController@search')->name('search');
     });
+    Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
+
+        Route::get('/', [CouponController::class ,'index'])->name('index');
+        Route::get('create', [CouponController::class ,'create'])->name('create');
+        Route::post('store', 'CouponController@store')->name('store');
+        Route::get('edit/{id}', 'CouponController@edit')->name('edit');
+        Route::post('update/{id}', 'CouponController@update')->name('update');
+        Route::get('status/{id}/{status}', 'CouponController@status')->name('status');
+        Route::delete('delete/{id}', 'CouponController@destroy')->name('delete');
+        Route::post('search', 'CouponController@search')->name('search');
+    });
     Route::group(['prefix' => 'compilation', 'as' => 'compilation.'], function () {
 
         Route::get('/', [CompilationController::class ,'index'])->name('index');
@@ -69,11 +84,11 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
     });
     Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
 
-        Route::get('/', [CustumerController::class ,'index'])->name('index');
+        Route::get('/', [CustomerController::class ,'index'])->name('index');
       //  Route::get('create', [CustumerController::class ,'create'])->name('create');
       //  Route::post('store', 'PlaceController@store')->name('store');
        // Route::get('edit/{id}', 'PlaceController@edit')->name('edit');
-        Route::get('details/{id}', 'CustumerController@details')->name('details');
+        Route::get('view/{id}', 'CustomerController@details')->name('view');
       //  Route::post('update/{id}', 'PlaceController@update')->name('update');
       //  Route::get('status/{id}/{status}', 'PlaceController@status')->name('status');
       //  Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');
@@ -93,6 +108,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
         //  Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');
         //   Route::post('search', 'PlaceController@search')->name('search');
     });
+
 
 });
 

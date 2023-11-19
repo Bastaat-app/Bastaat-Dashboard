@@ -437,5 +437,12 @@ class Helper
 
         return $data;
     }
+    public static function get_restaurant_id()
+    {
+        if (auth('vendor_employee')->check()) {
+            return auth('vendor_employee')->user()->restaurant->id;
+        }
+        return auth('vendor')->user()->restaurants[0]->id;
+    }
 
 }

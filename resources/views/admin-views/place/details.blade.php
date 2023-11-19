@@ -245,8 +245,15 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title font-16 mb-3">جوجل ماب</h5>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d137{{$data['place']['longitude']}}!2d{{$data['place']['longitude']}}!3d{{$data['place']['latitude']}}!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f7d156b7aa9d7f%3A0x5e10374e6ea64147!2z2LTYsdmD2Kkg2KfYs9iq2KjYtNixIOKAkyDYqNix2YXYrNipINmI2KrYtdmF2YrZhSDZhdmI2KfZgti5INin2YTYp9mG2KrYsdmG2Kog2YjYp9mE2KzZiNin2YQ!5e0!3m2!1sen!2seg!4v1693614344769!5m2!1sen!2seg" width="300" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d0.1!2d{{$data['place']['longitude']}}!3d{{$data['place']['latitude']}}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z{{$data['place']['latitude']}}!5e0!3m2!1sen!2sus!4v1636471085612!5m2!1sen!2sus&markers={{$data['place']['latitude']}},{{$data['place']['longitude']}}"
+                        width="300"
+                        height="200"
+                        style="border: 0"
+                        allowfullscreen=""
+                        loading="lazy"
+                    ></iframe>
                 </div>
             </div>
         </div>
@@ -305,7 +312,7 @@
                                                         </td>
                                                         <td> {{$order->id}} </td>
                                                         <td> {{$order->created_at}} </td>
-                                                        <td>{{$order->customer->f_name}}  {{$order->customer->l_name}}<br>{{$order->customer->phone}} </td>
+                                                        <td>{{$order->vendor->f_name}}  {{$order->vendor->l_name}}<br>{{$order->vendor->phone}} </td>
                                                         <td class="table-user">
                                                             <img src="{{asset($data['place']['logo'])}}" alt="table-user" class="me-2 rounded-circle"  onerror="this.src='{{asset('assets/images/logo.png')}}'" >
                                                             <a href="javascript:void(0);" class="text-body fw-semibold">{{$data['place']['name']}}</a>
@@ -420,6 +427,7 @@
                                                 </thead>
                                                 <tbody>
                                                 @foreach($data['reviews'] as $review)
+                                                    @if(isset($review->customer->f_name))
                                                     <tr>
                                                         <td>
                                                             <div class="form-check">
@@ -441,6 +449,8 @@
                                                         <td><span class="badge @if($review->status==1){{ 'bg-soft-success text-success' }}@else{{' bg-danger rounded-pill' }} @endif"> @if($review->status==1)مفعل@elseغير مفعل @endif</span></td>
 
                                                     </tr>
+
+                                                    @endif
                                                 @endforeach
                                                 </tbody>
                                             </table>
@@ -474,7 +484,7 @@
         $(document).ready(function() {
 
         $('#change_place_status').on('change', function() {
-            alert(this.value);
+
             $.ajax({
                 url: '{{route('admin.place.change-status')}}',
                 method: 'POST',

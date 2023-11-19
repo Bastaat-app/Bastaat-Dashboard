@@ -140,11 +140,11 @@ class Restaurant extends Model
 
     public function getLogoUrlAttribute()
     {
-        return asset('images/restaurant/'.$this->logo);
+        return asset($this->logo);
     }
     public function getCoverPhotoUrlAttribute()
     {
-        return asset('images/restaurant/'.$this->cover_photo);
+        return asset($this->cover_photo);
     }
 
     public function vendor()

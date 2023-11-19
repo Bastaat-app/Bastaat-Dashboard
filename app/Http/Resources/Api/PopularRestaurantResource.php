@@ -44,7 +44,8 @@ class PopularRestaurantResource extends JsonResource
             'orders_count'=>$this->orders_count??0,
             'rating_count'=>$this->rating_count,
             'distance_time'=>$this->distance_time??0,
-            'category_ids'=>$cats
+            'category_ids'=>$cats,
+            'compilation_id'=>$this->compilation_id?? 0
         ];
     }
 }

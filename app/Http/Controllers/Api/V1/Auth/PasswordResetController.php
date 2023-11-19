@@ -35,7 +35,7 @@ class PasswordResetController extends Controller
                 'token' => $token,
                 'created_at' => now(),
             ]);
-            // Mail::to($customer['email'])->send(new \App\Mail\PasswordResetMail($token, $customer->f_name));
+            // Mail::to($customer--['email'])->send(new \App\Mail\PasswordResetMail($token, $customer--->f_name));
             // return response()->json(['message' => 'Email sent successfully.'], 200);
             $response = SMS_module::send($request['phone'],$token);
             if($response == 'success')

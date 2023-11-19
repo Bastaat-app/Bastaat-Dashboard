@@ -88,7 +88,7 @@ class PlaceRepository extends BaseRepository
             unset($data['phone']);
             unset($data['confirm_password']);
 
-            $vendor_id= Vendor::insert($data_vendor);
+            $vendor_id= Vendor::insertGetId($data_vendor);
 //print_r($vendor_id); exit;
 
             $data['vendor_id']=$vendor_id;
@@ -196,8 +196,8 @@ class PlaceRepository extends BaseRepository
          $data['order_amounts']=Order::where(['restaurant_id'=>$id,'order_status'=>'delivered'])->sum('order_amount');
 
           $data['place']= parent::show($id,['vendor','compilation'],['orders']);
-          $data['orders']= Order::where('restaurant_id',$id)->with('customer')->paginate(config('default_pagination'));
-          $data['reviews']=Review::with(['customer','food'=>function ($query) use ($id){
+          $data['orders']= Order::where('restaurant_id',$id)->with('customer--')->paginate(config('default_pagination'));
+          $data['reviews']=Review::with(['customer--','food'=>function ($query) use ($id){
                                            $query->where('restaurant_id',$id);
                                         }])->paginate(config('default_pagination'));
           $data['withdraw']= WithdrawRequest::where('vendor_id',$data['place']['vendor_id'])->with('vendor')->addSelect( DB::raw('SUM(amount) AS withdraw_amount'))->get();

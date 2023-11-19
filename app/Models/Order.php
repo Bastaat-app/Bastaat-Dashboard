@@ -149,6 +149,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+    public function customer_address()
+    {
+        return $this->hasOne(CustomerAddress::class,'id','delivery_address_id');
+    }
 
     public function delivery_man()
     {

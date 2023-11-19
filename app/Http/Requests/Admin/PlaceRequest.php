@@ -27,7 +27,7 @@ class PlaceRequest extends FormRequest
     {
 
         return [
-            'name' => 'required',
+            'name' => 'required|unique',
             'footer_text' => 'required',
             'address' => 'required',
             'delivery_charge' => 'required|numeric',
@@ -41,8 +41,8 @@ class PlaceRequest extends FormRequest
             'longitude' => 'required',
             'f_name' => 'required',
             'l_name' => 'required',
-            'phone' => 'required',
-            'email' => 'required',
+            'phone' => 'required|unique',
+            'email' => 'required|unique',
             'image'=>'required|array',
             'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'cover_photo'=>'required|array',

@@ -61,6 +61,7 @@ class Coupon extends Model
 		'limit',
 		'status',
 		'restaurant_id',
+		'compilation_id',
 		'data',
 		'total_uses'
 	];
@@ -68,4 +69,14 @@ class Coupon extends Model
     {
         return $query->where('status', '=', 1);
     }
+   /* protected static function booted()
+     {
+      //if(auth('vendor')->check())
+    //     {
+           static::addGlobalScope(new RestaurantScope);
+      //   }
+     }*/
+   public function restaurant(){
+       return $this->hasOne(Restaurant::class,'id','restaurant_id');
+   }
 }

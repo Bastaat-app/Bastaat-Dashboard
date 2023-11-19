@@ -354,22 +354,22 @@ return [
         |
         | 'related'     Use the related table as the relation name.
         |               (post.author --> user.id)
-                            generates Post::user() and User::posts()
+                            generates Post::user() and customer::posts()
         |
         | 'foreign_key' Use the foreign key as the relation name.
         |               This can help to provide more meaningful relationship names, and avoids naming conflicts
         |               if you have more than one relationship between two tables.
         |                   (post.author_id --> user.id)
-        |                       generates Post::author() and User::posts_where_author()
+        |                       generates Post::author() and customer::posts_where_author()
         |                   (post.editor_id --> user.id)
-        |                       generates Post::editor() and User::posts_where_editor()
+        |                       generates Post::editor() and customer::posts_where_editor()
         |               ID suffixes can be omitted from foreign keys.
         |                   (post.author --> user.id)
         |                   (post.editor --> user.id)
         |                       generates the same as above.
         |               Where the foreign key matches the related table name, it behaves as per the 'related' strategy.
         |                   (post.user_id --> user.id)
-        |                       generates Post::user() and User::posts()
+        |                       generates Post::user() and customer::posts()
         */
 
         'relation_name_strategy' => 'related',
@@ -387,7 +387,7 @@ return [
          | that later can be used in QueryBuilder like
          |
          | ...
-         | $builder->select([User::USER_NAME])->where(User::AGE, '<=', 18);
+         | $builder->select([customer::USER_NAME])->where(customer::AGE, '<=', 18);
          | ...
          |
          | that helps to avoid typos in strings when typing field names and allows to use

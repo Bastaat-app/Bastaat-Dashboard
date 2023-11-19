@@ -27,7 +27,7 @@
                                         <input type="file"   name="cover_photo[]"  data-plugins="dropify" data-max-file-size="1M"  class="cover_dropfy @error("cover_photo") is-invalid @endError"  onchange="SubmitForm($(this));"/>
                                         <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل صورة الكوفر بحجم لا يتعدي ال ١ ميجا</p>
 
-                                        @error("image[]")
+                                        @error("cover_photo[]")
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
                                     </div>
@@ -74,6 +74,10 @@
                                 <div class="mb-3 logo_img_block">
                                     <div class="mt-3">
                                         <input type="file"  name="image[]" class="logo_img" data-plugins="dropify" data-max-file-size="1M" />
+
+                                        @error("image[]")
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @endError
                                         <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل اللوجو بحجم لا يتعدي ال ١ ميجا</p>
                                     </div>
                                 </div>
@@ -135,7 +139,7 @@
                                         <div class="mb-3">
                                             <label for="project-overview" class="form-label">الوقت</label>
                                             <select class="form-control  @error("delivery_time_unit") is-invalid @endError" name="delivery_time_unit"  value="{{$record->delivery_time_unit}}"data-toggle="select2" data-width="100%">
-                                                <option value="minutes">دقائق</option>
+                                                <option value="minutes" selected>دقائق</option>
                                                 <option value="hours">ساعات</option>
                                             </select>
                                             @error("delivery_time_unit")
@@ -202,7 +206,7 @@
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="row">
-                                    <input type="hidden" name="vendor_id" value="{{$record->vendor->id}}">
+                                    <input type="hidden" name="vendor_id" value="{{$record->vendor->id }}">
                                     <div class="mb-3 col">
                                         <label for="projectname" class="form-label">الإسم الاول</label>
                                         <input type="text" id="projectname"  name="f_name" class="form-control @error("f_name") is-invalid @endError" value="{{$record->vendor->f_name}}" placeholder="اكتب هنا الاسم الاول">

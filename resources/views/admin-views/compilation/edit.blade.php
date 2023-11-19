@@ -23,22 +23,31 @@
                             <div class="col-xl-6">
                                 <div class="mb-3">
                                     <label for="projectname" class="form-label">اسم التصنيف</label>
-                                    <input type="text" name="title" value="{{$record->title}}" id="projectname" class="form-control" placeholder="اكتب هنا اسم التصنيف">
+                                    <input type="text" name="title" value="{{$record->title}}" id="projectname" class="form-control @error("title") is-invalid @endError" placeholder="اكتب هنا اسم التصنيف">
+
+                                    @error("title")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
                                 </div>
                                 <div class="mb-3">
                                     <label for="project-overview" class="form-label">وصف التصنيف</label>
-                                    <textarea class="form-control"  name="description" ivalue="{{$record->description}}"d="project-overview" rows="5" placeholder="اكتب هنا وصف التصنيف"></textarea>
+                                    <textarea class="form-control @error("description") is-invalid @endError"  name="description" value="{{$record->description}}"d="project-overview" rows="5" placeholder="اكتب هنا وصف التصنيف"></textarea>
+
+                                    @error("description")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
                                 </div>
                             </div>
                             <!-- end col-->
                             <div class="col-xl-6">
                                 <div class="mb-3">
-                                    <div class="mt-3">
-                                        <input type="file" name="image[]" data-plugins="dropify" data-max-file-size="1M" accept="image/*"
-                                               onchange="loadFile(event)"  />
-                                        <img id="output" alt=""
-                                             style=" height: 110px; width: 100%; object-fit: contain;"
-                                             src="{{asset($record->image_url)}}"/>
+                                    <div class="mt-3 logo_img_block">
+
+                                        <input type="file"  name="image[]" class="logo_img" data-plugins="dropify" data-max-file-size="1M" accept="image/*" />
+
+                                        @error("image[]")
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @endError
                                         <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل صورة التصنيف بحجم لا يتعدي ال ١ ميجا</p>
                                     </div>
                                 </div>
@@ -70,17 +79,18 @@
 @section('script')
     <script>
 
-        var loadFile = function (event) {
-            var output = document.getElementById('output');
-            if (event.target.files[0]) {
-                output.src = URL.createObjectURL(event.target.files[0]);
-                output.onload = function () {
-                    URL.revokeObjectURL(output.src) // free memory
-                };
+        /* logo*/
+        $('.logo_img').dropify();
+        $(".logo_img").addClass('dropify');
+        $(".logo_img").attr("data-height", 300);
+        $(".logo_img").attr("data-default-file", "{{asset($record->image)}}");
+        $(".logo_img_block .dropify-preview .dropify-render").html('<img src="{{asset($record->image)}}"/>');
 
-            } else {
-                output.src = '';
-            }
+        $('.dropify').dropify();
+        $('.logo_img_block .dropify-wrapper .dropify-preview').attr('style', 'display:block !important');
 
-        };
+
+
+
     </script>
+@endsection

@@ -16,6 +16,7 @@ use Validator;
 use Illuminate\Support\Facades\DB;
 
 use Twilio\Rest\Client;
+use Twilio\Exceptions\TwilioException;
 use Exception;
 class AuthUserController extends Controller
 {
@@ -48,7 +49,7 @@ class AuthUserController extends Controller
         $validated=$request->all();
 
 
-        //  $user = User::where('phone', $validated['phone'])->first();
+        //  $user = customer::where('phone', $validated['phone'])->first();
 
 
         if (!Auth::attempt($validated)) {
@@ -117,9 +118,13 @@ class AuthUserController extends Controller
         $token = getenv("TWILIO_AUTH_TOKEN");
         $twilio_sid = getenv("TWILIO_SID");
         $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+
+
         $twilio = new Client($twilio_sid, $token);
+
         try{
             $twilio->verify->v2->services($twilio_verify_sid)->verifications->create($validated['phone'], "sms");
+
         }catch(\Exception $e){
 
             return response()->json(
@@ -194,14 +199,15 @@ class AuthUserController extends Controller
 
 
                 $user = tap(User::where('phone', $request['phone']))->update(['is_phone_verified' => true,'active'=>1]);
-                $user['token']=$token;
+
+              //  $user->token=$token;
                 /* Authenticate user */
-                $token=Auth::login($user->first());
+                $data=Auth::login($user->first());
                 return response()->json([
                     'status' => HTTPResponseCodes::Sucess['status'],
                     'message' => HTTPResponseCodes::Sucess['message'],
                     'errors' => [],
-                    'data' => new UserResource($user),
+                    'data' => new UserResource($data),
                     'code'=>HTTPResponseCodes::Sucess['code']
 
                 ],HTTPResponseCodes::Sucess['code']);
@@ -209,14 +215,14 @@ class AuthUserController extends Controller
         }catch(\Exception $e){
 
             if($e->getCode()==404||$e->getCode()==20404){
-                User::where('phone', $request['phone'])->update(['is_phone_verified' => true,'active'=>1]);
+              //  User::where('phone', $request['phone'])->update(['is_phone_verified' => true,'active'=>1]);
                 return response()->json([
                     'status' =>HTTPResponseCodes::InvalidArguments['status'],
                     'message' => HTTPResponseCodes::InvalidArguments['message'],
                     'errors' => [],
 
                     'code'=>HTTPResponseCodes::InvalidArguments['code']
-                ],HTTPResponseCodes::sucess['code']);
+                ],HTTPResponseCodes::Sucess['code']);
             }
         }
 
@@ -237,7 +243,7 @@ class AuthUserController extends Controller
      */
     public function logout()
     {
-        exit;
+
         $ee=  Auth::logout();
 
         return response()->json([

@@ -8,6 +8,7 @@ use App\Models\Zone;
 use App\Repositories\Admin\SingleRebo\CompilationRepository;
 use App\Repositories\Admin\SingleRebo\PlaceRepository;
 use App\Traits\UploadAttachTrait;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
@@ -84,6 +85,7 @@ class PlaceController extends BaseController
     public function update(Request $request, $id)
     {
         parent::update($request, $id);
+
        return redirect(route('admin.place.index'));
     }
 
@@ -95,15 +97,18 @@ class PlaceController extends BaseController
 
     public  function details($id){
        $data= $this->repository->details($id);
+
        return view($this->view . '.details', compact('data'));
     }
     public function change_status(Request $request)
     {
        $status= $request['status'];
        $id= $request['id'];
-     //  $status= !$status;
+       if(isset($request['type']))
+        $status= !$status;
         $data= $this->repository->change_status($id,$status);
-        return redirect(route('admin.place.details',['id'=>$id]));
+
+        return redirect(route('admin.place.details',['id'=>$id]))->with('success','Place Status Changed succesfully');
     }
     /*function index(Request $request)
     {

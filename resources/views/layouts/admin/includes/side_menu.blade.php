@@ -15,7 +15,7 @@
     </div>
     <!-- menu-left -->
     <div class="scrollbar">
-        <!-- User box -->
+        <!-- customer box -->
         <div class="user-box text-center">
             <img src="{{asset('assets/images/users/user-1.jpg')}}" alt="user-img" title="Mat Helme" class="rounded-circle avatar-md">
             <div class="dropdown">
@@ -62,7 +62,7 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="coupons-list.html" class="menu-link">
+                <a href="{{route('admin.coupon.index')}}" class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="percent"></i>
                 </span>
@@ -95,7 +95,7 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="create-cats.html" class="menu-link">
+                <a href="{{route('admin.compilation.create')}}" class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="target"></i>
                 </span>
@@ -104,7 +104,7 @@
             </li>
             <li class="menu-title">إدارة العملاء</li>
             <li class="menu-item">
-                <a href="orders.html" class="menu-link">
+                <a href="{{route('admin.order.index')}}" class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="shopping-bag"></i>
                 </span>
@@ -113,7 +113,7 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="customers.html" class="menu-link">
+                <a href="{{route('admin.customer.index')}}" class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="users"></i>
                 </span>

@@ -15,7 +15,7 @@ class ReviewRepository implements ReviewInterface
   public function review($restaurant_id)
   {
       // TODO: Implement Review() method.
-      $reviews = Review::with(['customer', 'food'])
+      $reviews = Review::with(['customer--', 'food'])
           ->whereHas('food', function($query)use($restaurant_id){
               return $query->where('restaurant_id', $restaurant_id);
           })->active()->latest()->get();
@@ -38,7 +38,7 @@ class ReviewRepository implements ReviewInterface
           }
 
           unset($item['food']);
-          unset($item['customer']);
+          unset($item['customer--']);
           array_push($storage, $item);
       }
 

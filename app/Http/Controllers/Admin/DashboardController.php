@@ -205,7 +205,7 @@ class DashboardController extends Controller
                 ->whereYear('created_at', date('Y'))->count();
         }
         $data = [
-            'customer' => $customer,
+            'customer--' => $customer,
             'restaurants' => $restaurants,
             'delivery_man' => $delivery_man
         ];

@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Vendor
@@ -36,6 +37,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Vendor extends Model
 {
+    use  SoftDeletes;
 	protected $table = 'vendors';
 
 	protected $casts = [

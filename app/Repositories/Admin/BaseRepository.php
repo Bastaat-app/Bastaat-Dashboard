@@ -54,6 +54,7 @@ class BaseRepository implements AdminRepositoryInterface
 
     public function get(Request $request, $with = [], $withCount = [], $filter = '', $paginate = '', $whereHas = [])
     {
+         DB::enableQueryLog();
         $query = $this->model->with($with)->withCount($withCount);
 
         return $this->data($query, $request, $filter, $paginate, $whereHas);
@@ -61,7 +62,7 @@ class BaseRepository implements AdminRepositoryInterface
 
     public function data($query, $request, $filter = '', $paginate = '', $whereHas = [])
     {
-
+        $single=false;
         if ($filter) {
 
             if (str_contains($filter, "&&")) {
@@ -69,6 +70,7 @@ class BaseRepository implements AdminRepositoryInterface
 
                 foreach ($filterArr as $value) {
                     $value_attr= explode("|",$value);
+
                     if($value_attr[1]!='all') {
                         $query = $this->where($query, $value);
                     }
@@ -124,7 +126,11 @@ class BaseRepository implements AdminRepositoryInterface
         $query->orderBy("id", "desc");
 
         if (!$paginate || $request->export_excel == true || $request->print == true){
-            return $query->get();
+            if($single==true)
+           return  $query->first();
+            return  $query->get();
+
+        //     print_r( DB::getQueryLog()); exit;
         }
 
         return $query->paginate(config('app.default_pagination'));

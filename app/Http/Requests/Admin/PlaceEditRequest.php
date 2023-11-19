@@ -25,7 +25,9 @@ class PlaceEditRequest extends FormRequest
      */
     public function rules()
     {
-
+        $data= request()->all();
+       $vendor_id=$data['vendor_id'];
+       $id=$data['id'];
         return [
             'name' => 'required',
             'footer_text' => 'required',
@@ -41,8 +43,8 @@ class PlaceEditRequest extends FormRequest
             'longitude' => 'required',
             'f_name' => 'required',
             'l_name' => 'required',
-            'phone' => 'required',
-            'email' => 'required',
+            'phone' => 'required|unique:vendors,phone,'.$vendor_id.',id,deleted_at,NULL',
+            'email'=> 'required|email|unique:vendors,email,'.$vendor_id.',id,deleted_at,NULL',
             'image'=>'sometimes|required|array',
            'image.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
            'cover_photo'=>'sometimes|required|array',

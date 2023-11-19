@@ -64,7 +64,7 @@
                                 <td>
                                     <span class="media align-items-center">
                                             <img class="avatar avatar-lg mr-3 avatar--3-1" src="{{$compilation['image_url']}}"
-                                                 onerror="this.src='{{asset('public/assets/admin/img/900x400/img1.jpg')}}'" alt="{{$compilation->title}} image">
+                                                 onerror="this.src='{{asset('assets/images/logo.png')}}'" alt="{{$compilation->title}} image">
                                             <div class="media-body">
                                                 <h5 class="text-hover-primary mb-0">{{Str::limit($compilation['title'], 25, '...')}}</h5>
                                             </div>
@@ -88,35 +88,12 @@
                             </tbody>
                         </table>
                     </div>
-                    <ul class="pagination pagination-rounded justify-content-end mb-0">
-                        <li class="page-item">
-                            <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                <span aria-hidden="true">«</span>
-                                <span class="visually-hidden">Previous</span>
-                            </a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="javascript: void(0);">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript: void(0);">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript: void(0);">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript: void(0);">4</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript: void(0);">5</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="javascript: void(0);" aria-label="Next">
-                                <span aria-hidden="true">»</span>
-                                <span class="visually-hidden">Next</span>
-                            </a>
-                        </li>
-                    </ul>
+
+                    @if(!request()->filled("print"))
+                        <div class="pagination pagination-rounded justify-content-end mb-0">
+                            {!! $compilations->withQueryString()->links() !!}
+                        </div>
+                    @endif
                 </div>
                 <!-- end card-body-->
             </div>

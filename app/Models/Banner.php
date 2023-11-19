@@ -46,7 +46,7 @@ class Banner extends Model
 
     public function getImageUrlAttribute()
     {
-        return asset('images/banner/'.$this->image);
+        return asset($this->image);
     }
     public function zone()
     {

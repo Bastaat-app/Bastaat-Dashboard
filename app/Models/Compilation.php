@@ -29,7 +29,7 @@ class Compilation extends Model
     ];
     public function getImageUrlAttribute()
     {
-        return asset('images/compilaion/'.$this->image);
+        return asset($this->image);
     }
 
     public function compilaionRestaurant(){

@@ -1,254 +1,110 @@
-@extends('layouts.admin.app')
-
-@section('title','Campaign view')
-
-@push('css_or_js')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-@endpush
+@extends('layouts.admin.master')
+@section('title')
+    {{__("index")}}
+@endsection
 
 @section('content')
-    <div class="content container-fluid">
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="row">
-                <div class="col-6">
-                    <h1 class="page-header-title">{{$banner->title}}</h1>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item">
+                            <a href="javascript: void(0);">العملاء</a>
+                        </li>
+                        <li class="breadcrumb-item active">تفاصيل العميل</li>
+                    </ol>
                 </div>
-                <div class="col-6">
-                    <a href="{{url()->previous()}}" class="btn btn-primary float-right">
-                        <i class="tio-back-ui"></i> {{__('messages.back')}}
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- End Page Header -->
-        <!-- Card -->
-        <div class="card mb-3 mb-lg-5">
-            <!-- Body -->
-            <div class="card-body">
-                <div class="row align-items-md-center gx-md-5">
-                    <div class="col-md-auto mb-3 mb-md-0">
-                        <div class="d-flex align-items-center">
-                            <img class="avatar avatar-xxl avatar-4by3 mr-4"
-                                 src="{{asset('storage/app/public/banner')}}/{{$banner->image}}"
-                                 onerror="this.src='{{asset('public/assets/admin/img/160x160/img2.jpg')}}'"
-                                 alt="Image Description">
-                            <div class="d-block">
-                                
-                                
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md">
-                        <h4>{{__('messages.short')}} {{__('messages.description')}} : </h4>
-                        <p>{{$banner->description}}</p>
-                    </div>
-
-                </div>
-            </div>
-            <!-- End Body -->
-        </div>
-        <!-- End Card -->
-        <div class="row gx-2 gx-lg-3">
-            <div class="col-sm-12 col-lg-12 mb-3 mb-lg-2">
-                <!-- Card -->
-                <div class="card">
-                    <!-- Table -->
-                    <div class="table-responsive datatable-custom">
-                        <table id="columnSearchDatatable"
-                               class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
-                               data-hs-datatables-options='{
-                                 "order": [],
-                                 "orderCellsTop": true
-                               }'>
-                            <thead class="thead-light">
-                            <tr>
-                                <th>{{translate('sl')}}</th>
-                                <th class="w-15p">{{__('messages.logo')}}</th>
-                                <th class="w-20p">{{__('messages.name')}}</th>
-                                <th class="w-25p">{{__('messages.vendor')}}</th>
-                                <th>{{__('messages.email')}}</th>
-                                <th>{{__('messages.phone')}}</th>
-                                <th>{{__('messages.action')}}</th>
-                            </tr>
-                            <tr>
-                                <th colspan="3">
-                                    <form action="{{route('admin.banner.addrestaurant',$banner->id)}}" id="restaurant-add-form" method="POST">
-                                        @csrf
-                                        <!-- Search -->
-                                        <div class="row">
-                                            <div class="input-group-prepend col-md-7">   
-                                            @php($allrestaurants=App\Models\Restaurant::all())
-                                                <select name="restaurant_id" id="restaurant_id" class="form-control">
-                                                    @forelse($allrestaurants as $restaurant)
-                                                    @if(!in_array($restaurant->id, $restaurant_ids))
-                                                    <option value="{{$restaurant->id}}" >{{$restaurant->name}}</option>
-                                                    @endif
-                                                    @empty
-                                                    <option value="">No data found</option>
-                                                    @endforelse
-                                                </select>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary col-md-5">{{__('messages.add')}} {{__('messages.restaurant')}}</button>
-
-                                        </div>
-                                        <!-- End Search -->
-                                    </form>
-                                </th>
-                                <th></th>
-                                <th colspan="3">
-                                    <form action="javascript:" id="search-form">
-                                        <!-- Search -->
-                                        <div class="input-group input-group-merge input-group-flush">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <i class="tio-search"></i>
-                                                </div>
-                                            </div>
-                                            <input id="datatableSearch_" type="search" name="search" class="form-control"
-                                                   placeholder="{{__('messages.search')}}" aria-label="Search" required>
-                                            <button type="submit" class="btn btn-primary">{{__('messages.search')}}</button>
-
-                                        </div>
-                                        <!-- End Search -->
-                                    </form>
-                                </th>
-                                
-                                <th></th>
-                                <th></th>
-                            </tr>
-                            </thead>
-
-                            <tbody id="set-rows">
-                            @foreach($restaurants as $key=>$dm)
-                                <tr>
-                                    <td>{{$key+1}}</td>
-                                    <td>
-                                        <div class="initial-3">
-                                            <img width="60" class="img-circle"
-                                                 onerror="this.src='{{asset('public/assets/admin/img/160x160/img1.jpg')}}'"
-                                                 src="{{asset('storage/app/public/restaurant')}}/{{$dm['logo']}}">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span class="d-block font-size-sm text-body">
-                                            {{$dm->name}}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="d-block font-size-sm text-body">
-                                            {{$dm->vendor->f_name.' '.$dm->vendor->l_name}}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        {{$dm->email}}
-                                        {{--<span class="d-block font-size-sm">{{$banner['image']}}</span>--}}
-                                    </td>
-                                    <td>
-                                        {{$dm['phone']}}
-                                    </td>
-                                    <td>
-                                        <!-- Dropdown -->
-                                        <div class="initial-4" onclick="location.href='{{route('admin.banner.campaign',[$banner->id, $dm['id']])}}'">
-                                                <span class="legend-indicator bg-danger"></span>{{translate('remove')}}
-                                            </div>
-                                        <!-- End Dropdown -->
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                        <hr>
-
-                        <div class="page-area">
-                            <table>
-                                <tfoot>
-                                {!! $restaurants->links() !!}
-                                </tfoot>
-                            </table>
-                        </div>
-
-                    </div>
-                    <!-- End Table -->
-                </div>
-                <!-- End Card -->
+                <h4 class="page-title">تفاصيل العميل {{$user->f_name}}  {{$user->l_name}}</h4>
             </div>
         </div>
     </div>
+    <!-- end page title -->
+    <!-- end page title -->
+    <div class="row">
+        <div class="col-lg-4 col-xl-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <img src="{{asset($user->image)}}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image" onerror="this.src='{{asset('assets/images/logo.png')}}'">
+                    <h4 class="mb-0">{{$user->f_name}}   {{$user->l_name}}</h4>
+                    <button type="button" class="btn btn-primary btn-xs waves-effect mb-2 waves-light">ارسال رسالة</button>
+                    <div class="text-start mt-3">
+                        <p class="text-muted mb-2 font-13">
+                            <strong>البريد الإلكتروني</strong>
+                            <span class="ms-2">{{$user->email}}</span>
+                        </p>
+                        <p class="text-muted mb-2 font-13">
+                            <strong>رقم الهاتف :</strong>
+                            <span class="ms-2">{{$user->phone}}</span>
+                        </p>
+                        <p class="text-muted mb-2 font-13">
+                            <strong>العنوان : </strong>
+                            <span class="ms-2">{{isset($user->addresses[0]->address)?$user->addresses[0]->address:''}}</span>
+                        </p>
+                        <p class="text-muted mb-2 font-13">
+                            <strong>عدد الطلبات : </strong>
+                            <span class="ms-2"> {{$user->orders_count}}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col-->
+        <div class="col-lg-8 col-xl-8">
+            <table class="table table-centered table-nowrap table-striped" id="products-datatable">
+                <thead>
 
+                <tr>
+                    <th style="width: 20px;">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="customCheck1">
+                            <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                        </div>
+                    </th>
+                    <th>رقم الطلب</th>
+                    <th>تاريخ الطلب</th>
+                    <th>اسم المكان</th>
+                    <th>إجمالي الفاتورة</th>
+                    <th>الحالة</th>
+                    <th style="width: 85px;">الإجراء</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if($user->orders->count()>0)
+                @foreach($user->orders as $order)
+                <tr>
+                    <td>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="customCheck2">
+                            <label class="form-check-label" for="customCheck{{$order->id}}">&nbsp;</label>
+                        </div>
+                    </td>
+                    <td> {{$order->id}} </td>
+                    <td> {{\Carbon\Carbon::parse($order->creared_at)->translatedFormat('l j F Y ')}} </td>
+                    <td class="table-user">
+                        <img src="{{asset($order->logo)}}" alt="table-user" class="me-2 rounded-circle" onerror="this.src='{{asset('assets/images/logo.png')}}'">
+                        <a href="javascript:void(0);" class="text-body fw-semibold"> {{$order->restaurant->name}}</a>
+                    </td>
+                    <td>  {{$order->amount}} </td>
+                    <td>
+                        <span class="badge  @if($order->order_status=='pending') {{'bg-warning rounded-pill'}}@elseif($order->order_status=='delivered'){{'bg-soft-success text-success'}}@elseif($order->order_status=='canceled'){{'bg-danger rounded-pill '}}@elseif($order->order_status=='processing'){{'bg-warning rounded-pill'}}@endif">@if($order->order_status=='pending') {{__('pending')}}@elseif($order->order_status=='delivered'){{__('delivered')}} @elseif($order->order_status=='canceled'){{__('canceled')}}  @elseif($order->order_status=='processing'){{__('processing')}} @endif </span>
+                    </td>
+                    <td>
+                        <a href="{{route('admin.order.details',['id'=>$order->id])}}" class="action-icon">
+                            <i class="mdi mdi-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+                @endforeach
+                    @else
+                    <tr> <span>{{__('no orders found')}}</span></tr>
+                @endif
+                </tbody>
+            </table>
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end row-->
 @endsection
-
-@push('script_2')
-    <script>
-        $(document).on('ready', function () {
-            // INITIALIZATION OF DATATABLES
-            // =======================================================
-            var datatable = $.HSCore.components.HSDatatables.init($('#columnSearchDatatable'));
-
-            $('#column1_search').on('keyup', function () {
-                datatable
-                    .columns(1)
-                    .search(this.value)
-                    .draw();
-            });
-
-            $('#column2_search').on('keyup', function () {
-                datatable
-                    .columns(2)
-                    .search(this.value)
-                    .draw();
-            });
-
-            $('#column3_search').on('keyup', function () {
-                datatable
-                    .columns(3)
-                    .search(this.value)
-                    .draw();
-            });
-
-            $('#column4_search').on('keyup', function () {
-                datatable
-                    .columns(4)
-                    .search(this.value)
-                    .draw();
-            });
-
-
-            // INITIALIZATION OF SELECT2
-            // =======================================================
-            $('.js-select2-custom').each(function () {
-                var select2 = $.HSCore.components.HSSelect2.init($(this));
-            });
-        });
-    </script>
-
-    <script>
-
-        $('#search-form').on('submit', function () {
-            var formData = new FormData(this);
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.post({
-                url: '{{route('admin.vendor.search')}}',
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                beforeSend: function () {
-                    $('#loading').show();
-                },
-                success: function (data) {
-                    $('#set-rows').html(data.view);
-                    $('.page-area').hide();
-                },
-                complete: function () {
-                    $('#loading').hide();
-                },
-            });
-        });
-    </script>
-@endpush

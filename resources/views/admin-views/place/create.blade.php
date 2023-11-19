@@ -128,7 +128,7 @@
                                     <div class="mb-3">
                                         <label for="project-overview" class="form-label">الوقت</label>
                                         <select class="form-control  @error("delivery_time_unit") is-invalid @endError" name="delivery_time_unit"  value="{{old("delivery_time_unit")}}"data-toggle="select2" data-width="100%">
-                                            <option value="minutes">دقائق</option>
+                                            <option value="minutes" selected>دقائق</option>
                                             <option value="hours">ساعات</option>
                                         </select>
                                         @error("delivery_time_unit")
@@ -288,3 +288,4 @@
 
         };
     </script>
+    @endsection

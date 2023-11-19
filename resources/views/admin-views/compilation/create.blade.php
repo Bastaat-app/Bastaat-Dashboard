@@ -23,11 +23,11 @@
                         <div class="col-xl-6">
                             <div class="mb-3">
                                 <label for="projectname" class="form-label">اسم التصنيف</label>
-                                <input type="text" name="title" id="projectname" class="form-control" placeholder="اكتب هنا اسم التصنيف">
+                                <input type="text"  value="{{old("title")}}" name="title" id="projectname" class="form-control @error("title") is-invalid @endError" placeholder="اكتب هنا اسم التصنيف">
                             </div>
                             <div class="mb-3">
                                 <label for="project-overview" class="form-label">وصف التصنيف</label>
-                                <textarea class="form-control"  name="description" id="project-overview" rows="5" placeholder="اكتب هنا وصف التصنيف"></textarea>
+                                <textarea class="form-control @error("description") is-invalid @endError"  value="{{old("description")}}" name="description" id="project-overview" rows="5" placeholder="اكتب هنا وصف التصنيف"></textarea>
                             </div>
                         </div>
                         <!-- end col-->
@@ -35,10 +35,10 @@
                             <div class="mb-3">
                                 <div class="mt-3">
                                     <input type="file" name="image[]" data-plugins="dropify" data-max-file-size="1M" accept="image/*"
-                                           onchange="loadFile(event)"  />
-                                    <img id="output" alt=""
-                                         style=" height: 110px; width: 100%; object-fit: contain;"
-                                         src=""/>
+                                           class=" @error("image") is-invalid @endError"   />
+                                    @error("image[]")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
                                     <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل صورة التصنيف بحجم لا يتعدي ال ١ ميجا</p>
                                 </div>
                             </div>
@@ -84,3 +84,4 @@
 
         };
     </script>
+    @endsection

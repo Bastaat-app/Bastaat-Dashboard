@@ -174,7 +174,7 @@
                                 <td>@if(isset($place->foods_count)){{$place->foods_count}} @endif</td>
                                 <td></td>
                                 <td>
-                                    <input type="checkbox" @if($place->status==1) checked @endif  data-plugin="switchery" data-color="#1bb99a" />
+                                    <input type="checkbox"  @if($place->status==1) checked @endif  data-plugin="switchery" value="{{$place->status}}" id="change_place_status" place_id="{{$place->id}}" data-color="#1bb99a" />
                                 </td>
                                 <td>
                                     <a href="{{route('admin.place.details',['id'=>$place->id])}}" class="action-icon">
@@ -285,6 +285,30 @@
             }
         });
     });
+    $(document).ready(function() {
 
+        $('#change_place_status').on('change', function() {
+
+            $.ajax({
+                url: '{{route('admin.place.change-status')}}',
+                method: 'POST',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    id: $('#change_place_status').attr('place_id'),
+                    status: this.value,
+                    type:'toggle'
+                },
+                success: function(response) {
+                    //  console.log(response);
+                    location.reload();
+                    // do something with the response data
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                    // handle the error case
+                }
+            });
+        });
+    });
     </script>
 @endsection
