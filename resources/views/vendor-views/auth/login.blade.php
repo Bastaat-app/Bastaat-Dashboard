@@ -1,152 +1,133 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
-<head>
+<html lang="en" data-menu-color="brand">
 
-    <meta charset="utf-8"/>
-    <title>{{__("dashboard")}} - {{__("login")}}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description"/>
-    <meta content="Coderthemes" name="author"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ isset($settings) ? $settings->{"icon_url"} : asset('images/favicon.ico')}}">
+    <head>
+        <meta charset="utf-8" />
+        <title>Dashboard | Ubold - Responsive Bootstrap 5 Vendor Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured vendor theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
 
-    <!-- App css -->
-    @if(app()->getLocale() == "ar")
-        <link href="{{asset('css/config/default/bootstrap-rtl.min.css')}}" rel="stylesheet" type="text/css"
-              id="bs-default-stylesheet"/>
-        <link href="{{asset('css/config/default/app-rtl.min.css')}}" rel="stylesheet" type="text/css"
-              id="app-default-stylesheet"/>
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
 
-        <link href="{{asset('css/config/default/bootstrap-dark-rtl.min.css')}}" rel="stylesheet" type="text/css"
-              id="bs-dark-stylesheet"/>
-        <link href="{{asset('css/config/default/app-dark-rtl.min.css')}}" rel="stylesheet" type="text/css"
-              id="app-dark-stylesheet"/>
-        <link href="{{asset('css/dawam.css')}}" rel="stylesheet" type="text/css" id="app-dark-stylesheet"/>
-        <!-- icons -->
-        <link href="{{asset('css/icons-rtl.min.css')}}" rel="stylesheet" type="text/css"/>
-    @else
-        <link href="{{asset('css/config/default/bootstrap.min.css')}}" rel="stylesheet" type="text/css"
-              id="bs-default-stylesheet"/>
-        <link href="{{asset('css/config/default/app.min.css')}}" rel="stylesheet" type="text/css"
-              id="app-default-stylesheet"/>
+        <!-- google fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+        <!-- Theme Config Js -->
+        <script src="{{asset('assets/js/head.js')}}"></script>
 
-        <link href="{{asset('css/config/default/bootstrap-dark.min.css')}}" rel="stylesheet" type="text/css"
-              id="bs-dark-stylesheet"/>
-        <link href="{{asset('css/config/default/app-dark.min.css')}}" rel="stylesheet" type="text/css"
-              id="app-dark-stylesheet"/>
-        {{--        <link href="{{asset('css/dawam.css')}}" rel="stylesheet" type="text/css" id="app-dark-stylesheet"/>--}}
-    <!-- icons -->
-        <link href="{{asset('css/icons.min.css')}}" rel="stylesheet" type="text/css"/>
-    @endif
+        <!-- Bootstrap css -->
+        <link href="{{asset('assets/css/bootstrap-rtl.min.css')}}" rel="stylesheet" type="text/css" id="app-style" />
 
-</head>
+        <!-- App css -->
+        <link href="{{asset('assets/css/app-rtl.min.css')}}" rel="stylesheet" type="text/css" />
 
-<body class="loading auth-fluid-pages pb-0"
-      data-layout='{"mode": "{{$color_scheme_mode}}", "width": "fluid", "menuPosition": "fixed", "sidebar": { "color": "{{$color_scheme_mode}}", "size": "default", "showuser": false}, "topbar": {"color": "{{$color_scheme_mode == 'dark' ? 'light' : 'dark'}}"}, "showRightSidebarOnPageLoad": true}'>
+        <!-- Icons css -->
+        <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+    </head>
 
-<div class="auth-fluid">
-    <div class="auth-fluid-form-box">
-        <div class="align-items-center d-flex h-100">
-            <div class="card-body">
+    <body class="authentication-bg authentication-bg-pattern">
+
+        <div class="account-pages mt-5 mb-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6 col-xl-4">
+                        <div class="card bg-pattern">
+
+                            <div class="card-body p-4">
+
+                                <div class="text-center w-75 m-auto">
+                                    <div class="auth-brand">
+                                        <!-- <a href="index.html" class="logo logo-dark text-center">
+                                            <span class="logo-lg">
+                                                <img src="assets/images/logo-login.png" alt="" height="22">
+                                            </span>
+                                        </a>
+
+                                        <a href="index.html" class="logo logo-light text-center">
+                                            <span class="logo-lg">
+                                                <img src="assets/images/logo-login.png" alt="" height="22">
+                                            </span>
+                                        </a> -->
+                                    </div>
+                                    <h1 class="mb-3">تسجيل الدخول</h1>
+                                </div>
+
+                                @error("error")
+                                <p class="text-danger text-danger">{{ $message }}</p>
+                                @endError
+
+                                <form action="{{route('vendor.auth.postLogin') }}" method="post">
+                                    @csrf
+
+                                    <div class="mb-3">
+                                        <label for="emailaddress" class="form-label">البريد الإلكتروني</label>
+                                        <input class="form-control" @error("email") is-invalid @endError"
+                                        name="email" id="email" value="{{ old("email") }}"
+                                        placeholder="ادخل البريد الالكتروني">
+                                        @error("email")
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @endError
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">كلمة المرور</label>
+                                        <div class="input-group input-group-merge">
+                                            <input id="password" class="form-control" placeholder="ادخل كلمة المرور"  type="password" id="password" name="password" value="{{ old("password") }}"
+                                             @error("password") is-invalid @endError">
+                                            <div class="input-group-text" data-password="false">
+                                                <span class="password-eye"></span>
+                                            </div>
+                                        </div>
+                                        @error("password")
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @endError
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="checkbox-signin" checked>
+                                            <label class="form-check-label" for="checkbox-signin">تذكرني</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center d-grid">
+                                        <button type="submit"  class="btn btn-primary" type="submit"> تسجيل دخول </button>
+                                    </div>
+
+                                </form>
 
 
-                <!-- title-->
-                <h4 class="mt-0">{{ __("login") }}</h4>
-                <p class="text-muted mb-4">{{ __("Enter your email address and password to access admin panel") }}</p>
 
-                @error("error")
-                <p class="text-danger text-danger">{{ $message }}</p>
-                @endError
-
-                <form action="{{route('vendor.auth.postLogin') }}" method="post">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="email" class="form-label">
-                            {{__("email")}}
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input class="form-control @error("email") is-invalid @endError"
-                               name="email" id="email" value="{{ old("email") }}"
-                               placeholder="{{__("email")}}">
-                        @error("email")
-                        <span class="text-danger">{{ $message }}</span>
-                        @endError
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password" class="form-label">
-                            {{__("password")}}
-                            <span class="text-danger">*</span>
-                        </label>
-                        <div class="input-group input-group-merge">
-                            <input type="password" id="password" name="password" value="{{ old("password") }}"
-                                   class="form-control @error("password") is-invalid @endError"
-                                   placeholder="{{__("password")}}">
-                            <div class="input-group-text" data-password="false">
-                                <span class="password-eye"></span>
-                            </div>
+                            </div> <!-- end card-body -->
                         </div>
-                        @error("password")
-                        <span class="text-danger">{{ $message }}</span>
-                        @endError
-                    </div>
+                        <!-- end card -->
 
-                    <div class="text-center d-grid">
-                        <button class="btn btn-danger" type="submit">{{ __("login") }}</button>
-                    </div>
-                </form>
-                <div class="text-center">
-                    <h5 class="mt-3 text-muted">{{ __("Sign in with") }}</h5>
-                 {{--  <ul class="social-list list-inline mt-3 mb-0">
-                        <li class="list-inline-item">
-                            <a href="{{ route("auth.facebook") }}" class="social-list-item border-primary text-primary">
-                                <i class="mdi mdi-facebook"></i>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="{{ route("auth.google") }}" class="social-list-item border-danger text-danger">
-                                <i class="mdi mdi-google"></i>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="{{ route("auth.twitter") }}" class="social-list-item border-info text-info">
-                                <i class="mdi mdi-twitter"></i>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="{{ route("auth.github") }}" class="social-list-item border-secondary text-secondary">
-                                <i class="mdi mdi-github"></i>
-                            </a>
-                        </li>
-                    </ul>--}}
+                        <div class="row mt-3">
+                            <div class="col-12 text-center">
+                                <p> <a href="auth-recoverpw.html" class="text-white-50 ms-1">هل نسيت كلمة المرور ؟</a></p>
+                                <p class="text-white-50">هل لديك حساب ؟ <a href="auth-register.html" class="text-white ms-1"><b>اشترك الأن</b></a></p>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+                    </div> <!-- end col -->
                 </div>
+                <!-- end row -->
             </div>
+            <!-- end container -->
         </div>
-    </div>
-
-    <div class="auth-fluid-right text-center">
-        <div class="auth-user-testimonial">
-            <img src="{{ isset($settings) ? $settings->{"logo_" . $color_scheme_mode . "_url"} : asset("images/logo.png") }}" alt="" class="w-100 mb-3"
-                 style="max-height: 60px; object-fit: contain">
-            <p class="lead">
-                <i class="mdi mdi-format-quote-open"></i>
-                {{ isset($settings) ? $settings->content : ""}}
-                <i class="mdi mdi-format-quote-close"></i>
-            </p>
-            <h5 class="text-white">
-                {{ isset($settings) ? $settings->name : ""}}
-            </h5>
-        </div>
-    </div>
-</div>
+        <!-- end page -->
 
 
-<!-- Vendor js -->
-<script src="{{asset('js/vendor.min.js')}}"></script>
+        <footer class="footer footer-alt">
+            <div><script>document.write(new Date().getFullYear())</script> © جميع الحقوق محفوظة إلي بسطة</a></div>
+        </footer>
 
-<!-- App js -->
-<script src="{{asset('js/app.min.js')}}"></script>
+        <!-- Authentication js -->
+        <script src="{{asset('assets/js/pages/authentication.init.js')}}"></script>
 
-</body>
+    </body>
 </html>

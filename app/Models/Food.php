@@ -85,7 +85,9 @@ class Food extends Model
 		'order_count',
 		'avg_rating',
 		'rating_count',
-		'rating'
+		'rating',
+       'in_stock',
+        'favourite'
 	];
 
     protected $appends = ['image_url'];

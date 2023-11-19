@@ -30,7 +30,7 @@ class ListOrderResource extends JsonResource
              'restaurant_name'=>$this->restaurant->name,
             'phone'=>$this->restaurant->phone,
             'logo_url'=>$this->restaurant->logo_url,
-            'cover_url'=>$this->restaurant->cover_url,
+            'cover_url'=>$this->restaurant->cover_photo_url??"",
             'address'=>$this->restaurant->address,
             'latitude'=>$this->restaurant->latitude,
             'longitude'=>$this->restaurant->longitude,

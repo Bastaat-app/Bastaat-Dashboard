@@ -41,7 +41,8 @@ class Category extends Model
 		'parent_id',
 		'position',
 		'status',
-		'priority'
+		'priority',
+        'description'
 	];
 
     public function scopeActive($query)

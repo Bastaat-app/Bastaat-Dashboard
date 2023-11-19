@@ -7,8 +7,12 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * Class Vendor
@@ -35,9 +39,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @package App\Models
  */
-class Vendor extends Model
+class Vendor extends Authenticatable
 {
     use  SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable ;
 	protected $table = 'vendors';
 
 	protected $casts = [
