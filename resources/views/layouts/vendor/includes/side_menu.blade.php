@@ -97,7 +97,7 @@
             </li>
             <li class="menu-title">إدارة العملاء</li>
             <li class="menu-item">
-                <a href="{{route('admin.order.index')}}" class="menu-link">
+                <a href="{{route('vendor.order.index')}}" class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="shopping-bag"></i>
                 </span>

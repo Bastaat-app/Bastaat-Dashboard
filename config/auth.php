@@ -63,9 +63,9 @@ return [
         ],
 
         'api' => [
-            'driver' => 'passport',
+            'driver' => 'jwt',
             'provider' => 'users',
-            'hash' => true,
+
         ],
         'customer--' => [
             'driver' => 'session',

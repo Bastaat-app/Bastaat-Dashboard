@@ -1,4 +1,4 @@
-@extends('layouts.admin.master')
+@extends('layouts.vendor.master')
 @section('title')
     {{__("index")}}
 @endsection
@@ -72,7 +72,7 @@
                                 <td> منذ{{\Carbon\Carbon::parse($product->creared_at)->translatedFormat('l j F Y')}} <br>الساعة منذ{{\Carbon\Carbon::parse($product->creared_at)->translatedFormat('H:i:s')}} </td>
 
                                 <td>
-                                    <span class="badge bg-soft-success text-success">منشور@if($product->status==1)@elseغير منشور@endif @</span>
+                                    <span class="badge bg-soft-success text-success">منشور @if($product->status==1)@elseغير منشور@endif </span>
                                 </td>
                                 <td>
                                     <a  href="#">
@@ -86,7 +86,7 @@
                                     <a href="{{route('vendor.product.edit',['id'=>$product->id])}}" class="action-icon">
                                         <i class="mdi mdi-square-edit-outline"></i>
                                     </a>
-                                    <a data-bs-toggle="modal" href="#exampleModalToggle" role="button" class="action-icon">
+                                    <a data-bs-toggle="modal" href="#exampleModalToggle" role="button" class="action-icon" delete-id={{$product->id}} >
                                         <i class="mdi mdi-delete"></i>
                                     </a>
                                 </td>
@@ -112,6 +112,24 @@
         <!-- end col -->
     </div>
     <!-- end row -->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalToggleLabel">هل تريد حذف المكان ؟</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"> بمجرد الضغط علي تأكيد سوف يتم مسح المكان نهائياً </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">تأكيد الحذف</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 @endsection
 
 @section('script')
@@ -124,12 +142,12 @@
             var button = $(event.relatedTarget) //Button that triggered the modal
 
             var id = button.attr('delete-id');
-            url = '{{ route("vendor.category.delete", ":id") }}';
+            url = '{{ route("vendor.product.delete", ":id") }}';
             url = url.replace(':id', id);
 
         });
         $("#exampleModalToggle .btn-danger").click(function(){
-            alert(url);
+           // alert(url);
 
             $.ajax({
                 url: url,
@@ -138,7 +156,7 @@
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function(result) {
                     // Do something with the result
-                    location.reload();
+                   // location.reload();
                 }
             });
         });

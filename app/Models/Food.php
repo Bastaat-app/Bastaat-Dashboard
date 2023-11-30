@@ -59,12 +59,14 @@ class Food extends Model
 		'restaurant_id' => 'int',
 		'order_count' => 'int',
 		'avg_rating' => 'float',
-		'rating_count' => 'int'
+		'rating_count' => 'int',
+
 	];
 
 	protected $fillable = [
 		'name',
 		'description',
+        'summary',
 		'image',
 		'category_id',
 		'category_ids',
@@ -87,7 +89,8 @@ class Food extends Model
 		'rating_count',
 		'rating',
        'in_stock',
-        'favourite'
+        'favourite',
+        'product_quantity'
 	];
 
     protected $appends = ['image_url'];
@@ -117,6 +120,10 @@ class Food extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class)->latest();
+    }
+    public function slider()
+    {
+        return $this->hasMany(Food_slider_image::class);
     }
 
     // public function rating()

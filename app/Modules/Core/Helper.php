@@ -442,7 +442,9 @@ class Helper
         if (auth('vendor_employee')->check()) {
             return auth('vendor_employee')->user()->restaurant->id;
         }
+       // echo(auth('vendor')->user()->restaurants[0]->id); exit;
         return auth('vendor')->user()->restaurants[0]->id;
     }
+
 
 }

@@ -86,7 +86,7 @@ Route::namespace('Api\V1')->prefix('food')->withoutMiddleware('auth_api')->group
     Route::get('/list', [FoodController::class, 'get_food'])->name('list-food');
     Route::get('/single-food', [FoodController::class, 'single_food'])->name('single-food');
 });
-Route::namespace('Api\V1')->prefix('order')->group (function() {
+Route::namespace('Api\V1')->prefix('order')->group (function() {+
     Route::group(['middleware'=>['auth_api:api']], function () {
         Route::post('/cart', [OrderController::class, 'cart_order'])->name('cart-order');
         Route::get('/pervious-address',[OrderController::class,'get_pervious_address'])->name('pervious-address');

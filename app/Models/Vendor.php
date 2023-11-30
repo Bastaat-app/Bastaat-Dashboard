@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens;
+
 
 /**
  * Class Vendor
@@ -42,7 +42,7 @@ use Laravel\Passport\HasApiTokens;
 class Vendor extends Authenticatable
 {
     use  SoftDeletes;
-    use HasApiTokens, HasFactory, Notifiable ;
+    use  HasFactory, Notifiable ;
 	protected $table = 'vendors';
 
 	protected $casts = [

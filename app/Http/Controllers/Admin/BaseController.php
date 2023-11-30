@@ -50,7 +50,7 @@ class BaseController extends Controller
     {
 
         $item = $this->repository->delete($id);
-     //   if ($item) {
+     //  if ($item) {
         //    session()->flash('success', __('deleted successfully'));
       //  }
         return  session()->flash('success', __('deleted successfully'));
@@ -189,4 +189,5 @@ class BaseController extends Controller
 
 
     }
+
 }

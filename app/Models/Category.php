@@ -42,7 +42,8 @@ class Category extends Model
 		'position',
 		'status',
 		'priority',
-        'description'
+        'description',
+        'product_quantity'
 	];
 
     public function scopeActive($query)

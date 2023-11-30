@@ -5,7 +5,7 @@ namespace App\Scopes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use App\CentralLogics\Helpers;
+use App\Modules\Core\Helper;
 
 class RestaurantScope implements Scope
 {
@@ -18,6 +18,7 @@ class RestaurantScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('restaurant_id', Helpers::get_restaurant_id());            
+       $builder->where('restaurant_id', Helper::get_restaurant_id());
+
     }
 }

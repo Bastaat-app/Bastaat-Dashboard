@@ -17,8 +17,9 @@ class AuthApi
     public function handle(Request $request, Closure $next)
     {
 
-        if(Auth::check()){
+        if(Auth::guard('api')->check()){
 
+            Auth::shouldUse("api");
             $request->user()->last_login=date("Y-m-d H:i:s");
             $request->user()->save();
             return $next($request);

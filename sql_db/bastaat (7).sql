@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 25, 2023 at 07:22 PM
+-- Generation Time: Nov 30, 2023 at 02:05 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.17
 
@@ -161,7 +161,8 @@ CREATE TABLE `banners` (
 
 INSERT INTO `banners` (`id`, `title`, `type`, `image`, `status`, `data`, `created_at`, `updated_at`, `zone_id`, `compilation_id`, `place_id`) VALUES
 (1, 'مطاعم الطيبات', 'restaurant_wise', 'images/banner/1698222373.png', 1, 'l\'hul ;edvi', NULL, '2023-10-25 05:48:10', 1, 1, 3),
-(2, 'اعلان 2', 'restaurant_wise', 'images/banner/1698226814.png', 1, NULL, '2023-10-25 06:40:14', '2023-10-25 06:40:14', 5, 1, 2);
+(2, 'اعلان 2', 'restaurant_wise', 'images/banner/1698226814.png', 1, NULL, '2023-10-25 06:40:14', '2023-11-11 12:52:16', 1, 1, 2),
+(3, 'اعلان كاتشب السبع', 'restaurant_wise', 'images/banner/1699724943.png', 1, NULL, '2023-11-11 17:49:03', '2023-11-11 17:49:03', 1, 1, 9);
 
 -- --------------------------------------------------------
 
@@ -232,7 +233,8 @@ INSERT INTO `compilations` (`id`, `title`, `image`, `parent_id`, `position`, `st
 (1, 'مطاعم', 'images/compilation/1698234401.jpg', 0, 0, 1, 0, '2023-10-25 11:46:41', '2023-10-25 11:46:41', ''),
 (2, 'كافيهات', 'images/compilation/1698234312.jpg', 0, 0, 1, 0, '2023-10-25 11:45:12', '2023-10-25 11:45:12', ''),
 (3, 'ملابس', 'images/compilation/1698234288.png', 0, 0, 1, 0, '2023-10-25 11:44:48', '2023-10-25 11:44:48', ''),
-(4, 'هايبر', 'images/compilation/1698234255.png', 0, 0, 1, 0, '2023-10-25 11:44:15', '2023-10-25 11:44:15', NULL);
+(4, 'هايبر', 'images/compilation/1698234255.png', 0, 0, 1, 0, '2023-10-25 11:44:15', '2023-10-25 11:44:15', NULL),
+(5, 'بسطات', 'images/compilation/1699724095.jpg', 0, 0, 1, 0, '2023-11-11 17:34:55', '2023-11-11 17:34:55', NULL);
 
 -- --------------------------------------------------------
 
@@ -273,11 +275,19 @@ CREATE TABLE `coupons` (
   `limit` int(11) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `restaurant_id` bigint(20) UNSIGNED NOT NULL,
+  `compilation_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `data` varchar(255) DEFAULT NULL,
   `total_uses` bigint(20) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `coupons`
+--
+
+INSERT INTO `coupons` (`id`, `title`, `code`, `start_date`, `expire_date`, `min_purchase`, `max_discount`, `discount`, `discount_type`, `coupon_type`, `limit`, `status`, `restaurant_id`, `compilation_id`, `created_at`, `updated_at`, `data`, `total_uses`) VALUES
+(1, 'كوبون1', '454465', '2023-11-13', '2023-11-15', 56.00, 0.00, 30.00, 'percentage', 'default', NULL, 1, 6, 2, '2023-11-13 05:47:41', '2023-11-13 05:47:41', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -326,7 +336,8 @@ INSERT INTO `customer_addresses` (`id`, `contact_person_number`, `address`, `lat
 (2, 'ahmed', 'tiyleklj', NULL, NULL, 2, 'contact_person_name', NULL, NULL, 'floor', NULL, 'house', 0),
 (5, '8775645656', 'بركه السبع', NULL, NULL, 2, NULL, '2023-10-21 08:49:27', '2023-10-21 08:49:27', '2', 'طريق الحماديه', 'منزل رقم4', 1),
 (6, 'ahmed', 'tiyleklj', NULL, NULL, 2, 'contact_person_name', NULL, NULL, 'floor', NULL, 'house', NULL),
-(7, '8775645656', 'بركه السبع', NULL, NULL, 2, NULL, '2023-10-21 08:47:55', '2023-10-21 08:47:55', '2', 'طريق الحماديه', 'منزل رقم4', 1);
+(7, '8775645656', 'بركه السبع', NULL, NULL, 2, NULL, '2023-10-21 08:47:55', '2023-10-21 08:47:55', '2', 'طريق الحماديه', 'منزل رقم4', 1),
+(8, 'ahmed', 'tiyleklj', NULL, NULL, 6, 'contact_person_name', NULL, NULL, 'floor', NULL, 'house', NULL);
 
 -- --------------------------------------------------------
 
@@ -491,6 +502,7 @@ CREATE TABLE `food` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `description` text DEFAULT NULL,
+  `summary` mediumtext DEFAULT NULL,
   `image` varchar(30) DEFAULT NULL,
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `category_ids` varchar(255) DEFAULT NULL,
@@ -513,17 +525,40 @@ CREATE TABLE `food` (
   `order_count` int(11) NOT NULL DEFAULT 0,
   `avg_rating` double(16,14) NOT NULL DEFAULT 0.00000000000000,
   `rating_count` int(11) NOT NULL DEFAULT 0,
-  `rating` varchar(255) DEFAULT NULL
+  `rating` varchar(255) DEFAULT NULL,
+  `product_quantity` int(11) NOT NULL,
+  `in_stock` tinyint(1) NOT NULL DEFAULT 0,
+  `favourite` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `food`
 --
 
-INSERT INTO `food` (`id`, `name`, `description`, `image`, `category_id`, `category_ids`, `variations`, `add_ons`, `attributes`, `choice_options`, `price`, `tax`, `tax_type`, `discount`, `discount_type`, `available_time_starts`, `available_time_ends`, `veg`, `status`, `restaurant_id`, `created_at`, `updated_at`, `order_count`, `avg_rating`, `rating_count`, `rating`) VALUES
-(1, 'sheesh Tawooq', 'demo product', '', 1, '[{\"id\":\"1\",\"position\":0}]', '[{\"type\":\"L\",\"price\":95},{\"type\":\"M\",\"price\":75}]', '[]', '[\"1\"]', '[{\"name\":\"choice_1\",\"title\":\"\\u0627\\u0644\\u062d\\u062c\\u0645\",\"options\":[\"L\",\"M\"]}]', 95.00, 0.00, 'percent', 0.00, 'percent', '10:00:00', '04:05:00', 1, 1, 3, '2022-12-02 17:37:30', '2023-06-07 11:52:04', 0, 0.00000000000000, 0, NULL),
-(2, 'Chiken Alagreek', 'demo product', '', 2, '[{\"id\":\"2\",\"position\":0}]', '[{\"type\":\"L\",\"price\":100},{\"type\":\"M\",\"price\":80}]', '[]', '[\"1\"]', '[{\"name\":\"choice_1\",\"title\":\"\\u0627\\u0644\\u062d\\u062c\\u0645\",\"options\":[\"L\",\"M\"]}]', 100.00, 0.00, 'percent', 0.00, 'percent', '10:00:00', '04:05:00', 0, 1, 3, '2022-12-02 17:37:30', '2023-06-07 11:55:36', 0, 0.00000000000000, 0, NULL),
-(3, 'Chekin Grill', 'demo product', '', 1, '[{\"id\":\"1\",\"position\":1}]', '[{\"type\":\"L\",\"price\":90},{\"type\":\"M\",\"price\":70}]', '[]', '[\"1\"]', '[{\"name\":\"choice_1\",\"title\":\"\\u0627\\u0644\\u062d\\u062c\\u0645\",\"options\":[\"L\",\"M\"]}]', 90.00, 0.00, 'percent', 0.00, 'percent', '10:00:00', '04:05:00', 0, 1, 3, '2022-12-02 17:37:30', '2023-06-07 12:09:21', 0, 0.00000000000000, 0, NULL);
+INSERT INTO `food` (`id`, `name`, `description`, `summary`, `image`, `category_id`, `category_ids`, `variations`, `add_ons`, `attributes`, `choice_options`, `price`, `tax`, `tax_type`, `discount`, `discount_type`, `available_time_starts`, `available_time_ends`, `veg`, `status`, `restaurant_id`, `created_at`, `updated_at`, `order_count`, `avg_rating`, `rating_count`, `rating`, `product_quantity`, `in_stock`, `favourite`) VALUES
+(1, 'sheesh Tawooq', 'demo product', NULL, '', 1, '[{\"id\":\"1\",\"position\":0}]', '[{\"type\":\"L\",\"price\":95},{\"type\":\"M\",\"price\":75}]', '[]', '[\"1\"]', '[{\"name\":\"choice_1\",\"title\":\"\\u0627\\u0644\\u062d\\u062c\\u0645\",\"options\":[\"L\",\"M\"]}]', 95.00, 0.00, 'percent', 0.00, 'percent', '10:00:00', '04:05:00', 1, 1, 3, '2022-12-02 17:37:30', '2023-06-07 11:52:04', 0, 0.00000000000000, 0, NULL, 0, 0, 0),
+(2, 'Chiken Alagreek', 'demo product', NULL, '', 2, '[{\"id\":\"2\",\"position\":0}]', '[{\"type\":\"L\",\"price\":100},{\"type\":\"M\",\"price\":80}]', '[]', '[\"1\"]', '[{\"name\":\"choice_1\",\"title\":\"\\u0627\\u0644\\u062d\\u062c\\u0645\",\"options\":[\"L\",\"M\"]}]', 100.00, 0.00, 'percent', 0.00, 'percent', '10:00:00', '04:05:00', 0, 1, 3, '2022-12-02 17:37:30', '2023-06-07 11:55:36', 0, 0.00000000000000, 0, NULL, 0, 0, 0),
+(3, 'Chekin Grill', '<p><br></p>', 'vcc', 'images/product/1701230601.jpg', 1, '[{\"id\":\"1\",\"position\":0}]', '[{\"type\":\"L\",\"price\":90},{\"type\":\"M\",\"price\":70}]', '[]', '[\"1\"]', '[{\"name\":\"choice_1\",\"title\":\"\\u0627\\u0644\\u062d\\u062c\\u0645\",\"options\":[\"L\",\"M\"]}]', 90.00, 0.00, 'percent', 0.00, 'percent', '10:00:00', '04:05:00', 0, 1, 3, '2022-12-02 17:37:30', '2023-11-29 17:44:44', 0, 0.00000000000000, 0, NULL, 0, 0, 0),
+(6, 'retert', '<p>rtertre</p>', 'egerter', 'images/product/1701287673.jpg', 2, '[{\"id\":\"2\",\"position\":0}]', NULL, NULL, NULL, NULL, 45.00, 0.00, 'percent', 5.00, 'percent', NULL, NULL, 0, 1, 2, NULL, NULL, 0, 0.00000000000000, 0, NULL, 2, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `food_slider_images`
+--
+
+CREATE TABLE `food_slider_images` (
+  `id` int(11) NOT NULL,
+  `image_path` mediumtext NOT NULL,
+  `food_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `food_slider_images`
+--
+
+INSERT INTO `food_slider_images` (`id`, `image_path`, `food_id`) VALUES
+(6, 'images/product/1701285095.jpg', 3);
 
 -- --------------------------------------------------------
 
@@ -768,8 +803,99 @@ CREATE TABLE `oauth_access_tokens` (
 --
 
 INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes`, `revoked`, `created_at`, `updated_at`, `expires_at`) VALUES
+('0708c46fc7ef0aaf4d804c635d389e52eaeb24ad911df7c7bf34f61e725e9592fcb9db67daad6def', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 19:17:53', '2023-11-22 19:17:53', '2024-11-22 19:17:53'),
+('0bfbc4bb9e534a02df1a2e08c0b9353363948cbeeab6651fcf39132dab0876ad1443883bf5d9df40', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:29:39', '2023-11-13 19:29:39', '2024-11-13 19:29:39'),
+('0fb8e2a7336e8ea67e9c4c8ab29f4bbb02e66064790dabe7d1b23c16a1ed2dc015ba12c7be9cd80c', 6, 1, 'AuthToken', '[]', 0, '2023-11-11 19:49:36', '2023-11-11 19:49:36', '2024-11-11 19:49:36'),
+('1332869510d30f8eb982f57bbfdbf7b67885663032fc5be7b0ff4dcf1097c83f4f80c88aeea22dad', 2, 1, 'AuthToken', '[]', 0, '2023-11-20 18:57:25', '2023-11-20 18:57:25', '2024-11-20 18:57:25'),
+('17102b536fd675ab75363c2f27c1f25217c116026f963e9c830fd4823e795f2869ea4735a501c013', 6, 1, 'AuthToken', '[]', 0, '2023-11-15 18:39:06', '2023-11-15 18:39:06', '2024-11-15 18:39:06'),
+('1c94537b578dcb9c7bf2368855c74383518b316e532a207a5446e2f1c27443da3e330ffbfb7b5214', 2, 1, 'AuthToken', '[]', 0, '2023-11-21 17:49:48', '2023-11-21 17:49:48', '2024-11-21 17:49:48'),
+('1cc8a58b1ae335cab267f229e38151be45bf7615801c72bd4b9e93ecf4b18aa8021d49232d1d7a96', 6, 1, 'AuthToken', '[]', 0, '2023-11-12 19:49:51', '2023-11-12 19:49:51', '2024-11-12 19:49:51'),
+('227324daf82bbb2a06656e1e6d50bf7cb73fa34e7081a98336ddc34e9317b0577ff2820ce8a9b616', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 18:30:20', '2023-11-22 18:30:20', '2024-11-22 18:30:20'),
+('238acdf0913eab2016fa951b64bd2f495939f93a433ab7336d399ad9f802ce6410f919e417cbee94', 6, 1, 'AuthToken', '[]', 0, '2023-11-16 17:15:03', '2023-11-16 17:15:03', '2024-11-16 17:15:03'),
+('23d736203e06a65c55abec9d82f415a716bb8fb3a41540b7c1d218d8c3a2786491c83a86b1523a36', 2, 1, 'AuthToken', '[]', 0, '2023-11-21 17:01:32', '2023-11-21 17:01:32', '2024-11-21 17:01:32'),
+('257e7db53ec1ceef1909674201fc3c8c917859985cef1d2b891c9e3c9fa5865bfbf61a38d55de2aa', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:47:42', '2023-11-19 19:47:42', '2024-11-19 19:47:42'),
+('290089b740776503924e6361b2235ddfa2c20c8c49603b4277a5ad4fced5a29ed17a85793ce85a00', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:18:16', '2023-11-13 19:18:16', '2024-11-13 19:18:16'),
+('29e49fb6cbfb2f5e7e784926297f88bf3dab39612f90ab83811a511e88e6f429b7252b8b3da37dfc', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 20:00:30', '2023-11-13 20:00:30', '2024-11-13 20:00:30'),
+('2b4fae7c2fa7af81ed6517f756ad25374574292bee9469d571583f929d78df91e67e2217e538c0c8', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:55:02', '2023-11-19 19:55:02', '2024-11-19 19:55:02'),
+('2f241c65788225ab1daa63783f854c95b898d497a8e5e264521b6a6c912285e52878ceaef2500854', 6, 1, 'AuthToken', '[]', 0, '2023-11-16 08:51:34', '2023-11-16 08:51:34', '2024-11-16 08:51:34'),
+('30ece99fca5741eb9ac2bf39f1098ce38f6d5dda8ddcb5a9f91297583a47427a2727be81d981a185', 2, 1, 'AuthToken', '[]', 0, '2023-11-21 16:53:23', '2023-11-21 16:53:23', '2024-11-21 16:53:23'),
+('35f9872ce67faa42edc9f56859e8613aab9b6d6cf078968c950eb55c73f4704543054d4a93ee992a', 6, 1, 'AuthToken', '[]', 0, '2023-11-11 19:41:58', '2023-11-11 19:41:58', '2024-11-11 19:41:58'),
+('38a7ca4c508c3532f46f2695e70859ab44b684cf959cf401c6c958fc113406a0c774219bc6a85d8b', 2, 1, 'AuthToken', '[]', 0, '2023-11-21 16:54:05', '2023-11-21 16:54:05', '2024-11-21 16:54:05'),
+('38cfd3adb83ab5d11a15004d28fd4763090f89f4c7c06fa40720e9dc8b24cfe3f2d4d4703cc34060', 6, 1, 'AuthToken', '[]', 0, '2023-11-11 19:42:57', '2023-11-11 19:42:57', '2024-11-11 19:42:57'),
+('41cb21c1af4154f800c5c4fb3b6d8b9fed84d17bca8d83bdb746aca4493a6f39d8e25d3bfb548d48', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:12:12', '2023-11-13 19:12:12', '2024-11-13 19:12:12'),
+('42eb4a5da1b2354259d0c1156879e7d488d4889b519257b65ae92e5c7ce1a8d2547cb30af26de6c3', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 21:07:04', '2023-11-19 21:07:04', '2024-11-19 21:07:04'),
+('45b1f444d9652d180fc864a68619915d463791ea6b79a1fd808fa827797768eed74da493e0ac05d3', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 18:00:56', '2023-11-19 18:00:56', '2024-11-19 18:00:56'),
+('492bae04c9c9c1c78222bad14b1cfc984357b14e11ba4f6efd91f465d3414a9175e9abee2357ba7f', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:16:46', '2023-11-13 19:16:46', '2024-11-13 19:16:46'),
+('49efc35b6d76a8e0990d82809fba27ca0f205e10a8261c87f92cd853ec3f760111a64ffd6fa551c6', 6, 1, 'AuthToken', '[]', 0, '2023-11-11 19:37:17', '2023-11-11 19:37:17', '2024-11-11 19:37:17'),
+('4a884f9e26693fa15b62e39565751e0b6f2196eb519d306c2f9ac718585945e606232a8fa781f344', 2, 1, 'AuthToken', '[]', 0, '2023-11-21 16:52:14', '2023-11-21 16:52:14', '2024-11-21 16:52:14'),
+('4d9faae5689fced47cd381f2748cfe3b12a80a90ea5fde0dfc08743d1e57cec36db21a4f3b5e3192', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:09:43', '2023-11-19 19:09:43', '2024-11-19 19:09:43'),
+('5184285dde8384a9620ef76113e21db317d28965b679d5b84ee39bd6d38690d35ab3c69b4b6cbca5', 2, 1, 'AuthToken', '[]', 0, '2023-11-17 12:30:35', '2023-11-17 12:30:35', '2024-11-17 12:30:35'),
+('58507b43e358618d33a6e4370860569951b3b25a574afdf985365b94322957308b33bca6ca66214d', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 14:36:26', '2023-11-22 14:36:26', '2024-11-22 14:36:26'),
+('620c6284b8046c8ad56a5bbda42dedfb86459a6dc6cecfcd4552bf1b16b21be63614548759f87272', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:45:51', '2023-11-13 19:45:51', '2024-11-13 19:45:51'),
+('6ac56c1ac914356072a3bff16c26a310a350a0a65bba178d5d934497df865e2b84402b6008646167', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:38:23', '2023-11-19 19:38:23', '2024-11-19 19:38:23'),
+('6c3cee939411e906950b00ba3692218c2767d74c43148dbafebc29b35d2dc040061132aa3dcc0b22', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:38:10', '2023-11-13 19:38:10', '2024-11-13 19:38:10'),
+('6c4ef1e2081302e4d206f28b036b86c2c7f7a812858eba0e0d3428ded83d435235ae8d9d8cfbe347', 2, 1, 'AuthToken', '[]', 0, '2023-11-21 13:44:43', '2023-11-21 13:44:43', '2024-11-21 13:44:43'),
+('6d4958ca02dc3a000aa780db5788d862f15e80269bd836f004bc4724460669a4e508ed9f44e7a0f8', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:20:37', '2023-11-19 19:20:37', '2024-11-19 19:20:37'),
+('6daffd9e9a35a5b5335740da0af820616a85b9f0c2cf2de7e4bf19057ba0a02467ad1e3037667c3a', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:10:32', '2023-11-19 19:10:32', '2024-11-19 19:10:32'),
+('6e9b61561f5fe5bbaec7533318551207c2d704b795efc54b387ec276f163163aa62419572aaa72ad', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 19:29:04', '2023-11-22 19:29:04', '2024-11-22 19:29:04'),
+('6f47cb0e3bb64e6599c144bb98ce6ea8389b9e2dc3148403e7208812d9f30a64243ff74213a3062a', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:07:02', '2023-11-19 19:07:02', '2024-11-19 19:07:02'),
+('796c702bfaefafd2047c26e920d65676aff3e5d57b91279f4a851b1c7f8f0714d85e2ab4d2a84966', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 21:08:24', '2023-11-19 21:08:24', '2024-11-19 21:08:24'),
+('7b08b22d66a7075d77c92df4fd8e012f44f220016ead46f314304eb440e0557dbd847c6c5513a123', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:43:59', '2023-11-19 19:43:59', '2024-11-19 19:43:59'),
+('7b67be5823484dd2dfe91654dc765ffcd9395cfe856d9f0b5b2c9c8d065ce2de95973ca32c7e1434', 2, 1, 'AuthToken', '[]', 0, '2023-11-21 09:28:51', '2023-11-21 09:28:51', '2024-11-21 09:28:51'),
+('7e6b509341f23bc1a9f4e72e5a31d8627d8035eac223793fc1680f728b0169bbfad6c7c7d9de1ee2', 6, 1, 'AuthToken', '[]', 0, '2023-11-11 19:35:15', '2023-11-11 19:35:15', '2024-11-11 19:35:15'),
+('8304748306da8affaba7a020ad78f65046973c267715d3bc36d12e5ea10c0265efd5103b86fb863c', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 18:00:09', '2023-11-19 18:00:09', '2024-11-19 18:00:09'),
+('8821774522057e3ff1629c65255f9e0de647f3ebb1c9734a6902a8a4ec10bdc6b23b0d506d9544e8', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:51:28', '2023-11-13 19:51:28', '2024-11-13 19:51:28'),
+('883f9fdee8fcf4e3916c8f8b31d0e870350d4e630f67fd85ad9784d1367a988551a737209e5f7f43', 2, 1, 'AuthToken', '[]', 0, '2023-11-18 20:05:22', '2023-11-18 20:05:22', '2024-11-18 20:05:22'),
+('8b7b1008799f70233e600558c96ce275bc57670d26634a7d33dfc6646b49fa612f2abb40c9c1d78d', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 18:45:43', '2023-11-19 18:45:43', '2024-11-19 18:45:43'),
+('8ba3b9a842fd7693e80bec2e33b2f0d86e18bcecab04cbd82eba443331c60af4749f59fe15971f1c', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 18:49:03', '2023-11-19 18:49:03', '2024-11-19 18:49:03'),
+('8d19ed403c813fa3147f2a140c26c2bc414e40bb8d1de41f12abd0e5c353350bed4ce8ed7219edc2', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:33:16', '2023-11-13 19:33:16', '2024-11-13 19:33:16'),
+('8e52a5530eeb10c0641376eb293c8132bd986a03f8aacec1b545afed35bf0cfc9ab59b428418dfc5', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 18:42:18', '2023-11-19 18:42:18', '2024-11-19 18:42:18'),
+('92df98097cba4182ca9a07fd35405f04bb9283f857c08b04aeda106667585b9c8b981b4767f4c87e', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 18:51:00', '2023-11-19 18:51:00', '2024-11-19 18:51:00'),
+('943f6ea0ff1592b010a8b36ecdf035ebc21a308f75fa4a4b7c1b9b7e1fe69d80b11164f4712e7464', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 14:00:16', '2023-11-22 14:00:16', '2024-11-22 14:00:16'),
+('94b625aa37dfe49bcf960ac7cbce46bd6d85c44870f5495aab74befaff26f25f51519cfd73cad421', 2, 1, 'AuthToken', '[]', 0, '2023-10-28 20:28:14', '2023-10-28 20:28:14', '2024-10-28 22:28:14'),
+('97245844a9f69a9b42c2589e8ebd1fb2d1a7693f0568f3e0732dd385d636a9481a7ac0ed6633f8f3', 6, 1, 'AuthToken', '[]', 0, '2023-11-11 19:46:09', '2023-11-11 19:46:09', '2024-11-11 19:46:09'),
+('9b3d71e274f68bad11a4c93cb80fc6fd9b414acfe63c2cf8ccc36da5ea50f13be4050aebf32bd169', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:08:01', '2023-11-19 19:08:01', '2024-11-19 19:08:01'),
+('9f7ce7caedf5c03b8d48321213960178b40b9356599c473d90cd2d31960914edf21ad60852d5c6d1', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:54:27', '2023-11-19 19:54:27', '2024-11-19 19:54:27'),
+('a1d66aea394993153b09968a340b5df6153b00c53120fd4f6ebe36474fd3311ee8596df804d2e4c5', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:23:36', '2023-11-19 19:23:36', '2024-11-19 19:23:36'),
+('a1d77e7c7dddef8e92368e46bf4cefbfea1977c2c2a118cd1e71bfbf6774b4fe1ee0be929355852f', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 14:43:59', '2023-11-22 14:43:59', '2024-11-22 14:43:59'),
+('a2de1f45c8a3cfd30b12a5d9acb4c34965fba53e3aeafe8da5ee9e500c5a70aab60a46f0c74e8bb5', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 14:01:52', '2023-11-22 14:01:52', '2024-11-22 14:01:52'),
+('acc0aa9ae27299ea3d68a86f3794f62e383395a39929c97d3006c1198d55715c680eb70e9ec6160c', 6, 1, 'AuthToken', '[]', 0, '2023-11-12 19:53:03', '2023-11-12 19:53:03', '2024-11-12 19:53:03'),
+('aee616a589e731f84d7a5a70bdc77a0c88ef8e0b5abb624674a10f90936dd2cab9c2b8353d235529', 2, 1, 'AuthToken', '[]', 0, '2023-11-21 17:17:15', '2023-11-21 17:17:15', '2024-11-21 17:17:15'),
+('b3e88addd807febe8377199335b5241643bfd663478ba0d824cf4fc218997fbe341f39d70a38699f', 6, 1, 'AuthToken', '[]', 0, '2023-11-14 17:32:34', '2023-11-14 17:32:34', '2024-11-14 17:32:34'),
+('b7702cbb252e76079a3f607f89e17db7b33613c803fa14187d9beb201b96e8277e9431a912e5b61f', 6, 1, 'AuthToken', '[]', 0, '2023-11-17 09:14:46', '2023-11-17 09:14:46', '2024-11-17 09:14:46'),
+('b8440a2ab5a72248a47d7feb2c04638b2e539e3bc5abdd73312136b6490700dee0035d7104a8fbad', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 12:04:38', '2023-11-22 12:04:38', '2024-11-22 12:04:38'),
+('b912d669cd210031634a1242f0aba9a545adc540a704469c2fdac9b25fbc93863c2bb3f63da8011a', 2, 1, 'AuthToken', '[]', 0, '2023-11-20 19:10:41', '2023-11-20 19:10:41', '2024-11-20 19:10:41'),
+('ba726cd2c996ade99635d315ced7cafd3455b1b5b6472a22b560cd5b72dc4408e67d628aa2bddc51', 6, 1, 'AuthToken', '[]', 0, '2023-11-11 19:42:38', '2023-11-11 19:42:38', '2024-11-11 19:42:38'),
+('baa1e09c639cfc1092130c685942bcb4220c3487dfd29760762f81ecd357e626b46b8979909f1155', 2, 1, 'AuthToken', '[]', 0, '2023-11-21 17:23:38', '2023-11-21 17:23:38', '2024-11-21 17:23:38'),
+('bb68c69022aa68bd677982fc9163d0ebb919c2db32e7dca12e1a80b77891baca936b896e6b505e43', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 18:21:25', '2023-11-19 18:21:25', '2024-11-19 18:21:25'),
+('bdf1f9e29176a12fe77555a63667e3f1f89c8a02f0b306c2da5d71dfffe2cf14e1b610bb43e2501b', 2, 1, 'AuthToken', '[]', 0, '2023-11-21 20:30:21', '2023-11-21 20:30:21', '2024-11-21 20:30:21'),
+('c2960a452355327007b678d332db78df83e11c9c6d1f518cbe33389855ff89437e42f39f8a5c21d7', 2, 1, 'AuthToken', '[]', 0, '2023-11-18 09:14:21', '2023-11-18 09:14:21', '2024-11-18 09:14:21'),
 ('c32e52b4d6b882be59836c7c7bc4eaa0a4154ab45c78640e98bcb064d8d9c75f0be4bc64d723fdcf', 2, 1, 'Laravel Password Grant Client', '[]', 0, '2023-10-15 08:22:32', '2023-10-15 08:22:32', '2024-10-15 11:22:32'),
-('d771d7e7aa07f475aefaea09bf5d0e622e67c1f8b40e4ad681f295ae4ed63883a4de7cd1a9f1d8ac', 2, 1, 'Laravel Password Grant Client', '[]', 0, '2023-10-15 08:33:03', '2023-10-15 08:33:03', '2024-10-15 11:33:03');
+('c417012d4875188b0f8196752d373fe8d5b60e0c2df1db9db2f10c562b4d9f2d5c7fc5a9b4dcc9c6', 6, 1, 'AuthToken', '[]', 0, '2023-11-12 19:53:46', '2023-11-12 19:53:46', '2024-11-12 19:53:46'),
+('c7f6246ed65f1461fbd62caedc0869838fb4f8fba5b9e8233103a077eabf81e67f8248ff12ab4bed', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:43:31', '2023-11-13 19:43:31', '2024-11-13 19:43:31'),
+('cb9951ecbe8af3392caaedd930e4d571f399e8a1bce63f789b470d1fc8c892905f311fff34360b91', 6, 1, 'AuthToken', '[]', 0, '2023-11-12 19:49:49', '2023-11-12 19:49:49', '2024-11-12 19:49:49'),
+('d069c460f0c7bd04370b03649e380015429a6b66a8799deafd81db72a6e6eec4a7e30697c38c93bf', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:50:52', '2023-11-19 19:50:52', '2024-11-19 19:50:52'),
+('d771d7e7aa07f475aefaea09bf5d0e622e67c1f8b40e4ad681f295ae4ed63883a4de7cd1a9f1d8ac', 2, 1, 'Laravel Password Grant Client', '[]', 0, '2023-10-15 08:33:03', '2023-10-15 08:33:03', '2024-10-15 11:33:03'),
+('dadcc5bb6ab821b1c84ec4b35a10e7c054147b6e0424d0de8e79da4cfbaca0e726f9379eae1fd476', 6, 1, 'AuthToken', '[]', 0, '2023-11-11 19:43:27', '2023-11-11 19:43:27', '2024-11-11 19:43:27'),
+('ddb3a57c6d3269577fc54b644bf19f520a6e030ba667dd2d0cb16eb7195b47d4dc796df70ac30012', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 13:53:27', '2023-11-22 13:53:27', '2024-11-22 13:53:27'),
+('dfd318a898abe9dd4b96c12e3b0ce55769a6772354e3e06f3ff1d769bf7842e9d1095c1ead56898d', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 09:55:36', '2023-11-22 09:55:36', '2024-11-22 09:55:36'),
+('e17d386e7dd3277f7b348bdaf99d74fc3ce767384f02ba3bdc20bbcefcab811dae88c7160ef16952', 6, 1, 'AuthToken', '[]', 0, '2023-11-17 09:33:08', '2023-11-17 09:33:08', '2024-11-17 09:33:08'),
+('e314fc287fd6c1044cbfe70bfce76261705ddc179849309a1fce9d01e80984ab7fb5be56a9d137a6', 2, 1, 'AuthToken', '[]', 0, '2023-11-18 09:17:28', '2023-11-18 09:17:28', '2024-11-18 09:17:28'),
+('e4381347a1e61e20e3986fec55602f31b4691c135679b6c320733ae0a93071e9b5ccb79daf263fbf', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:56:05', '2023-11-19 19:56:05', '2024-11-19 19:56:05'),
+('e4ec2352947b8a2f0b08b27ec3541cfc00a2c49de22b8272c5e2d43a93b0a940830dc6fc5db93356', 2, 1, 'AuthToken', '[]', 0, '2023-11-20 18:14:48', '2023-11-20 18:14:48', '2024-11-20 18:14:48'),
+('e54cff046e5d704ba6149a0a66546f0db6ef3f3ebb656690d5c040bf235f7de004aed7e03070dceb', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 15:16:29', '2023-11-22 15:16:29', '2024-11-22 15:16:29'),
+('e57943b3fab3b3c6dd2cbb50f424d74895e22bcd9176832145bda0bc768155e5d6af1cabb73bcbbf', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:53:40', '2023-11-19 19:53:40', '2024-11-19 19:53:40'),
+('e7e5efae44c10a2a9a5e61b53ae67d8b521710446d888ad1e2b1fe4132afbca3e1cf531e375b6fb5', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:39:27', '2023-11-19 19:39:27', '2024-11-19 19:39:27'),
+('eae3d9c61de2ab116d976fb6550bb0673f796e5aee3f37d1cadcaaff2d722aa0e206024d6f88ddba', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:40:38', '2023-11-19 19:40:38', '2024-11-19 19:40:38'),
+('ee02ab454a124c97b9345279a3e7cde847f9957d594a291ff6f7757602721e2befed7cde01201a11', 2, 1, 'AuthToken', '[]', 0, '2023-11-22 14:19:00', '2023-11-22 14:19:00', '2024-11-22 14:19:00'),
+('ee06d12f2c5a17098b045dda71f816a83d6c82d667e51b2124a2f97573bf9a0893167639aa37e929', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:13:57', '2023-11-13 19:13:57', '2024-11-13 19:13:57'),
+('efce58c3cc3c3b79b08cc576df8616d3a02f43556c2c955679ad46fdd87d733626aa0408f49a615e', 6, 1, 'AuthToken', '[]', 0, '2023-11-11 19:21:46', '2023-11-11 19:21:46', '2024-11-11 19:21:46'),
+('f3c91f55d570d56ff0795d2315b8dcfb582a8ec44ba9d504368a62455fc8859d2a5ce51dc6750c1a', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:36:23', '2023-11-13 19:36:23', '2024-11-13 19:36:23'),
+('f63b26388c9b57c68a2e4d893fc08e42336c0a83804ac93de3f8d7eb382b57136a9571d8fb1c2785', 9, 1, 'AuthToken', '[]', 0, '2023-11-22 18:30:36', '2023-11-22 18:30:36', '2024-11-22 18:30:36'),
+('f6c01ffc2725a42ac9f6fbd00f09b694c38f6d3eb4f42016ca3ef819e9e8ebc23ea0dc46b9585427', 2, 1, 'AuthToken', '[]', 0, '2023-11-19 19:42:44', '2023-11-19 19:42:44', '2024-11-19 19:42:44'),
+('f908bb1d60a0c8c93b2d26d992f831a40e3d0af56f9bfd52420bc586ea49e0021bdffaec35755353', 6, 1, 'AuthToken', '[]', 0, '2023-11-17 09:17:17', '2023-11-17 09:17:17', '2024-11-17 09:17:17'),
+('fb799b50db20f48f6d30f6c31172a4f24380b6985653c4cc57584eaa070574277863ba51e0a228ce', 6, 1, 'AuthToken', '[]', 0, '2023-11-13 19:31:39', '2023-11-13 19:31:39', '2024-11-13 19:31:39'),
+('fdd86835e3dd538302f3a7ed0d548eea04d4fa08c0e404da5d0889a390e2c18c56610b51d72a97b5', 2, 1, 'AuthToken', '[]', 0, '2023-11-20 18:15:55', '2023-11-20 18:15:55', '2024-11-20 18:15:55');
 
 -- --------------------------------------------------------
 
@@ -914,7 +1040,7 @@ INSERT INTO `orders` (`id`, `user_id`, `order_amount`, `coupon_discount_amount`,
 (100006, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'pending', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 05:09:05', '2023-10-17 05:09:05', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0),
 (100007, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'pending', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 05:12:06', '2023-10-17 05:12:06', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0),
 (100008, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'canceled', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 05:15:51', '2023-10-18 09:06:10', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-10-18 09:06:10', NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0),
-(100009, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'canceled', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 05:20:02', '2023-10-21 06:17:27', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-10-21 06:17:27', NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0),
+(100009, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'picked_up', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 05:20:02', '2023-11-29 23:02:21', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, '2023-11-29 22:57:22', NULL, '2023-11-29 23:02:21', NULL, '2023-10-21 06:17:27', NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0),
 (100010, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'canceled', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 05:22:41', '2023-10-21 06:21:28', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-10-21 06:21:28', NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0),
 (100011, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'pending', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 05:26:45', '2023-10-17 05:26:45', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0),
 (100012, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'pending', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 05:29:00', '2023-10-17 05:29:00', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0),
@@ -923,7 +1049,7 @@ INSERT INTO `orders` (`id`, `user_id`, `order_amount`, `coupon_discount_amount`,
 (100015, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'pending', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 05:43:30', '2023-10-17 05:43:30', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0),
 (100018, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'pending', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 06:07:59', '2023-10-17 06:07:59', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0),
 (100019, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'pending', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 06:10:39', '2023-10-17 06:10:39', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0),
-(100020, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'pending', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 06:15:52', '2023-10-17 06:15:52', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0);
+(100020, 2, 360.00, 0.00, 0.00, 0.00, NULL, 'unpaid', 'pending', 0.00, NULL, NULL, 7, NULL, NULL, NULL, 'delivery', 0, 3, '2023-10-17 06:15:52', '2023-10-17 06:15:52', 0.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0.00, 0, NULL, 0.00, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -1059,7 +1185,7 @@ CREATE TABLE `provide_d_m_earnings` (
 CREATE TABLE `restaurants` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `phone` varchar(20) NOT NULL,
+  `phone` varchar(20) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `logo` varchar(255) DEFAULT NULL,
   `latitude` varchar(255) DEFAULT NULL,
@@ -1092,21 +1218,31 @@ CREATE TABLE `restaurants` (
   `pos_system` tinyint(1) NOT NULL DEFAULT 0,
   `delivery_charge` decimal(24,2) NOT NULL DEFAULT 0.00,
   `delivery_time` varchar(10) DEFAULT '30-40',
+  `delivery_time_unit` enum('hours','minutes') NOT NULL DEFAULT 'minutes',
   `veg` tinyint(1) NOT NULL DEFAULT 1,
   `non_veg` tinyint(1) NOT NULL DEFAULT 1,
   `order_count` int(11) NOT NULL DEFAULT 0,
   `minimum_shipping_charge` float NOT NULL DEFAULT 0,
-  `shipping_coast` float NOT NULL DEFAULT 0
+  `shipping_coast` float NOT NULL DEFAULT 0,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `restaurants`
 --
 
-INSERT INTO `restaurants` (`id`, `name`, `phone`, `email`, `logo`, `latitude`, `longitude`, `address`, `footer_text`, `minimum_order`, `comission`, `opening_time`, `closeing_time`, `free_delivery`, `status`, `compilation_id`, `vendor_id`, `created_at`, `updated_at`, `rating`, `cover_photo`, `delivery`, `take_away`, `schedule_order`, `food_section`, `tax`, `zone_id`, `reviews_section`, `active`, `off_day`, `gst`, `self_delivery_system`, `pos_system`, `delivery_charge`, `delivery_time`, `veg`, `non_veg`, `order_count`, `minimum_shipping_charge`, `shipping_coast`) VALUES
-(1, 'المهندسين', '1605316053', 'mohandseen@taibat.com', '2023-05-31-647719e553772.png', '30.0670220059917', '31.20173273112938', 'المهندسين شارع شهاب', NULL, 0.00, NULL, '10:00:00', '23:00:00', 0, 1, 1, 7, '2023-05-31 12:56:53', '2023-05-31 12:56:53', NULL, '2023-05-31-647719e55787f.png', 1, 1, 0, 1, 5.00, 4, 1, 1, ' ', NULL, 0, 0, 0.00, '10-30', 1, 1, 0, 0, 0),
-(2, 'طنطا', '01005008870', 'tanta@eltaibat.com', '2023-05-31-647724b95cc09.png', '30.829638906807343', '31.005752129371107', 'طنطا', NULL, 0.00, NULL, '10:00:00', '23:00:00', 0, 1, 1, 8, '2023-05-31 13:43:05', '2023-05-31 13:43:05', NULL, '2023-05-31-647724b95dedd.png', 1, 1, 0, 1, 5.00, 5, 1, 1, ' ', NULL, 0, 0, 0.00, '10-30', 1, 1, 0, 0, 0),
-(3, 'شبين الكوم', '01113008870', 'shebin@altaibat.net', '2023-05-31-6477252a0b6e4.png', '30.55038421667931', '31.019373256522183', 'monofya -shebin elkom p.o23511', NULL, 0.00, NULL, '08:00:00', '23:00:00', 0, 1, 1, 9, '2023-05-31 13:44:58', '2023-10-21 08:39:26', '{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":3}', '2023-05-31-6477252a0c72c.png', 1, 1, 0, 1, 5.00, 1, 1, 1, ' ', NULL, 0, 0, 0.00, '10-30', 1, 1, 0, 0, 0);
+INSERT INTO `restaurants` (`id`, `name`, `phone`, `email`, `logo`, `latitude`, `longitude`, `address`, `footer_text`, `minimum_order`, `comission`, `opening_time`, `closeing_time`, `free_delivery`, `status`, `compilation_id`, `vendor_id`, `created_at`, `updated_at`, `rating`, `cover_photo`, `delivery`, `take_away`, `schedule_order`, `food_section`, `tax`, `zone_id`, `reviews_section`, `active`, `off_day`, `gst`, `self_delivery_system`, `pos_system`, `delivery_charge`, `delivery_time`, `delivery_time_unit`, `veg`, `non_veg`, `order_count`, `minimum_shipping_charge`, `shipping_coast`, `deleted_at`) VALUES
+(1, 'المهندسين', '1605316053', 'mohandseen@taibat.com', '2023-05-31-647719e553772.png', '30.0670220059917', '31.20173273112938', 'المهندسين شارع شهاب', NULL, 0.00, NULL, '10:00:00', '23:00:00', 0, 1, 1, 10, '2023-05-31 12:56:53', '2023-05-31 12:56:53', NULL, '2023-05-31-647719e55787f.png', 1, 1, 0, 1, 5.00, 4, 1, 1, ' ', NULL, 0, 0, 0.00, '10-30', 'hours', 1, 1, 0, 0, 0, NULL),
+(2, 'طنطا', '010050088703', 'tanta@eltaibat.com', '2023-05-31-647724b95cc09.png', '30.829638906807343', '31.005752129371107', 'طنطا', NULL, 0.00, NULL, '10:00:00', '23:00:00', 0, 1, 1, 8, '2023-05-31 13:43:05', '2023-05-31 13:43:05', NULL, '2023-05-31-647724b95dedd.png', 1, 1, 0, 1, 5.00, 5, 1, 1, ' ', NULL, 0, 0, 0.00, '10-30', 'hours', 1, 1, 0, 0, 0, NULL),
+(3, 'شبين الكوم', '01113008870', 'shebin@altaibat.net', 'images/place/1700522694.png', '30.55038421667931', '31.019373256522183', 'monofya -shebin elkom p.o23511', 'مشويات ، مخبوزات', 0.00, NULL, '08:00:00', '00:00:00', 0, 0, 1, 1, '2023-05-31 13:44:58', '2023-11-20 23:24:54', '{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":3}', 'images/place/1700522694.png', 1, 1, 0, 1, 5.00, 1, 1, 1, ' ', NULL, 0, 0, 34.00, '10-30', 'hours', 1, 1, 0, 0, 0, NULL),
+(4, 'معاذ احمد نصر', NULL, NULL, 'images/place/1698994530.jpg', '30.5458982', '31.0126785', 'شبين', 'أغذيه-منظفات', 0.00, NULL, '07:48:00', '00:00:00', 0, 0, 4, 1, '2023-11-03 04:55:30', '2023-11-09 13:28:49', NULL, 'images/place/1698994530.png', 1, 1, 0, 1, 0.00, 1, 1, 1, ' ', NULL, 0, 0, 15.00, '30-50', 'hours', 1, 1, 0, 0, 0, NULL),
+(5, 'kazyon', NULL, NULL, NULL, '30.5458982', '31.0126785', 'شبين', 'أغذيه-منظفات', 0.00, NULL, '07:48:00', '00:00:00', 0, 1, 4, 1, '2023-11-05 00:01:02', '2023-11-05 07:19:08', NULL, NULL, 1, 1, 0, 1, 0.00, 1, 1, 1, ' ', NULL, 0, 0, 15.00, '30-50', 'hours', 1, 1, 0, 0, 0, '2023-11-05 07:19:08'),
+(6, 'مطعم كاتشب', NULL, NULL, 'images/place/1699537040.png', '54.053992238175006', '163.52345222327773', '10 Mohi El-Mahdi St', 'مطعم كاتشب بركة السبع', 0.00, NULL, '03:33:00', '00:00:00', 0, 1, 1, 1, '2023-11-09 13:37:20', '2023-11-11 13:42:25', NULL, 'images/place/1699537040.png', 1, 1, 0, 1, 0.00, 1, 1, 1, ' ', NULL, 0, 0, 37.00, '٢٠-٦٠', 'hours', 1, 1, 0, 0, 0, NULL),
+(7, 'ss', NULL, NULL, 'images/place/1699688801.jpg', '4322342', '4234242', 'ss', 'ss', 0.00, NULL, '09:44:00', '11:44:00', 0, 0, 2, 1, '2023-11-11 07:46:41', '2023-11-11 20:17:40', NULL, 'images/place/1699688801.png', 1, 1, 0, 1, 0.00, 1, 1, 1, ' ', NULL, 0, 0, 34.00, '30-50', 'hours', 1, 1, 0, 0, 0, NULL),
+(8, 'ytryr', NULL, NULL, 'images/place/1699691007.jpg', '7567', '57675675', 'rwtr', 'rrwrw', 0.00, NULL, '09:55:00', '00:00:00', 0, 1, 4, 12, '2023-11-11 08:23:27', '2023-11-11 08:36:44', NULL, 'images/place/1699691007.png', 1, 1, 0, 1, 0.00, 3, 1, 1, ' ', NULL, 0, 0, 44.00, '30-50', 'hours', 1, 1, 0, 0, 0, NULL),
+(9, 'مطعم كاتشب السبع', NULL, NULL, 'images/place/1699710724.jpg', '30.5537199', '31.0421278', 'بركة السبع غرب', 'مشويات ، مخبوزات', 0.00, NULL, '16:50:00', '00:00:00', 0, 1, 1, 13, '2023-11-11 13:52:04', '2023-11-11 13:56:54', NULL, 'images/place/1699710724.jpg', 1, 1, 0, 1, 0.00, 1, 1, 1, ' ', NULL, 0, 0, 45.00, '49-56', 'hours', 1, 1, 0, 0, 0, NULL),
+(10, '555', NULL, NULL, 'images/place/1699730343.png', '30.5458982', '31.0131169', 'retert', 'ttert', 0.00, NULL, '21:18:00', '23:18:00', 0, 1, 1, 17, '2023-11-11 19:19:03', '2023-11-21 09:59:41', NULL, 'images/place/1699730343.jpg', 1, 1, 0, 1, 0.00, 1, 1, 1, ' ', NULL, 0, 0, 34.00, '30-50', 'minutes', 1, 1, 0, 0, 0, NULL),
+(11, 'حلويات عبد الفتاح', NULL, NULL, 'images/place/1699730614.png', '30.5537199', '31.0421278', 'بركة السبع', 'هايبر ، بقالة', 0.00, NULL, '21:24:00', '09:25:00', 0, 1, 4, 18, '2023-11-11 19:23:34', '2023-11-11 19:23:34', NULL, 'images/place/1699730614.png', 1, 1, 0, 1, 0.00, 1, 1, 1, ' ', NULL, 0, 0, 56.00, '23-45', 'minutes', 1, 1, 0, 0, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -1287,7 +1423,6 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `interest` varchar(255) DEFAULT NULL,
   `cm_firebase_token` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
   `order_count` int(11) NOT NULL DEFAULT 0,
   `login_medium` varchar(191) DEFAULT NULL,
   `social_id` varchar(191) DEFAULT NULL,
@@ -1302,8 +1437,11 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `f_name`, `l_name`, `phone`, `email`, `image`, `is_phone_verified`, `active`, `email_verified_at`, `password`, `email_verification_token`, `remember_token`, `created_at`, `updated_at`, `interest`, `cm_firebase_token`, `status`, `order_count`, `login_medium`, `social_id`, `zone_id`, `wallet_balance`, `loyalty_point`, `ref_code`, `last_login`) VALUES
-(2, 'fatmaapi', 'gh_7', '+2001022752344', 'fatmaghareeb@gmail.com', NULL, 1, 1, NULL, '$2y$10$xVL0NiEiGi6/OrYNwsG5T.W/43VOEXNEU01mTd9S30hjtdQyd5e5y', NULL, NULL, '2023-10-15 08:11:30', '2023-10-21 09:05:35', NULL, NULL, 1, 0, NULL, NULL, NULL, 0.000, 0.000, NULL, '2023-10-21 09:05:35');
+INSERT INTO `users` (`id`, `f_name`, `l_name`, `phone`, `email`, `image`, `is_phone_verified`, `active`, `email_verified_at`, `password`, `email_verification_token`, `remember_token`, `created_at`, `updated_at`, `interest`, `cm_firebase_token`, `order_count`, `login_medium`, `social_id`, `zone_id`, `wallet_balance`, `loyalty_point`, `ref_code`, `last_login`) VALUES
+(2, 'fatmaapi', 'gh_7', '+2001022752344', 'fatmaghareeb@gmail.com', NULL, 1, 1, NULL, '$2y$10$85FSMihP9i90aNE/5UAtkODWaFrxviiKLossze3/TuxkvGG5a2vfy', NULL, NULL, '2023-11-11 11:42:38', '2023-11-22 19:16:19', NULL, NULL, 0, NULL, NULL, NULL, 0.000, 0.000, NULL, '2023-11-22 19:16:19'),
+(5, 'fatmaapi0', 'gh_70', '+20010227523447', 'fatmagha4ree4b@gmail.com0', NULL, 0, 0, NULL, '$2y$10$rU3neGrXh/vJq5DBPhqjTuQKkeJ8U1EMK8mNJqMp1u8KdEijN5tTq', NULL, NULL, '2023-11-11 09:10:17', '2023-11-11 09:10:17', NULL, NULL, 0, NULL, NULL, NULL, 0.000, 0.000, NULL, '2023-11-11 09:10:17'),
+(8, 'fatmaapio', 'gh_7', '+201092377558', 'fatmaghareebu@gmail.com', NULL, 1, 1, NULL, '$2y$10$zRY7EIjiMGIO2yqmrA/Yu.3YFbDkantkBwZPlV/Um9/Y5TUWPLioS', NULL, NULL, '2023-11-18 20:02:42', '2023-11-18 20:03:38', NULL, NULL, 0, NULL, NULL, NULL, 0.000, 0.000, NULL, '2023-11-18 20:02:42'),
+(10, 'Amr', 'Khaled', '+2001025314161', 'amr@gmail.com', NULL, 1, 1, NULL, '$2y$10$mx4AjCxRCiUTqR0q/9zLpuG779b.8uaxZiRdLzOKOZD1K.aViN1NG', NULL, NULL, '2023-11-22 20:41:28', '2023-11-22 20:41:57', NULL, NULL, 0, NULL, NULL, NULL, 0.000, 0.000, NULL, '2023-11-22 20:41:28');
 
 -- --------------------------------------------------------
 
@@ -1368,15 +1506,23 @@ CREATE TABLE `vendors` (
   `image` varchar(255) DEFAULT NULL,
   `status` tinyint(1) DEFAULT 1,
   `firebase_token` varchar(255) DEFAULT NULL,
-  `auth_token` varchar(255) DEFAULT NULL
+  `auth_token` varchar(255) DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `vendors`
 --
 
-INSERT INTO `vendors` (`id`, `f_name`, `l_name`, `phone`, `email`, `email_verified_at`, `password`, `remember_token`, `admin_id`, `created_at`, `updated_at`, `bank_name`, `branch`, `holder_name`, `account_no`, `image`, `status`, `firebase_token`, `auth_token`) VALUES
-(1, 'fatma', 'ghareeb', '5435345347657', 'fatma@fatma.com', '2022-09-01 06:17:03', '$2y$10$FH7pwqLVcvu.mZnETmAHGebZxi1iebYmEv4fi8FDIbUAgfqaydbR2', 'hbHIgi7Vp0CjPHBwTdPFMcaakHJg9FYNUSpD61mxkpyuHGdSnqLxksiyzw9h', 1, NULL, NULL, 'ewrewrwe', 'wew', 'reewrwerw', '25345465765756', NULL, 1, NULL, NULL);
+INSERT INTO `vendors` (`id`, `f_name`, `l_name`, `phone`, `email`, `email_verified_at`, `password`, `remember_token`, `admin_id`, `created_at`, `updated_at`, `bank_name`, `branch`, `holder_name`, `account_no`, `image`, `status`, `firebase_token`, `auth_token`, `deleted_at`) VALUES
+(1, 'mohamed ba', 'ghareeb', '5435345247657', 'estbsher@gmail.com', '2022-09-01 06:17:03', '$2y$10$yK35EXhPMGzaTep88zmA3.hBayoYUWB5SFfB0dGU1c2ZoErPwyH9y', '3QaQA7hycud4e5Zz6RijrCD351tbtSVmqerJSNva6FxUfRoTBC3tyrk2rGJF', 1, NULL, '2023-11-20 23:25:55', 'ewrewrwe', 'wew', 'reewrwerw', '25345465765756', NULL, 1, NULL, NULL, NULL),
+(8, 'محمد', 'كازيون', '01123467898', 'kazyon@gmail.com', NULL, '$2y$10$yK35EXhPMGzaTep88zmA3.hBayoYUWB5SFfB0dGU1c2ZoErPwyH9y', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
+(9, 'Muaz', 'Ahmed Nasr', '+201154285418', 'muathahmednasr@gmail.com', NULL, '$2y$10$tBLw/JJLmv1AX.IOOG591e2EiXj/CY3VF0s1TkpwiwawcsLP8vj7u', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
+(10, 'soha', 'hessien', '44334333', 'hessien@gmail.com', NULL, '$2y$10$aId.hFrkALkzgiWng/IP2OrCmEJLrlhvNgDD3fxS2.N0GYXdMqTfa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
+(12, 'eeee', 'rrrr', '43456464', 'eeee@ee.com', NULL, '$2y$10$g4xvfabw4wERR..yDjH4vOKKmPbslj4nV34z5j20YomeYh474U9P6', NULL, NULL, NULL, '2023-11-11 08:51:45', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
+(13, 'Muaz', 'Nasr', '01154285418', 'firnasapp@gmail.com', NULL, '$2y$10$y3EtiqFO8ZjYDQQ47TKgoumV4yhOqLRbVkYpsu./KQ3jmuJHAZ0W6', NULL, NULL, NULL, '2023-11-11 18:06:03', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
+(17, 'customer', 'shebin', '0112160753', 'faris@farisgrp.com', NULL, '$2y$10$twH8bDyB1xGX7JUslq2ImeCFG/7iLA7XU0lPNvoReCwJsGWzzkTtS', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
+(18, 'nasw', 'kao', '01154285419', 'muazcode22@gmail.com', NULL, '$2y$10$Tsxvk3XFXcr9LkhYg0GmA.p5oMj/B9AWGL278I6bYHQOMY4LfoScy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1629,6 +1775,12 @@ ALTER TABLE `failed_jobs`
 -- Indexes for table `food`
 --
 ALTER TABLE `food`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `food_slider_images`
+--
+ALTER TABLE `food_slider_images`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1907,7 +2059,7 @@ ALTER TABLE `attributes`
 -- AUTO_INCREMENT for table `banners`
 --
 ALTER TABLE `banners`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `business_settings`
@@ -1925,7 +2077,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `compilations`
 --
 ALTER TABLE `compilations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `conversations`
@@ -1937,7 +2089,7 @@ ALTER TABLE `conversations`
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `currencies`
@@ -1949,7 +2101,7 @@ ALTER TABLE `currencies`
 -- AUTO_INCREMENT for table `customer_addresses`
 --
 ALTER TABLE `customer_addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `delivery_histories`
@@ -2003,7 +2155,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `food`
 --
 ALTER TABLE `food`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `food_slider_images`
+--
+ALTER TABLE `food_slider_images`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `loyalty_point_transactions`
@@ -2093,7 +2251,7 @@ ALTER TABLE `provide_d_m_earnings`
 -- AUTO_INCREMENT for table `restaurants`
 --
 ALTER TABLE `restaurants`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `restaurant_schedule`
@@ -2147,7 +2305,7 @@ ALTER TABLE `translations`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `user_infos`
@@ -2165,7 +2323,7 @@ ALTER TABLE `user_notifications`
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `vendor_employees`

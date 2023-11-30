@@ -13,6 +13,7 @@ use App\Http\Requests\Api\VerifyRequest;
 use App\Modules\Core\HTTPResponseCodes;
 use App\Http\Resources\UserResource;
 use Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\DB;
 
 use Twilio\Rest\Client;
@@ -52,7 +53,7 @@ class AuthUserController extends Controller
         //  $user = customer::where('phone', $validated['phone'])->first();
 
 
-        if (!Auth::attempt($validated)) {
+        if (!Auth::guard('api')->attempt($validated)) {
 
             return response()->json([
                 'status' =>HTTPResponseCodes::UnAuth['status'],
@@ -63,9 +64,10 @@ class AuthUserController extends Controller
             ],HTTPResponseCodes::Sucess['code']);
         }
 
+
         // if (Hash::check($request->password, $user->password)) {
-        $user = Auth::user();
-        $token = $user->createToken('AuthToken')->accessToken;
+        $user = Auth::guard('api')->user();
+        $token = Auth::guard('api')->attempt($validated);
         //  $token = $user->createToken('Laravel Password Grant Client')->accessToken;
         $user['token']= $token;
 
@@ -199,10 +201,20 @@ class AuthUserController extends Controller
 
 
                 $user = tap(User::where('phone', $request['phone']))->update(['is_phone_verified' => true,'active'=>1]);
-
-              //  $user->token=$token;
+                $data=$user->first();
+//print_r($user->first());exit;
+                //  $user->token=$token;
                 /* Authenticate user */
-                $data=Auth::login($user->first());
+                // $user=$user->first();
+                //   $validate= new LoginRequest() ;
+
+                //    $request1= $user->validate($validate->rules());
+                //   return( $this->login($request1));
+
+                //  Auth::login($user->first());
+                // $data=Auth::user();
+                // $data['token']=Auth::fromUser($data);
+                //  print_r($data); exit;
                 return response()->json([
                     'status' => HTTPResponseCodes::Sucess['status'],
                     'message' => HTTPResponseCodes::Sucess['message'],
@@ -215,7 +227,7 @@ class AuthUserController extends Controller
         }catch(\Exception $e){
 
             if($e->getCode()==404||$e->getCode()==20404){
-              //  User::where('phone', $request['phone'])->update(['is_phone_verified' => true,'active'=>1]);
+                //  User::where('phone', $request['phone'])->update(['is_phone_verified' => true,'active'=>1]);
                 return response()->json([
                     'status' =>HTTPResponseCodes::InvalidArguments['status'],
                     'message' => HTTPResponseCodes::InvalidArguments['message'],

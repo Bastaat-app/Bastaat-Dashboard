@@ -16,14 +16,15 @@
         "intervention/image": "^2.5",
         "kingflamez/laravelrave": "^4.2",
         "laravel/framework": "^8.12",
-        "laravel/passport": "^10.4",
+
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.5",
         "laravelpkg/laravelchk": "dev-master",
         "madnest/madzipper": "*",
         "mercadopago/dx-php": "2.4.3",
         "stripe/stripe-php": "^7.77",
-        "twilio/sdk": "^6.28"
+        "twilio/sdk": "^6.28",
+        "tymon/jwt-auth": "^1.0@dev"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
