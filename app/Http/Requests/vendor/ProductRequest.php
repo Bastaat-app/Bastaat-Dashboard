@@ -3,9 +3,6 @@
 namespace App\Http\Requests\Vendor;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
-use App\Modules\Core\HTTPResponseCodes;
 class ProductRequest extends FormRequest
 {
     /**
@@ -37,7 +34,7 @@ class ProductRequest extends FormRequest
             'discount' => 'required',
             'product_quantity' => 'required',
             'status' => 'required',
-            'image' => 'required',
+            'image' => 'required_if:old_image,null'
            // 'phone' => 'required|unique:vendors,phone,'.$vendor_id.',id,deleted_at,NULL',
 
         ];
@@ -49,7 +46,7 @@ class ProductRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
+   /* public function messages()
     {
         return [
             'name.required' => 'name is required',
@@ -62,6 +59,20 @@ class ProductRequest extends FormRequest
             'status.required' => 'status is required',
             'image.required' => 'image is required',
 
+        ];
+    }*/
+    public function attributes()
+    {
+        return [
+            'name' => __('name'),
+            'description' => __('description'),
+            'summary' => __('summary'),
+            'price' => __('price'),
+            'category_id' => __('category'),
+            'discount' => __('discount'),
+            'product_quantity' => __('product_quantity'),
+            'status' => __('status'),
+            'image' => __('image'),
         ];
     }
 

@@ -60,31 +60,33 @@ class PlaceEditRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
+    public function attributes()
     {
         return [
-            'name.required' => 'name is required',
-            'footer_text.required' => 'footer_text is required',
-            'address.required' => 'address is required',
-            'delivery_charge.required' => 'delivery_charge is required',
-            'compilation_id.required' => 'compilation_id is required',
-            'opening_time.required' => 'opening_time is required',
-            'closeing_time.required' => 'closeing_time is required',
-            'delivery_time_from.required' => 'delivery_time_from is required',
-            'delivery_time_to.required' => 'delivery_time_to is required',
-            'zone_id.required' => 'zone_id is required',
-            'latitude.required' => 'latitude is required',
-            'longitude.required' => 'longitude is required',
-            'f_name.required' => 'f_name is required',
-            'l_name.required' => 'l_name is required',
-            'phone.required' => 'phone is required',
-            'email.required' => 'email is required',
-            'image.required' => 'image is required',
-            'cover_photo.required' => 'cover_photo is required',
-            'password.required' => 'password is required',
-            'confirm_password.required' => 'confirm_password is required'
+            'name' => __('name'),
+            'footer_text' => __('footer_text'),
+            'address' => __('address'),
+            'delivery_charge' => __('delivery_charge'),
+            'delivery charge' => __('delivery charge'),
+            'compilation_id' => __('compilation_id'),
+            'opening_time' => __('opening_time'),
+            'closeing_time' => __('closeing_time'),
+            'delivery_time_from' => __('delivery_time_from'),
+            'delivery_time_to' => __('delivery_time_to'),
+            'zone_id' => __('zone_id'),
+            'latitude' => __('latitude'),
+            'longitude' => __('longitude'),
+            'f_name' => __('f_name'),
+            'l_name' => __('l_name'),
+            'phone' => __('phone'),
+            'email' => __('email'),
+            'image' => __('image'),
+            'cover_photo' => __('cover_photo'),
+            'password' => __('password'),
+            'confirm_password' => __('confirm_password')
         ];
     }
+
 
 
 }

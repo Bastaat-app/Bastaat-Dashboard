@@ -57,7 +57,9 @@ class BaseRepository implements AdminRepositoryInterface
          DB::enableQueryLog();
         $query = $this->model->with($with)->withCount($withCount);
 
-        return $this->data($query, $request, $filter, $paginate, $whereHas);
+       // return
+          return $this->data($query, $request, $filter, $paginate, $whereHas);
+            print_r(DB::getQueryLog());
     }
 
     public function data($query, $request, $filter = '', $paginate = '', $whereHas = [])
@@ -199,5 +201,7 @@ class BaseRepository implements AdminRepositoryInterface
         //print_R($QUERY);exit;
         return($users);
     }
-
+    public function change_status($id,$status){
+        $this->model->where('id',$id)->update(['status'=>$status]);
+    }
 }

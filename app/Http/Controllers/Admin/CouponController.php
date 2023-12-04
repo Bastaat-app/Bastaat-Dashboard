@@ -88,13 +88,16 @@ class CouponController extends BaseController
     }
     public function change_status(Request $request)
     {
+
         $status= $request['status'];
+        if($request['status']=="")$status=0;
         $id= $request['id'];
+
         if(isset($request['type']))
             $status= !$status;
         $data= $this->repository->change_status($id,$status);
 
-        return redirect(route('admin.place.details',['id'=>$id]))->with('success','Place Status Changed succesfully');
+        return back()->with('success','Copoun Status Changed succesfully');
     }
     /*function index(Request $request)
     {

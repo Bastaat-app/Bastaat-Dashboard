@@ -1,6 +1,6 @@
-@extends('layouts.admin.master')
+@extends('layouts.vendor.master')
 @section('title')
-    {{__("index")}}
+    {{__("details order")}}
 @endsection
 
 @section('content')

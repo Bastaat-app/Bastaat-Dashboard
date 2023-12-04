@@ -62,7 +62,7 @@
                                 <td>{{$user->phone}}</td>
                                 <td> {{$user->orders_count}} طلب </td>
                                 <td>
-                                    <input type="checkbox" checked data-plugin="switchery" data-color="#1bb99a" />
+                                    <input type="checkbox"  @if($user->active==1) checked @endif  data-plugin="switchery" value="{{$user->active}}" id="change_status" status_id="{{$user->id}}" data-color="#1bb99a" />
                                 </td>
                                 <td>
                                     <a href="{{route('admin.customer.view',['id'=>$user->id])}}" class="action-icon">
@@ -89,3 +89,34 @@
     </div>
     <!-- end row -->
 @endsection
+@section('script')
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            $('#change_status').on('change', function() {
+
+                $.ajax({
+                    url: '{{route('admin.customer.change-status')}}',
+                    method: 'POST',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    data: {
+                        id: $('#change_status').attr('status_id'),
+                        status: this.value,
+                        type:'toggle'
+                    },
+                    success: function(response) {
+                        //  console.log(response);
+                        location.reload();
+                        // do something with the response data
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                        // handle the error case
+                    }
+                });
+            });
+        });
+    </script>
+@endsection
+

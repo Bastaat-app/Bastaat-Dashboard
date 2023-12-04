@@ -29,17 +29,7 @@ class CategoryRequest extends FormRequest
         $vendor_id=$data['vendor_id'];
         $id=$data['id'];*/
         return [
-            'title' => 'required',
-            'code' => 'required',
-            'restaurant_id' => 'required|numeric|exists:restaurants,id',
-            'compilation_id' => 'required|numeric|exists:compilations,id',
-            'start_date' => 'required',
-            'discount_type' => 'required',
-            'expire_date' => 'required',
-            'discount' => 'required',
-            'min_purchase' => 'required',
-
-
+            'name' => 'required',
         ];
 
     }
@@ -52,9 +42,16 @@ class CategoryRequest extends FormRequest
    /* public function messages()
     {
         return [
+            'name.required'=>trans('name is required')
 
         ];
     }*/
-
+    public function attributes()
+    {
+        return [
+            'name' => __('name'),
+            // Add more attribute translations
+        ];
+    }
 
 }

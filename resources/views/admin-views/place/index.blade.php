@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    {{__("index")}}
+    {{__("index_place")}}
 @endsection
 
 @section('content')

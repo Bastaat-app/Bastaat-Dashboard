@@ -3,9 +3,10 @@
 use App\Http\Controllers\Vendor\CategoryController;
 use App\Http\Controllers\Vendor\OrderController;
 use App\Http\Controllers\Vendor\ProductController;
+use App\Http\Controllers\Vendor\CustomerController;
 use Illuminate\Support\Facades\Route;
 
-
+App::setLocale('ar');
 Route::group(['namespace' => 'App\Http\Controllers\Vendor', 'as' => 'vendor.'], function () {
 
     /*authentication*/
@@ -42,9 +43,11 @@ Route::group(['namespace' => 'App\Http\Controllers\Vendor', 'as' => 'vendor.'], 
             Route::get('edit/{id}', 'ProductController@edit')->name('edit');
             Route::post('update/{id}', 'ProductController@update')->name('update');
             Route::get('status/{id}/{status}', 'ProductController@status')->name('status');
+            Route::get('fav_status/{id}/{status}', 'ProductController@fav_status')->name('fav-status');
             Route::post('change_status', 'ProductController@change_status')->name('change-status');
             Route::get('view/{id}', 'ProductController@details')->name('view');
             Route::delete('delete/{id}', 'ProductController@destroy')->name('delete');
+            Route::delete('delete_image', 'ProductController@delete_image')->name('delete-image');
             Route::post('search', 'ProductController@search')->name('search');
             Route::post('uploadimages', 'ProductController@upload_images')->name('upload_images');
         });
@@ -57,6 +60,21 @@ Route::group(['namespace' => 'App\Http\Controllers\Vendor', 'as' => 'vendor.'], 
             // Route::get('edit/{id}', 'PlaceController@edit')->name('edit');
             Route::get('details/{id}', 'OrderController@details')->name('details');
             Route::post('change_status', 'OrderController@change_status')->name('change-status');
+
+            //  Route::post('update/{id}', 'PlaceController@update')->name('update');
+            //  Route::get('status/{id}/{status}', 'PlaceController@status')->name('status');
+            //  Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');
+            //   Route::post('search', 'PlaceController@search')->name('search');
+        });
+
+        Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
+
+            Route::get('/', [CustomerController::class ,'index'])->name('index');
+            //  Route::get('create', [CustumerController::class ,'create'])->name('create');
+            //  Route::post('store', 'PlaceController@store')->name('store');
+            // Route::get('edit/{id}', 'PlaceController@edit')->name('edit');
+            Route::get('view/{id}', 'CustomerController@details')->name('view');
+            Route::post('change_status', 'CustomerController@change_status')->name('change-status');
             //  Route::post('update/{id}', 'PlaceController@update')->name('update');
             //  Route::get('status/{id}/{status}', 'PlaceController@status')->name('status');
             //  Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');

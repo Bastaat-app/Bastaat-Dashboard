@@ -24,7 +24,8 @@ class Compilation extends Model
         'parent_id',
         'position',
         'status',
-        'priority'
+        'priority',
+        'description'
 
     ];
     public function getImageUrlAttribute()

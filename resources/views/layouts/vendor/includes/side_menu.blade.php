@@ -27,7 +27,7 @@
                         <span>الإعدادات</span>
                     </a>
                     <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <a href="{{route('vendor.auth.logout')}}" class="dropdown-item notify-item">
                         <i class="fe-log-out me-1"></i>
                         <span>تسجيل الخروج</span>
                     </a>
@@ -45,22 +45,7 @@
                 </a>
             </li>
             <li class="menu-title"> العروض الترويجية</li>
-            <li class="menu-item">
-                <a href="notofications-list.html" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="bell"></i>
-                </span>
-                    <span class="menu-text"> إرسال إشعارات</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{route('admin.banner.index')}}" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="target"></i>
-                </span>
-                    <span class="menu-text"> إنشاء إعلانات</span>
-                </a>
-            </li>
+
 
           <!--  <li class="menu-title"> إدارة أصحاب المحلات</li>-->
             <li class="menu-item">
@@ -106,7 +91,7 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="{{route('admin.customer.index')}}" class="menu-link">
+                <a href="{{route('vendor.customer.index')}}" class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="users"></i>
                 </span>

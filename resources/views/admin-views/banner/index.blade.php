@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    {{__("index")}}
+    {{__("index _banner")}}
 @endsection
 
 @section('content')
@@ -54,6 +54,7 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @if($banners->count()>0)
                             @foreach($banners as $key=>$banner)
                             <tr>
                                 <td>
@@ -79,14 +80,8 @@
                                         </span>
                                 </td>
 
-
                                 <td>
-                                    <label class="toggle-switch toggle-switch-sm" for="statusCheckbox{{$banner->id}}">
-                                        <input type="checkbox" onclick="location.href='{{route('admin.banner.status',[$banner['id'],$banner->status?0:1])}}'" class="toggle-switch-input" id="statusCheckbox{{$banner->id}}" {{$banner->status?'checked':''}}>
-                                        <span class="toggle-switch-label">
-                                                <span class="toggle-switch-indicator"></span>
-                                            </span>
-                                    </label>
+                                    <input type="checkbox"  @if($banner->status==1) checked @endif  data-plugin="switchery" value="{{$banner->status}}" id="change_status" status_id="{{$banner->id}}" data-color="#1bb99a" />
                                 </td>
 
                                 <td>
@@ -95,8 +90,17 @@
                                 </td>
                             </tr>
                             @endforeach
+                            @else
+                                <tr>no data found</tr>
+
+                            @endif
                             </tbody>
                         </table>
+                        @if(!request()->filled("print"))
+                            <div class="pagination pagination-rounded justify-content-end mb-0">
+                                {!! $banners->withQueryString()->links() !!}
+                            </div>
+                        @endif
                     </div>
 
                     <ul class="pagination pagination-rounded justify-content-end mb-0">
@@ -124,4 +128,59 @@
         </div> <!-- end col -->
     </div>
     <!-- end row -->
+@endsection
+@section('script')
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        let url;
+        let id;
+        $("#exampleModalToggle").on('show.bs.modal', function(event) {
+
+            var button = $(event.relatedTarget) //Button that triggered the modal
+
+            var id = button.attr('delete-id');
+            url = '{{ route("admin.banner.delete", ":id") }}';
+            url = url.replace(':id', id);
+
+        });
+        $("#exampleModalToggle .btn-danger").click(function(){
+            alert(url);
+
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data:{id:id},
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function(result) {
+                    // Do something with the result
+                    location.reload();
+                }
+            });
+        });
+        $(document).ready(function() {
+
+            $('#change_status').on('change', function() {
+
+                $.ajax({
+                    url: '{{route('admin.banner.change-status')}}',
+                    method: 'POST',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    data: {
+                        id: $('#change_status').attr('status_id'),
+                        status: this.value,
+                        type:'toggle'
+                    },
+                    success: function(response) {
+                        //  console.log(response);
+                        location.reload();
+                        // do something with the response data
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                        // handle the error case
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

@@ -2,19 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Compilation;
 use App\Models\Zone;
 use App\Repositories\Admin\SingleRebo\BannerRepository;
 use App\Traits\UploadAttachTrait;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Models\Banner;
 use App\Models\Restaurant;
-use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
-use App\CentralLogics\Helpers;
 
 class BannerController extends BaseController
 {
@@ -87,6 +80,23 @@ class BannerController extends BaseController
 
         parent::update($request, $id);
        return redirect(route('admin.banner.index'));
+    }
+    public function place_comp(Request $request){
+        $compilation_id=$request->compilation_id;
+       $items= $this->repository->place_comp($compilation_id);
+        return($items);
+    }
+    public function change_status(Request $request)
+    {
+        $status= $request['status'];
+        if($request['status']=="")$status=0;
+        $id= $request['id'];
+
+        if(isset($request['type']))
+            $status= !$status;
+        $data= $this->repository->change_status($id,$status);
+
+        return back()->with('success','Copoun Status Changed succesfully');
     }
     /*function index(Request $request)
     {

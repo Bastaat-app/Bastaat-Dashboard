@@ -1,8 +1,10 @@
 @extends('layouts.vendor.master')
 @section('title')
-    {{__("index")}}
+    {{__("create product")}}
 @endsection
-
+@push('style')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
+@endpush
 @section('content')
 
     <!-- start page title -->
@@ -14,6 +16,8 @@
             </div>
         </div>
     </div>
+    <form action="{{route('vendor.product.store')}}" method="post">
+        @csrf
     <!-- end page title -->
     <div class="form_edit">
 
@@ -75,7 +79,7 @@
 
                         <div class="mb-3 discount_">
                             <label for="product-discount"> الخصم<span class="text-danger"></span></label>
-                            <input type="text" name="discount" value="{{old("discount")}}" class="form-control @error("discount") is-invalid @endError" id="product-price" placeholder="ادخل السعر بعد الخصم">
+                            <input type="text" name="discount" value="{{old("discount")}}" class="form-control @error("discount") is-invalid @endError" id="product-price" placeholder="ادخل الخصم">
                             @error("discount")
                             <span class="text-danger">{{ $message }}</span>
                             @endError
@@ -129,31 +133,22 @@
                         <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">صورة المنتج</h5>
                         <div class="mt-3 logo_img_block image_">
 
-                            <input type="file"  name="image"  id="file-input6"  class="logo_img" data-plugins="dropify" data-max-file-size="1M" accept="image/*"  />
-
                             @error("image[]")
                             <span class="text-danger">{{ $message }}</span>
                             @endError
+                            <input type="file"  name="image"  id="file-input6"  class="logo_img" data-plugins="dropify" data-max-file-size="1M" accept="image/*"  />
+
                             <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل صورة التصنيف بحجم لا يتعدي ال ١ ميجا</p>
                         </div>
-
-                        <form action="{{route('vendor.product.upload_images')}}" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
-                              data-upload-preview-template="#uploadPreviewTemplate">
-                            @csrf
-                            <div class="fallback">
-                                <input name="file[]"  class="slider_images"type="file" multiple />
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="document">Documents</label>
+                                <div class="needsclick dropzone" id="document-dropzone">
+                                </div>
                             </div>
-
-                            <div class="dz-message needsclick" >
-                                <i class="h1 text-muted dripicons-cloud-upload"></i>
-                                <h3>قم بادراج صور السلايدر.</h3>
-
-                            </div>
-                        </form>
-                        <!-- Preview -->
-                        <div class="dropzone-previews mt-3" id="file-previews">
-
                         </div>
+
+
                     </div>
                 </div> <!-- end col-->
 
@@ -170,44 +165,74 @@
                 <div class="text-center mb-3">
                     <button type="button" class="btn w-sm btn-light waves-effect">إلغاء</button>
                     <button type="button" class="btn w-sm btn-success waves-effect waves-light submit_edit">إضافم المنتج</button>
-                    <button type="button" class="btn w-sm btn-danger waves-effect waves-light">حذف</button>
+
                 </div>
             </div> <!-- end col -->
         </div>
         <!-- end row -->
 
+
     </div>
-
-    <!-- file preview template -->
-    <div class="d-none" id="uploadPreviewTemplate">
-        <div class="card mt-1 mb-0 shadow-none border">
-            <div class="p-2">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
-                    </div>
-                    <div class="col ps-0">
-                        <a href="javascript:void(0);" class="text-muted fw-bold" data-dz-name></a>
-                        <p class="mb-0" data-dz-size></p>
-                    </div>
-                    <div class="col-auto">
-                        <!-- Button -->
-                        <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
-                            <i class="dripicons-cross"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    </form>
 @endsection
+@push('script')
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+    <script>
+        var uploadedDocumentMap = {}
+        var name = ''
+        Dropzone.options.documentDropzone = {
+            url: "{{route('vendor.product.upload_images')}}",
+            maxFilesize: 2, // MB
+            addRemoveLinks: true,
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            success: function (file, response) {
+                name=response.name;
+                $('form').append('<input type="hidden" name="file[]" value="' + response.name + '">')
+                uploadedDocumentMap[file.name] = response.name
+            },
+            removedfile: function (file) {
+               file.previewElement.remove()
 
+                if (typeof file.file_name !== 'undefined') {
+                    name = file.file_name
+                } else {
+                    name = uploadedDocumentMap[file.name]
+                }
+                alert(name);
+                $.ajax({
+                    url: "{{route('vendor.product.delete-image')}}",
+                    type: 'DELETE',
+                    data: {image:name},
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    success: function (data) {
+                        $('form').find('input[name="file[]"][value="' + name + '"]').remove()
+                    }
+                });
+
+            },
+            init: function () {
+                    @if(isset($product) && $project->document)
+                var files =
+                {!! json_encode($project->document) !!}
+                    for (var i in files) {
+                    var file = files[i]
+                    this.options.addedfile.call(this, file)
+                    file.previewElement.classList.add('dz-complete')
+                    $('form').append('<input type="hidden" name="file[]" value="' + file.file_name + '">')
+                }
+                @endif
+            }
+        }
+    </script>
+@endpush
 @section('script')
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="{{asset('assets/libs/dropzone/min/dropzone.min.js')}}"></script>
+
+
     <script>
         var formData;
         /*Dropzone.options.myAwesomeDropzone = {

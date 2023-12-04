@@ -67,7 +67,7 @@
                                 <td>{{$coupon->code}}</td>
                                 <td>{{$coupon->restaurant->name}}</td>
                                 <td>
-                                    <input type="checkbox" checked data-plugin="switchery" data-color="#1bb99a" value="{{$coupon->status}}" record_id="{{$coupon->id}}"   id="change_status"/>
+                                    <input type="checkbox"  value="{{$coupon->status}}" @if($coupon->status==1) checked @endif data-plugin="switchery" data-color="#1bb99a"   record_id="{{$coupon->id}}"   id="change_status"/>
                                 </td>
                                 <td>
                                     <a href="{{route('admin.coupon.edit',['id'=>$coupon->id])}}" class="action-icon">
@@ -130,8 +130,6 @@
 
         });
         $("#exampleModalToggle .btn-danger").click(function(){
-            alert(url);
-
             $.ajax({
                 url: url,
                 type: 'DELETE',
@@ -146,25 +144,20 @@
         $(document).ready(function() {
 
             $('#change_status').on('change', function() {
-               id= $('#change_status').attr('record_id');
-               status=this.value();
-
-              url="{{route('admin.coupon.status',[":id",":status"])}}";
-              url=  url.replace(':id', id);
-              url=  url.replace(':status',status);
-              alert(url);
+               id= $(this).attr('record_id');
+               status=this.value;
+             // alert(url);
                 $.ajax({
-                    url:url,
-                    method: 'GET',
-                  //  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    url:"{{route('admin.coupon.change-status')}}",
+                    method: 'POST',
+                   headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     data: {
-                      //  id: $('#change_status').attr('record_id'),
-                      //  status: this.value,
-                      //  type:'toggle'
+                        id: id,
+                        status: status,
+                          type:'toggle'
                     },
                     success: function(response) {
-                        //  console.log(response);
-                        location.reload();
+                       location.reload();
                         // do something with the response data
                     },
                     error: function(jqXHR, textStatus, errorThrown) {

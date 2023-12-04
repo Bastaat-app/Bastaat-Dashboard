@@ -1,6 +1,6 @@
-@extends('layouts.admin.master')
+@extends('layouts.vendor.master')
 @section('title')
-    {{__("index")}}
+    {{__("edit category")}}
 @endsection
 
 @section('content')
@@ -29,14 +29,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
                                 </div>
-                                <div class="mb-3">
-                                    <label for="project-overview" class="form-label">وصف التصنيف</label>
-                                    <textarea class="form-control @error("description") is-invalid @endError"  name="description" value="{{$record->description}}"d="project-overview" rows="5" placeholder="اكتب هنا وصف التصنيف"></textarea>
 
-                                    @error("description")
-                                    <span class="text-danger">{{ $message }}</span>
-                                    @endError
-                                </div>
                             </div>
                             <!-- end col-->
                             <div class="col-xl-6">
@@ -64,8 +57,7 @@
                     <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary waves-effect waves-light m-1">
                             <i class="fe-check-circle me-1"></i> تعديل</button>
-                        <button type="button" class="btn btn-light waves-effect waves-light m-1">
-                            <i class="fe-x me-1"></i> إلغاء </button>
+                        <a href="{{ route('vendor.category.index')}}" class="btn btn-light waves-effect waves-light m-1"> <i class="fe-x me-1"></i>إلغاء</a>
                     </div>
                 </div>
                 <!-- cta -->

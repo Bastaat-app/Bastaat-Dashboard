@@ -3,12 +3,12 @@
     <!-- Brand Logo -->
     <div class="logo-box">
         <!-- Brand Logo Light -->
-        <a href="index.html" class="logo-light">
+        <a href="{{route('admin.dashboard')}}" class="logo-light">
             <img src="{{asset('assets/images/logo.png')}}" alt="logo" class="logo-lg">
             <img src="{{asset('assets/images/logo.png')}}" alt="small logo" class="logo-sm">
         </a>
         <!-- Brand Logo Dark -->
-        <a href="index.html" class="logo-dark">
+        <a href="{{route('admin.dashboard')}}" class="logo-dark">
             <img src="{{asset('assets/images/logo.png')}}" alt="dark logo" class="logo-lg">
             <img src="{{asset('assets/images/logo.png')}}" alt="small logo" class="logo-sm">
         </a>
@@ -27,7 +27,7 @@
                         <span>الإعدادات</span>
                     </a>
                     <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <a href="{{route('admin.auth.logout')}}" class="dropdown-item notify-item">
                         <i class="fe-log-out me-1"></i>
                         <span>تسجيل الخروج</span>
                     </a>
@@ -37,7 +37,7 @@
         <!--- Menu -->
         <ul class="menu">
             <li class="menu-item">
-                <a href="./basta-index.html" class="menu-link">
+                <a href="{{route('admin.dashboard')}}" class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="airplay"></i>
                 </span>

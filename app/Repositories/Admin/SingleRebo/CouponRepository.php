@@ -28,7 +28,7 @@ class CouponRepository extends BaseRepository
         if($type=='store'){
             $validate= new CouponRequest() ;
 
-            $data= $request->validate($validate->rules());
+            $data= $request->validate($validate->rules(),[],$validate->attributes());
         }else{
             /*$request_data=$request->all();
             $vendor_id=$request_data['vendor_id'];
@@ -64,6 +64,10 @@ class CouponRepository extends BaseRepository
         $item->fill($data);
         $item->save();
         return $item;
+    }
+
+    public function change_status($id,$status){
+        $this->model->where('id',$id)->update(['status'=>$status]);
     }
 
 

@@ -110,8 +110,8 @@
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary waves-effect waves-light m-1">
                                 <i class="fe-check-circle me-1"></i> إنشاء </button>
-                            <button type="button" class="btn btn-light waves-effect waves-light m-1">
-                                <i class="fe-x me-1"></i> إلغاء </button>
+                          <a href="{{ route('admin.coupon.index')}}" class="btn btn-light waves-effect waves-light m-1"> <i class="fe-x me-1"></i>إلغاء</a>
+
                         </div>
                     </div>
                     <!-- cta -->

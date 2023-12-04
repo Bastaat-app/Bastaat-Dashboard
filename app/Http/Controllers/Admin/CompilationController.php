@@ -2,20 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Compilation;
 use App\Models\Zone;
 use App\Repositories\Admin\SingleRebo\CompilationRepository;
 use App\Traits\UploadAttachTrait;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-
 use App\Models\Restaurant;
-use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
-use App\CentralLogics\Helpers;
-
 class CompilationController extends BaseController
 {
     use UploadAttachTrait;
@@ -85,6 +77,19 @@ class CompilationController extends BaseController
 
         parent::update($request, $id);
        return redirect(route('admin.compilation.index'));
+    }
+
+    public function change_status(Request $request)
+    {
+        $status= $request['status'];
+        if($request['status']=="")$status=0;
+        $id= $request['id'];
+
+        if(isset($request['type']))
+            $status= !$status;
+        $data= $this->repository->change_status($id,$status);
+
+        return back()->with('success','Copoun Status Changed succesfully');
     }
     /*function index(Request $request)
     {

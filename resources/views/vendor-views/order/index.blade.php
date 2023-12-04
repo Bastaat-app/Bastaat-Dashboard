@@ -1,6 +1,6 @@
 @extends('layouts.vendor.master')
 @section('title')
-    {{__("index")}}
+    {{__("index order")}}
 @endsection
 
 @section('content')
@@ -80,7 +80,11 @@
                             </tr>
                             @endforeach
                             @else
-                                {{__('no data available')}}
+                                <tr>
+                                    <td colspan="9" class="text-center">
+                                        {{__('no data available')}}
+                                    </td>
+                                </tr>
                             @endif
                             </tbody>
                         </table>

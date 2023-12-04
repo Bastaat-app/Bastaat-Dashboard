@@ -69,7 +69,7 @@
                 </a>
             </li>
             <li class="dropdown notification-list">
-                <a class="nav-link dropdown-toggle waves-effect waves-light arrow-none" href="./orders.html" role="button" aria-haspopup="false" aria-expanded="false">
+                <a class="nav-link dropdown-toggle waves-effect waves-light arrow-none" href="{{route('vendor.order.index')}}" role="button" aria-haspopup="false" aria-expanded="false">
                     <i class="dripicons-cart font-22 cart-icon"></i>
                 </a>
             </li>
@@ -82,9 +82,9 @@
             <!-- customer Dropdown -->
             <li class="dropdown">
                 <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                    <img src="{{asset('assets/images/users/user-1.jpg')}}" alt="user-image" class="rounded-circle">
-                    <span class="ms-1 d-none d-md-inline-block"> ابراهيم المري <i class="mdi mdi-chevron-down"></i>
-                  </span>
+                    <img src="{{asset(auth("vendor")->user()->image)}}" alt="user-image" class="rounded-circle" onerror="this.src='{{asset('assets/images/logo.png')}}'">
+                    <span class="ms-1 d-none d-md-inline-block"> {{auth("vendor")->user()->f_name}}  {{auth("vendor")->user()->l_name}}<i class="mdi mdi-chevron-down"></i>
+                    </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
                     <!-- item-->
@@ -94,7 +94,7 @@
                     </a>
                     <div class="dropdown-divider"></div>
                     <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <a href="{{route('vendor.auth.logout')}}"class="dropdown-item notify-item">
                         <i class="fe-log-out"></i>
                         <span>تسجيل الخروج</span>
                     </a>

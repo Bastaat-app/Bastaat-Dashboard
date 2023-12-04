@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    {{__("index")}}
+    {{__("index_compilation")}}
 @endsection
 
 @section('content')
@@ -71,9 +71,10 @@
                                         </span>
                                     <span class="d-block font-size-sm text-body">
 
-                                        </span> </td>
+                                        </span>
+                                </td>
                                 <td>
-                                    <input type="checkbox" checked data-plugin="switchery" data-color="#1bb99a" />
+                                    <input type="checkbox"  @if($compilation->status==1) checked @endif  data-plugin="switchery" value="{{$compilation->status}}" id="change_status" status_id="{{$compilation->id}}" data-color="#1bb99a" />
                                 </td>
                                 <td>
                                     <a href="{{route('admin.compilation.edit',['id'=>$compilation->id])}}" class="action-icon">
@@ -102,4 +103,59 @@
         <!-- end col -->
     </div>
     <!-- end row -->
+@endsection
+@section('script')
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        let url;
+        let id;
+        $("#exampleModalToggle").on('show.bs.modal', function(event) {
+
+            var button = $(event.relatedTarget) //Button that triggered the modal
+
+            var id = button.attr('delete-id');
+            url = '{{ route("admin.compilation.delete", ":id") }}';
+            url = url.replace(':id', id);
+
+        });
+        $("#exampleModalToggle .btn-danger").click(function(){
+            alert(url);
+
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data:{id:id},
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function(result) {
+                    // Do something with the result
+                    location.reload();
+                }
+            });
+        });
+        $(document).ready(function() {
+
+            $('#change_status').on('change', function() {
+
+                $.ajax({
+                    url: '{{route('admin.compilation.change-status')}}',
+                    method: 'POST',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    data: {
+                        id: $('#change_status').attr('status_id'),
+                        status: this.value,
+                        type:'toggle'
+                    },
+                    success: function(response) {
+                        //  console.log(response);
+                        location.reload();
+                        // do something with the response data
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                        // handle the error case
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

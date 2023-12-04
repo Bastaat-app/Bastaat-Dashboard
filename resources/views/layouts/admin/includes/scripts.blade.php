@@ -1,6 +1,7 @@
 
 <!-- Sweet Alerts js -->
 {{--<script src="{{asset('assets/libs/sweetalert2/sweetalert2.all.min.js')}}"></script>--}}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <!-- Vendor js -->
 <script src="{{asset('assets/js/vendor.min.js')}}"></script>
 <!-- App js -->
@@ -23,6 +24,8 @@
 <script src="{{asset('assets/js/pages/form-advanced.init.js')}}"></script>
 <!-- Dashboar 1 init js-->
 <script src="{{asset('assets/js/pages/dashboard-1.init.js')}}"></script>
+
+
 <script>
 /*
     $("select.select2, .select2").select2();

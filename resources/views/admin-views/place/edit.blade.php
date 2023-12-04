@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    {{__("index")}}
+    {{__("edit_place")}}
 @endsection
 
 @section('content')
@@ -176,14 +176,14 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="projectname" class="form-label">خط العرض</label>
-                                    <input type="text" id="projectname"  name="latitude" class="form-control  @error("latitude") is-invalid @endError"   value="{{$record->latitude}}" placeholder="اكتب هنا خط العرض">
+                                    <input type="text" id="lat"  name="latitude" class="form-control  @error("latitude") is-invalid @endError"   value="{{$record->latitude}}" placeholder="اكتب هنا خط العرض">
                                     @error("latitude")
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
                                 </div>
                                 <div class="mb-3">
                                     <label for="projectname" class="form-label">خط الطول</label>
-                                    <input type="text" id="projectname" name="longitude" class="form-control  @error("longitude") is-invalid @endError" value="{{$record->longitude}}" placeholder="اكتب هنا خط الطول">
+                                    <input type="text" id="lng" name="longitude" class="form-control  @error("longitude") is-invalid @endError" value="{{$record->longitude}}" placeholder="اكتب هنا خط الطول">
                                     @error("longitude")
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
@@ -191,7 +191,9 @@
                             </div>
                             <!-- end col-->
                             <div class="col-xl-6">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13731.377060846768!2d31.0780203!3d30.6383463!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f7d156b7aa9d7f%3A0x5e10374e6ea64147!2z2LTYsdmD2Kkg2KfYs9iq2KjYtNixIOKAkyDYqNix2YXYrNipINmI2KrYtdmF2YrZhSDZhdmI2KfZgti5INin2YTYp9mG2KrYsdmG2Kog2YjYp9mE2KzZiNin2YQ!5e0!3m2!1sen!2seg!4v1693614344769!5m2!1sen!2seg" width="500" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                <div id="map" class="col-xl-6" style="width: 50%; height: 300px;"></div>
+                               <!-- <iframe id="google_map" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13731.377060846768!2d31.0780203!3d30.6383463!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f7d156b7aa9d7f%3A0x5e10374e6ea64147!2z2LTYsdmD2Kkg2KfYs9iq2KjYtNixIOKAkyDYqNix2YXYrNipINmI2KrYtdmF2YrZhSDZhdmI2KfZgti5INin2YTYp9mG2KrYsdmG2Kog2YjYp9mE2KzZiNin2YQ!5e0!3m2!1sen!2seg!4v1693614344769!5m2!1sen!2seg" width="500" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            -->
                             </div>
                         </div>
                         <!-- end row -->
@@ -326,4 +328,59 @@
             });
 
     </script>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include Map API library (e.g., Google Maps API) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMtllOMzchTUwJ_FCi1SstrTWrD5yhO3w"></script>
+<script>
+    $(document).ready(function() {
+
+            // Initialize the map
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 30.5458982, lng:31.0126785 },
+                zoom: 10,
+            });
+
+            // Create a marker at the specified latitude and longitude
+            var marker = new google.maps.Marker({
+                position: { lat: 30.5458982, lng: 31.0126785 },
+                map: map,
+                title: 'Marker Title',
+            });
+
+
+
+
+        google.maps.event.addListener(map, 'click', function(event) {
+
+            $("#lat").val(event.latLng.lat() );
+            $("#lng").val(event.latLng.lng());
+        });
+
+        // Update marker position when latitude input changes
+        $('#lat').on('input', function() {
+            var latitude = parseFloat($(this).val());
+            var longitude = parseFloat($('#lng').val());
+
+            // Update marker position
+            marker.setPosition({ lat: latitude, lng: longitude });
+
+            // Center the map on the new marker position
+            map.setCenter({ lat: latitude, lng: longitude });
+        });
+        // Update marker position when longitude input changes
+        $('#lng').on('input', function() {
+            var latitude = parseFloat($('#lat').val());
+            var longitude = parseFloat($(this).val());
+
+            // Update marker position
+            marker.setPosition({ lat: latitude, lng: longitude });
+
+            // Center the map on the new marker position
+            map.setCenter({ lat: latitude, lng: longitude });
+        });
+    });
+
+</script>
 @endsection

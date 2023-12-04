@@ -1,6 +1,6 @@
-@extends('layouts.admin.master')
+@extends('layouts.vendor.master')
 @section('title')
-    {{__("index")}}
+    {{__("index category")}}
 @endsection
 
 @section('content')
@@ -50,30 +50,38 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($categories as $category)
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck2">
-                                        <label class="form-check-label" for="customCheck{{$category->id}}">&nbsp;</label>
-                                    </div>
-                                </td>
-                                <td> {{$category->id}} </td>
-                                <td>{{$category->name}}</td>
-                                <td>{{$category->description}} </td>
-                                <td>
-                                    <input type="checkbox"  @if($category->status==1) checked @endif  data-plugin="switchery" value="{{$category->status}}" id="change_status" status_id="{{$category->id}}" data-color="#1bb99a" />
-                                </td>
-                                <td>
-                                    <a href="{{route('vendor.category.edit',['id'=>$category->id])}}" class="action-icon">
-                                        <i class="mdi mdi-square-edit-outline"></i>
-                                    </a>
-                                    <a data-bs-toggle="modal" href="#exampleModalToggle" role="button" class="action-icon" delete-id={{$category->id}} >
-                                        <i class="mdi mdi-delete"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                           @endforeach
+                            @if(($categories!=null)&&($categories->count())>0)
+                                @foreach($categories as $category)
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="customCheck2">
+                                            <label class="form-check-label" for="customCheck{{$category->id}}">&nbsp;</label>
+                                        </div>
+                                    </td>
+                                    <td> {{$category->id}} </td>
+                                    <td>{{$category->name}}</td>
+                                    <td>{{$category->description}} </td>
+                                    <td>
+                                        <input type="checkbox"  @if($category->status==1) checked @endif  data-plugin="switchery" value="{{$category->status}}" id="change_status" status_id="{{$category->id}}" data-color="#1bb99a" />
+                                    </td>
+                                    <td>
+                                        <a href="{{route('vendor.category.edit',['id'=>$category->id])}}" class="action-icon">
+                                            <i class="mdi mdi-square-edit-outline"></i>
+                                        </a>
+                                        <a data-bs-toggle="modal" href="#exampleModalToggle" role="button" class="action-icon" delete-id={{$category->id}} >
+                                            <i class="mdi mdi-delete"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                               @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="9" class="text-center">
+                                        {{__('no data available')}}
+                                    </td>
+                                </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>

@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    {{__("index")}}
+    {{__("index_banner")}}
 @endsection
 
 @section('content')
@@ -42,13 +42,15 @@
 
                                 </div>
                                 <div class="mb-3">
-                                    <div class="mt-3">
-                                        <input type="file" name="image[]" data-plugins="dropify" data-max-file-size="1M" accept="image/*"
-                                               onchange="loadFile(event)"  />
-                                        <img id="output" alt=""
-                                             style=" height: 110px; width: 100%; object-fit: contain;"
-                                             src="{{asset($banner->image)}}"/>
-                                        <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل صورة الإعلان بحجم لا يتعدي ال ١ ميجا</p>
+                                    <div class="mt-3 logo_img_block">
+
+                                        <input type="file"  name="image[]" class="logo_img" data-plugins="dropify" data-max-file-size="1M" accept="image/*"  />
+
+                                        @error("image[]")
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @endError
+                                        <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل صورة التصنيف بحجم لا يتعدي ال ١ ميجا</p>
+                                        <input type="hidden" value="{{$banner->image}}" name="old_image">
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +71,6 @@
                                     <select id="selectplace" class="form-control" name="place_id" data-toggle="select2" data-width="100%">
                                         <option>اختر اسم المكان</option>
                                         @foreach($places as $place)
-
                                             <option value="{{$place['id']}}" {{$place->id == $banner->place_id?'selected':''}}>{{$place['name']}}</option>
                                         @endforeach
                                     </select>
@@ -117,4 +118,19 @@
             }
 
         };
+
+        /* logo*/
+        $('.logo_img').dropify();
+        $(".logo_img").addClass('dropify');
+        $(".logo_img").attr("data-height", 300);
+        $(".logo_img").attr("data-default-file", "{{asset($banner->image)}}");
+        $(".logo_img_block .dropify-preview .dropify-render").html('<img src="{{asset($banner->image)}}"/>');
+
+        $('.dropify').dropify();
+        $('.logo_img_block .dropify-wrapper .dropify-preview').attr('style', 'display:block !important');
+
+
+
+
     </script>
+@endsection

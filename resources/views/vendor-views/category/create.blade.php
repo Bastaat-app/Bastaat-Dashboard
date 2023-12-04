@@ -1,6 +1,6 @@
-@extends('layouts.admin.master')
+@extends('layouts.vendor.master')
 @section('title')
-    {{__("index")}}
+    {{__("add category")}}
 @endsection
 
 @section('content')
@@ -24,11 +24,12 @@
                             <div class="mb-3">
                                 <label for="projectname" class="form-label">اسم التصنيف</label>
                                 <input type="text"  value="{{old("name")}}" name="name" id="projectname" class="form-control @error("name") is-invalid @endError" placeholder="اكتب هنا اسم التصنيف">
+                                @error("name")
+                                <span class="text-danger">{{ $message }}</span>
+                                @endError
+
                             </div>
-                            <div class="mb-3">
-                                <label for="project-overview" class="form-label">وصف التصنيف</label>
-                                <textarea class="form-control @error("description") is-invalid @endError"  value="{{old("description")}}" name="description" id="project-overview" rows="5" placeholder="اكتب هنا وصف التصنيف"></textarea>
-                            </div>
+
                         </div>
                         <!-- end col-->
                         <div class="col-xl-6">
@@ -55,8 +56,8 @@
                 <div class="col-12 text-center">
                     <button type="submit" class="btn btn-primary waves-effect waves-light m-1">
                         <i class="fe-check-circle me-1"></i> إنشاء </button>
-                    <button type="button" class="btn btn-light waves-effect waves-light m-1">
-                        <i class="fe-x me-1"></i> إلغاء </button>
+
+                    <a href="{{ route('vendor.category.index')}}" class="btn btn-light waves-effect waves-light m-1"> <i class="fe-x me-1"></i>إلغاء</a>
                 </div>
             </div>
             <!-- cta -->

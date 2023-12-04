@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    {{__("index")}}
+    {{__("create_banner")}}
 @endsection
 
 @section('content')
@@ -28,28 +28,39 @@
                                 <div class="mb-3">
                                     <label for="projectname" class="form-label">إسم الإعلان</label>
                                     <input type="text"   name="title"  class="form-control" placeholder="اكتب هنا اسم الإعلان">
+                                    @error("title")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
                                 </div>
                                 <div class="mb-3">
                                     <label for="selectmethod" class="form-label">المنطقة</label>
                                     <select name="zone_id" id="zone" class="form-control js-select2-custom" onchange="getRequest('{{url('/')}}/admin/food/get-foods?zone_id='+this.value,'choice_item')">
-                                        <option  disabled selected>---{{__('messages.select')}}---</option>
+                                        <option  disabled selected>{{__('select')}}</option>
 
                                         @foreach($zones as $zone)
 
                                             <option value="{{$zone['id']}}" >{{$zone['name']}}</option>
                                         @endforeach
                                     </select>
-
+                                    @error("zone_id")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
                                 </div>
                                 <div class="mb-3">
-                                    <div class="mt-3">
-                                        <input type="file" name="image[]" data-plugins="dropify" data-max-file-size="1M" accept="image/*"
-                                               onchange="loadFile(event)"  />
-                                        <img id="output" alt=""
-                                             style=" height: 110px; width: 100%; object-fit: contain;"
-                                             src=""/>
-                                        <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل صورة الإعلان بحجم لا يتعدي ال ١ ميجا</p>
+                                    <div class="mb-3">
+
+                                        <div class="mt-3 logo_img_block">
+
+                                            <input type="file"  name="image[]" class="logo_img" data-plugins="dropify" data-max-file-size="1M" accept="image/*"  />
+
+                                            <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل صورة التصنيف بحجم لا يتعدي ال ١ ميجا</p>
+                                        </div>
+
+                                        @error("image")
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @endError
                                     </div>
+
                                 </div>
                             </div>
                             <!-- end col-->
@@ -63,6 +74,9 @@
                                             <option value="{{$compilation->id}}" >{{$compilation->title}}</option>
                                         @endforeach
                                     </select>
+                                    @error("compilation_id")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
                                 </div>
                                 <div class="mb-3">
                                     <label for="selectplace" class="form-label">اختر المكان</label>
@@ -73,6 +87,9 @@
                                             <option value="{{$place['id']}}" >{{$place['name']}}</option>
                                         @endforeach
                                     </select>
+                                    @error("place_id")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
                                 </div>
                             </div>
                         </div>
@@ -102,7 +119,10 @@
 
 @endsection
 @section('script')
+
+
     <script>
+
 
         var loadFile = function (event) {
             var output = document.getElementById('output');
@@ -117,4 +137,8 @@
             }
 
         };
+
+
     </script>
+    @endsection
+

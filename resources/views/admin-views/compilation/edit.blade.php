@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    {{__("index")}}
+    {{__("edit_compilation")}}
 @endsection
 
 @section('content')
@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="project-overview" class="form-label">وصف التصنيف</label>
-                                    <textarea class="form-control @error("description") is-invalid @endError"  name="description" value="{{$record->description}}"d="project-overview" rows="5" placeholder="اكتب هنا وصف التصنيف"></textarea>
+                                    <textarea class="form-control @error("description") is-invalid @endError"  name="description" value="{{$record->description}}"d="project-overview" rows="5" placeholder="اكتب هنا وصف التصنيف">{{$record->description}}</textarea>
 
                                     @error("description")
                                     <span class="text-danger">{{ $message }}</span>
@@ -49,6 +49,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                         @endError
                                         <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل صورة التصنيف بحجم لا يتعدي ال ١ ميجا</p>
+                                        <input type="hidden" value="{{$record->image}}" name="old_image">
                                     </div>
                                 </div>
                             </div>

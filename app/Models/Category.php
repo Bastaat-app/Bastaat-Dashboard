@@ -43,7 +43,9 @@ class Category extends Model
 		'status',
 		'priority',
         'description',
-        'product_quantity'
+        'product_quantity',
+        'compilation_id',
+        'restaurant_id'
 	];
 
     public function scopeActive($query)
@@ -59,6 +61,10 @@ class Category extends Model
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');
+    }
+    public function restaurant()
+    {
+        return $this->hasMany(Restaurant::class, 'restaurant_id');
     }
 
 

@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    {{__("index")}}
+    {{__("detail_place")}}
 @endsection
 
 @section('content')
@@ -301,6 +301,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
+                                                @if(count($data['orders'])>0)
                                                     @foreach(($data['orders']) as $order)
 
                                                         <tr>
@@ -329,6 +330,14 @@
                                                     </tr>
 
                                                      @endforeach
+                                                @else
+                                                    <tr>
+                                                        <td colspan="9" class="text-center">
+                                                            {{__('no data available')}}
+                                                        </td>
+                                                    </tr>
+
+                                                @endif
                                                 </tbody>
                                             </table>
                                         </div>
@@ -369,6 +378,7 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @if(count($data['withdraw'])>0)
                             @foreach($data['withdraw'] as $withdraw)
                           @if($withdraw->count>0)
                             <tr>
@@ -398,6 +408,14 @@
                             </tr>
                             @endif
                             @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="9" class="text-center">
+                                        {{__('no data available')}}
+                                    </td>
+                                </tr>
+
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -426,6 +444,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
+                                                @if(count($data['reviews'] )>0)
                                                 @foreach($data['reviews'] as $review)
                                                     @if(isset($review->customer->f_name))
                                                     <tr>
@@ -452,6 +471,14 @@
 
                                                     @endif
                                                 @endforeach
+                                                @else
+                                                    <tr>
+                                                        <td colspan="9" class="text-center">
+                                                            {{__('no data available')}}
+                                                        </td>
+                                                    </tr>
+
+                                                @endif
                                                 </tbody>
                                             </table>
                                         </div>

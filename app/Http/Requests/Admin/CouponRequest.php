@@ -49,12 +49,20 @@ class CouponRequest extends FormRequest
      *
      * @return array
      */
-   /* public function messages()
+   public function attributes()
     {
         return [
-
+            'title' => __('title'),
+            'code' => __('code'),
+            'restaurant_id' => __('restaurant_id'),
+            'compilation_id' => __('compilation_id'),
+            'start_date' => __('start_date'),
+            'discount_type' =>__( 'discount_type'),
+            'expire_date' => __('expire_date'),
+            'discount' => __('discount'),
+            'min_purchase' => __('min_purchase'),
         ];
-    }*/
+    }
 
 
 }

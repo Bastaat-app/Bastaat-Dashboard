@@ -1,6 +1,6 @@
 @extends('layouts.vendor.master')
 @section('title')
-    {{__("index")}}
+    {{__("index product")}}
 @endsection
 
 @section('content')
@@ -63,11 +63,11 @@
                                     </div>
                                 </td>
                                 <td class="table-user">
-                                    <img src="{{asset('$product->image')}}" alt="table-user" class="me-2 rounded-circle" onerror="this.src='{{asset('assets/images/logo.png')}}'">
+                                    <img src="{{asset($product->image)}}" alt="table-user" class="me-2 rounded-circle" onerror="this.src='{{asset('assets/images/logo.png')}}'">
                                     <a href="javascript:void(0);" class="text-body fw-semibold">{{$product->name}}</a>
                                 </td>
                                 <td> {{$product->category}}</td>
-                                <td> {{$product->price}}</td>
+                                <td> {{$product->price}} {{__('currency')}}</td>
                                 <td><span class="badge bg-soft-success text-success">@if($product->in_stock==1)متوفر @else غير متوفر@endif</span></td>
                                 <td> منذ{{\Carbon\Carbon::parse($product->creared_at)->translatedFormat('l j F Y')}} <br>الساعة منذ{{\Carbon\Carbon::parse($product->creared_at)->translatedFormat('H:i:s')}} </td>
 
@@ -75,12 +75,17 @@
                                     <span class="badge bg-soft-success text-success">منشور @if($product->status==1)@elseغير منشور@endif </span>
                                 </td>
                                 <td>
-                                    <a  href="#">
-                                        <i class="mdi  @if ($product->favourite==1)mdi-star@else   @endif"></i>
+                                    <a  href="{{route('vendor.product.fav-status',['id'=>$product->id,'status'=>$product->favourite])}}">
+                                        @if($product->favourite==1)
+                                        <i class="mdi mdi-star" ></i>
+                                        @endif
+                                        @if($product->favourite==0)
+                                            <i class="mdi mdi-star-outline" ></i>
+                                        @endif
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{route('vendor.product.view',['id'=>$product->id])}}" class="action-icon">
+                                    <a href="{{route('vendor.product.edit',['id'=>$product->id])}}" class="action-icon">
                                         <i class="mdi mdi-eye"></i>
                                     </a>
                                     <a href="{{route('vendor.product.edit',['id'=>$product->id])}}" class="action-icon">
@@ -93,7 +98,11 @@
                             </tr>
                             @endforeach
                          @else
-                            <tr>no data found</tr>
+                                <tr>
+                                    <td colspan="9" class="text-center">
+                                        {{__('no data available')}}
+                                    </td>
+                                </tr>
 
                             @endif
                             </tbody>

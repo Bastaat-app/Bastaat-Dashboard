@@ -2,22 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Compilation;
-use App\Models\Zone;
-
 use App\Repositories\Admin\SingleRebo\CustomerRepository;
 
-
-use App\Traits\UploadAttachTrait;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
-use App\Models\Restaurant;
-use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
-use App\CentralLogics\Helpers;
 
 class CustomerController extends BaseController
 {
@@ -50,5 +38,16 @@ class CustomerController extends BaseController
 //print_r($user);exit;
        return view($this->view . '.view', compact('user'));
     }
+    public function change_status(Request $request)
+    {
+        $status= $request['status'];
+        if($request['status']=="")$status=0;
+        $id= $request['id'];
 
+        if(isset($request['type']))
+            $status= !$status;
+        $data= $this->repository->change_status($id,$status);
+
+        return back()->with('success','Copoun Status Changed succesfully');
+    }
 }

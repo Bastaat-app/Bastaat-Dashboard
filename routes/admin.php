@@ -12,10 +12,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], function () {
-    //dashboard
-    Route::get('/', 'DashboardController@dashboard')->name('dashboard');
-
-    Route::get('index_', 'DashboardController@index')->name('index_');
 
     /*authentication*/
     Route::group(['namespace' => 'Auth', 'prefix' => 'auth', 'as' => 'auth.'], function () {
@@ -28,13 +24,18 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
 
 
     Route::group(['middleware' => ['admin']], function () {
-      /*  Route::get('/', function () {
+        //dashboard
+        Route::get('/', 'DashboardController@dashboard')->name('dashboard');
 
-            return ("hdhskadjasdja");
-        })->name('admin.index');*/
+        Route::get('index_', 'DashboardController@index')->name('index_');
+
+        /*  Route::get('/', function () {
+
+              return ("hdhskadjasdja");
+          })->name('admin.index');*/
         //dashboard
        // Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
-    });
+
     Route::group(['prefix' => 'banner', 'as' => 'banner.'], function () {
 
         Route::get('/', [BannerController::class ,'index'])->name('index');
@@ -43,8 +44,10 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
          Route::get('edit/{banner}', 'BannerController@edit')->name('edit');
          Route::post('update/{banner}', 'BannerController@update')->name('update');
          Route::get('status/{id}/{status}', 'BannerController@status')->name('status');
+        Route::post('change_status', 'BannerController@change_status')->name('change-status');
          Route::delete('delete/{banner}', 'BannerController@delete')->name('delete');
          Route::post('search', 'BannerController@search')->name('search');
+        Route::post('place_comp', 'BannerController@place_comp')->name('place-comp');
     });
     Route::group(['prefix' => 'coupon', 'as' => 'coupon.'], function () {
 
@@ -54,6 +57,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
         Route::get('edit/{id}', 'CouponController@edit')->name('edit');
         Route::post('update/{id}', 'CouponController@update')->name('update');
         Route::get('status/{id}/{status}', 'CouponController@status')->name('status');
+        Route::post('change_status', 'CouponController@change_status')->name('change-status');
         Route::delete('delete/{id}', 'CouponController@destroy')->name('delete');
         Route::post('search', 'CouponController@search')->name('search');
     });
@@ -65,6 +69,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
         Route::get('edit/{id}', 'CompilationController@edit')->name('edit');
         Route::post('update/{id}', 'CompilationController@update')->name('update');
         Route::get('status/{id}/{status}', 'CompilationController@status')->name('status');
+        Route::post('change_status', 'CompilationController@change_status')->name('change-status');
         Route::delete('delete/{id}', 'CompilationController@delete')->name('delete');
         Route::post('search', 'CompilationController@search')->name('search');
     });
@@ -89,6 +94,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
       //  Route::post('store', 'PlaceController@store')->name('store');
        // Route::get('edit/{id}', 'PlaceController@edit')->name('edit');
         Route::get('view/{id}', 'CustomerController@details')->name('view');
+        Route::post('change_status', 'CustomerController@change_status')->name('change-status');
       //  Route::post('update/{id}', 'PlaceController@update')->name('update');
       //  Route::get('status/{id}/{status}', 'PlaceController@status')->name('status');
       //  Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');
@@ -107,6 +113,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
         //  Route::get('status/{id}/{status}', 'PlaceController@status')->name('status');
         //  Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');
         //   Route::post('search', 'PlaceController@search')->name('search');
+    });
+
     });
 
 

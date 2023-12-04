@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Brian2694\Toastr\Facades\Toastr;
-
-use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {

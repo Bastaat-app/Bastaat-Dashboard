@@ -2,18 +2,14 @@
 
 namespace App\Repositories\Admin\Vendor;
 
-//use App\Http\Requests\Admin\CityRequest;
-
-
 use App\Http\Requests\Vendor\ProductRequest;
-use App\Models\Category;
-use App\Models\Compilation;
 use App\Models\Food;
 use App\Models\Food_slider_image;
 use App\Models\Restaurant;
 use App\Repositories\Admin\BaseRepository;
 use App\Traits\UploadAttachTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductRepository extends BaseRepository
 {
@@ -31,14 +27,14 @@ class ProductRepository extends BaseRepository
         if($type=='store'){
             $validate= new ProductRequest() ;
 
-            $request = $request->validate($validate->rules());
+            $request = $request->validate($validate->rules(),[],$validate->attributes());
         }else{
             $request_data=$request->all();
 
             $id=$request_data['id'];
             $validate= new ProductRequest() ;
 
-            $request = $request->validate($validate->rules());
+            $request = $request->validate($validate->rules(),[],$validate->attributes());
             $request['id']=$id;
         }
         $data=$request;
@@ -53,7 +49,7 @@ class ProductRepository extends BaseRepository
     {
         if ($request != null)
             $data = $this->setDataPayload($request, 'store');
-print_r($request->all());
+//print_r($request->all());
         if($request->has('image')) {
             $images = ($this->upload(array($request->image), 'product'));
             unset($request->image);
@@ -99,19 +95,22 @@ print_r($request->all());
 
     public function update($id, Request $request = null, $data = null)
     {
-        print_r($request->all());
+
         if ($request != null)
             $data = $this->setDataPayload($request, 'update');
-//print_r($request->all()); exit;
+
        if($request->has('image')) {
-           if(session('old_image')!=$request->image){
+
+          // if(session('old_image')!=$request->image){
+
                $images = ($this->upload(array($request->image), 'product'));
-           }
+          // }
 
            unset($request->image);
        }
+
         // $request->image=$images;
-        $request= $request->except(['_token','image']);
+        $request= $request->except(['_token','image','old_image']);
 
         if(isset($images[0]))
             $request['image']=$images[0];
@@ -149,6 +148,10 @@ print_r($request->all());
     public function change_status($id,$status){
         $this->model->where('id',$id)->update(['status'=>$status]);
     }
+    public function fav_status($id,$status){
+        $this->model->where('id',$id)->update(['favourite'=>$status]);
+
+    }
     public function delete($id)
     {
         if ($id == 0) {
@@ -163,6 +166,13 @@ print_r($request->all());
          }
         Food_slider_image::where('food_id',$id)->delete();
         return true;
+    }
+    public function destory_image($request){
+        if(File::exists($request->image)) {
+            unlink($request->image);
+        }
+
+        Food_slider_image::where(['food_id'=>$request->id,'image_path'=>$request->image])->delete();
     }
 
 

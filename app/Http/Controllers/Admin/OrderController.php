@@ -1,23 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
-use App\Http\Controllers\Controller;
-use App\Models\Compilation;
-use App\Models\Zone;
-use App\Repositories\Admin\SingleRebo\CompilationRepository;
-use App\Repositories\Admin\SingleRebo\CustomerRepository;
 use App\Repositories\Admin\SingleRebo\OrderRepository;
-use App\Repositories\Admin\SingleRebo\PlaceRepository;
-
-use App\Traits\UploadAttachTrait;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-
-use App\Models\Restaurant;
-use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
 use App\CentralLogics\Helpers;
 
 class OrderController extends BaseController

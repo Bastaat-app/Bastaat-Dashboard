@@ -3,17 +3,11 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Admin\BaseController;
-use App\Http\Controllers\Controller;
-use App\Models\Zone;
+use App\Modules\Core\Helper;
 use App\Repositories\Admin\Vendor\CategoryRepository;
 use App\Traits\UploadAttachTrait;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
-use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
-use App\CentralLogics\Helpers;
 
 class CategoryController extends BaseController
 {
@@ -29,7 +23,7 @@ class CategoryController extends BaseController
     }
     public function index(Request $request, $with = [], $withCount = [], $filter = '', $paginate = 10, $whereHas = [])
     {
-       $categories= parent::index($request, [], [], '', 10, []);
+       $categories= parent::index($request, [], [], 'restaurant_id|'.Helper::get_restaurant_id().'|=', 10, []);
 
        /* if ($request->filled("export_excel") && $request->export_excel == true) {
 
@@ -60,12 +54,15 @@ class CategoryController extends BaseController
 
     public function store(Request $request)
     {
+
+
         parent::store($request);
        return redirect(route('vendor.category.index'));
     }
 
     public function edit($id)
     {
+
        // $governorates = Governorate::orderBy('name_' . app()->getLocale())->get();
         //$record = parent::show($id, 'city');
         $record= parent::show($id);

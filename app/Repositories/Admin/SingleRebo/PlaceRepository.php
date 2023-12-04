@@ -1,14 +1,8 @@
 <?php
 
 namespace App\Repositories\Admin\SingleRebo;
-
-//use App\Http\Requests\Admin\CityRequest;
-
-
 use App\Http\Requests\Admin\PlaceEditRequest;
 use App\Http\Requests\Admin\PlaceRequest;
-use App\Models\Compilation;
-use App\Models\Message;
 use App\Models\Order;
 use App\Models\Restaurant;
 use App\Models\RestaurantWallet;
@@ -22,7 +16,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use mysql_xdevapi\Exception;
 
 class PlaceRepository extends BaseRepository
 {
@@ -40,14 +33,14 @@ class PlaceRepository extends BaseRepository
         if($type=='store'){
             $validate= new PlaceRequest() ;
 
-            $request = $request->validate($validate->rules());
+            $request = $request->validate($validate->rules(),[],$validate->attributes());
         }else{
             $request_data=$request->all();
             $vendor_id=$request_data['vendor_id'];
             $id=$request_data['id'];
             $validate= new PlaceEditRequest() ;
 
-            $request = $request->validate($validate->rules());
+            $request = $request->validate($validate->rules(),[],$validate->attributes());
             $request['vendor_id']=$vendor_id;
             $request['id']=$id;
         }
@@ -196,8 +189,8 @@ class PlaceRepository extends BaseRepository
          $data['order_amounts']=Order::where(['restaurant_id'=>$id,'order_status'=>'delivered'])->sum('order_amount');
 
           $data['place']= parent::show($id,['vendor','compilation'],['orders']);
-          $data['orders']= Order::where('restaurant_id',$id)->with('customer--')->paginate(config('default_pagination'));
-          $data['reviews']=Review::with(['customer--','food'=>function ($query) use ($id){
+          $data['orders']= Order::where('restaurant_id',$id)->with('customer')->paginate(config('default_pagination'));
+          $data['reviews']=Review::with(['customer','food'=>function ($query) use ($id){
                                            $query->where('restaurant_id',$id);
                                         }])->paginate(config('default_pagination'));
           $data['withdraw']= WithdrawRequest::where('vendor_id',$data['place']['vendor_id'])->with('vendor')->addSelect( DB::raw('SUM(amount) AS withdraw_amount'))->get();

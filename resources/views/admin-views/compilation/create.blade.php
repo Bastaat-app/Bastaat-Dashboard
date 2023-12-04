@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    {{__("index")}}
+    {{__("create_compilation")}}
 @endsection
 
 @section('content')
@@ -24,10 +24,16 @@
                             <div class="mb-3">
                                 <label for="projectname" class="form-label">اسم التصنيف</label>
                                 <input type="text"  value="{{old("title")}}" name="title" id="projectname" class="form-control @error("title") is-invalid @endError" placeholder="اكتب هنا اسم التصنيف">
+                                @error("title")
+                                <span class="text-danger">{{ $message }}</span>
+                                @endError
                             </div>
                             <div class="mb-3">
                                 <label for="project-overview" class="form-label">وصف التصنيف</label>
                                 <textarea class="form-control @error("description") is-invalid @endError"  value="{{old("description")}}" name="description" id="project-overview" rows="5" placeholder="اكتب هنا وصف التصنيف"></textarea>
+                                @error("description")
+                                <span class="text-danger">{{ $message }}</span>
+                                @endError
                             </div>
                         </div>
                         <!-- end col-->
@@ -36,7 +42,7 @@
                                 <div class="mt-3">
                                     <input type="file" name="image[]" data-plugins="dropify" data-max-file-size="1M" accept="image/*"
                                            class=" @error("image") is-invalid @endError"   />
-                                    @error("image[]")
+                                    @error("image")
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
                                     <p class="text-muted text-center mt-2 mb-0">يمكنك تحميل صورة التصنيف بحجم لا يتعدي ال ١ ميجا</p>
