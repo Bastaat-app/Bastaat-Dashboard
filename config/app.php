@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Facade;
 return [
 'default_pagination'=>10,
 'allow_distance'=>10,
+'currency'=>'SAR',
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -183,6 +184,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+
+
 
 
         /*

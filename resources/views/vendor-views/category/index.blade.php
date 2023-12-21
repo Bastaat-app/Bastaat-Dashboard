@@ -44,7 +44,6 @@
                                 </th>
                                 <th>ID</th>
                                 <th>اسم التصنيف</th>
-                                <th>وصف التصنيف</th>
                                 <th>الحالة</th>
                                 <th style="width: 85px;">الإجراء</th>
                             </tr>
@@ -61,7 +60,6 @@
                                     </td>
                                     <td> {{$category->id}} </td>
                                     <td>{{$category->name}}</td>
-                                    <td>{{$category->description}} </td>
                                     <td>
                                         <input type="checkbox"  @if($category->status==1) checked @endif  data-plugin="switchery" value="{{$category->status}}" id="change_status" status_id="{{$category->id}}" data-color="#1bb99a" />
                                     </td>

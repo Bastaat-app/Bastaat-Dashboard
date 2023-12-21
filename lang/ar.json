@@ -74,7 +74,17 @@
     "pending": "في الانتظار",
     "delivered": "تم التسليم",
     "processing": "يتم التجهيز ",
-    "canceled": "تم الالغاء"
+    "canceled": "تم الالغاء",
+    "Status Changed succesfully": "تم تغيير الحاله",
+    "user wallet Charged succesfully": "تم شحن محفظه العميل",
+    "user_id": "الرقم التعريفي للعميل",
+    "amount": "المبلغ",
+    "chat": "التواصل",
+    "error_occured": "حدث خطأ",
+    "please_only_input_png_or_jpg_type_file": "الصور المسموح بيها امتداد png,jpg فقط",
+    "file_size_too_big": "حجم الملف كبير جدا لايمكن رفعه",
+    "user_not_found": "لا يوجد"
+
 
 
 

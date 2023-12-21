@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Modules\Core\Helper;
 use App\Scopes\ZoneScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -127,7 +128,7 @@ class Restaurant extends Model
 		'minimum_shipping_charge',
 		'per_km_shipping_charge'
 	];
-    protected $appends = ['gst_status','gst_code','logo_url','cover_photo_url'];
+    protected $appends = ['gst_status','gst_code','logo_url','cover_photo_url','rate_data'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -138,6 +139,12 @@ class Restaurant extends Model
         'gst'
     ];
 
+    public function getRateDataAttribute()
+    {
+        echo"jkjk"; exit;
+        $data= Helper::calculate_restaurant_rating($this->rating);
+        return $data['rating'];
+    }
     public function getLogoUrlAttribute()
     {
         return asset($this->logo);
@@ -155,6 +162,10 @@ class Restaurant extends Model
     public function foods()
     {
         return $this->hasMany(Food::class);
+    }
+    public function fav()
+    {
+        return $this->belongsTo(FavRestaurant::class,'restaurant_id','id');
     }
 
     public function schedules()
@@ -204,6 +215,7 @@ class Restaurant extends Model
         return [$rating5, $rating4, $rating3, $rating2, $rating1];
     }
 
+
     public function getGstStatusAttribute()
     {
         return (boolean)($this->gst?json_decode($this->gst, true)['status']:0);
@@ -235,6 +247,14 @@ class Restaurant extends Model
 + sin( radians(' . $location['lat']  . ') ) * sin( radians( restaurants.latitude ) ) ) )');
         $allow=config('allow_distance');
      return   $query->selectRaw(" {$sqlDistance} AS distance")->havingRaw("distance <= 10");
+    }
+    public function scopeRate($query)
+    {
+      //return $query->selectRaw('JSON_EXTRACT(rating, "$.*") as data'); exit;
+        return $query->orderByRaw('JSON_UNQUOTE(JSON_EXTRACT(rating, "$.5")) DESC');
+            //->get();
+       // print_r($highestRate); exit;
+
     }
 
 

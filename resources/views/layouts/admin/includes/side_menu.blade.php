@@ -125,12 +125,14 @@
                 <span class="menu-icon">
                   <i data-feather="gift"></i>
                 </span>
+                    <a href="{{route('admin.order.index',['status'=>'refunded'])}}" class="menu-link">
                     <span class="menu-text"> الطلبات المستردة</span>
                     <span class="badge bg-success rounded-pill ms-auto">4</span>
+                    </a>
                 </a>
             </li>
             <li class="menu-item">
-                <a href="client-wallet.html" class="menu-link">
+                <a href="{{route('admin.customer-wallet.create')}}" class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="gift"></i>
                 </span>
@@ -139,7 +141,7 @@
             </li>
             <li class="menu-title"> المساعدة</li>
             <li class="menu-item">
-                <a href="apps-chat.html" class="menu-link">
+                <a href="{{ route('admin.message.list') }}" class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="message-square"></i>
                 </span>

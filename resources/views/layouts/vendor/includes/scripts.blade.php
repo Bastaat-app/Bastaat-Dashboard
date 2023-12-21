@@ -30,6 +30,7 @@
 
 <!-- Init js-->
 <script src="{{asset('assets/js/pages/form-fileuploads.init.js')}}"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
 
 <script>

@@ -96,13 +96,14 @@ class Food extends Model
     protected $appends = ['image_url'];
     public function getImageUrlAttribute()
     {
-        return asset('images/products/'.$this->image);
+        return asset($this->image);//'images/product/'.
     }
     public function scopeActive($query)
     {
-        return $query->where('status', 1)->whereHas('restaurant', function ($query) {
+        //->where('status', 1)
+    //    return $query->whereHas('restaurant', function ($query) {
             return $query->where('status', 1);
-        });
+       // });
     }
 
     public function scopeAvailable($query,$time)

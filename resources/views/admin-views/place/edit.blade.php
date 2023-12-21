@@ -332,7 +332,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Include Map API library (e.g., Google Maps API) -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMtllOMzchTUwJ_FCi1SstrTWrD5yhO3w"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsyPlzRkgHQSwCHVzLFtbf_pZMOeBzPjU"></script>
 <script>
     $(document).ready(function() {
 

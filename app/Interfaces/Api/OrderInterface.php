@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 interface  OrderInterface
 {
 
+    public function calcualate_order_amount($request) ;
+    public function payment_success() ;
     public function cart_order( Request $request) ;
     public function get_pervious_address($user_id) ;
     public function get_address($user_id,$address_id) ;

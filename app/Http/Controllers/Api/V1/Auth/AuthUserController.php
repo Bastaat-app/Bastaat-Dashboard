@@ -475,4 +475,19 @@ class AuthUserController extends Controller
             'code' => HTTPResponseCodes::Sucess['code']
         ], HTTPResponseCodes::Sucess['code']);
     }
+
+    public function updateDeviceToken(Request $request)
+    {
+        Auth::user()->cm_firebase_token =  $request->token;
+
+        Auth::user()->save();
+        return response()->json([
+            'status' => HTTPResponseCodes::Sucess['status'],
+            'message' => __('Token successfully stored.'),
+            'errors' => [],
+            'data' =>[], //UserCollection::collection($user),
+            'code' => HTTPResponseCodes::Sucess['code']
+        ], HTTPResponseCodes::Sucess['code']);
+
+    }
 }

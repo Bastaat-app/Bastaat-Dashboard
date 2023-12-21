@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Http\Resources\Api\CategoryResource;
+use App\Models\Category;
 use App\Modules\Core\Helper;
 use Illuminate\Http\Resources\Json\JsonResource;
-
 class PopularRestaurantResource extends JsonResource
 {
     /**
@@ -19,7 +20,13 @@ class PopularRestaurantResource extends JsonResource
             $cats=$this->category_ids;
         else
             $cats=[];
+if( isset($this->restaurant)){
+    return $this->restaurant;
+}
+        $this->whenLoaded('restaurant', function() {
+            return new  PopularRestaurantResource($this->restaurant);
 
+        });
         return //parent::toArray($request);
         [
             'id'=>$this->id,
@@ -44,7 +51,7 @@ class PopularRestaurantResource extends JsonResource
             'orders_count'=>$this->orders_count??0,
             'rating_count'=>$this->rating_count,
             'distance_time'=>$this->distance_time??0,
-            'category_ids'=>$cats,
+            'category_ids'=> CategoryResource::collection(Category::where('restaurant_id',$this->id)->get()),
             'compilation_id'=>$this->compilation_id?? 0
         ];
     }

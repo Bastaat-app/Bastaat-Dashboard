@@ -1,9 +1,11 @@
 <?php
 namespace App\Modules\Core;
 
+use App\Models\Coupon;
+use App\Models\Food;
 use App\Models\Order;
 use App\Models\Restaurant;
-
+use Carbon\Carbon;
 class Helper
 {
     public static function restaurant_data_formatting($data, $multi_data = false)
@@ -56,6 +58,7 @@ class Helper
     public  static function calculate_restaurant_rating($ratings)
     {
         $total_submit = $ratings[0]+$ratings[1]+$ratings[2]+$ratings[3]+$ratings[4];
+      //  print_r($total_submit); exit;
         $rating = ($ratings[0]*5+$ratings[1]*4+$ratings[2]*3+$ratings[3]*2+$ratings[4])/($total_submit?$total_submit:1);
         return ['rating'=>$rating, 'total'=>$total_submit];
     }
@@ -282,7 +285,9 @@ class Helper
         return $discount_ammount;
     }
 
-    public static function is_valide($coupon, $user_id, $restaurant_id)
+
+    // copoun check
+    public static function is_valide($coupon, $user_id, $restaurant_id,$cart_items=[])
     {
 
         $start_date = Carbon::parse($coupon->start_date);
@@ -294,7 +299,7 @@ class Helper
             return 407;  //coupon expire
         }
 
-        if($coupon->coupon_type == 'restaurant_wise' && !in_array($restaurant_id, json_decode($coupon->data, true)))
+       /* if($coupon->coupon_type == 'restaurant_wise' && !in_array($restaurant_id, json_decode($coupon->data, true)))
         {
             return 404;
         }
@@ -318,11 +323,40 @@ class Helper
             if ($total < $coupon['limit']) {
                 return 200;
             }else{
-                return 406;//Limite orer
+                return 406;//Limite error
             }
-        }
-        if ($coupon['limit'] == null) {
-            return 200;
+        }*/
+        if ($coupon != null) {
+            $product_price=0;
+            $cart_items=json_decode($cart_items, true);
+            foreach ($cart_items as $key => $value) {
+                $food = food::where('id', $value['food_id'])->first();
+                $product_price +=   $food ['price']* $value['quantity'];
+            }
+
+            if($coupon) {
+
+               // $coupon1=Coupon::active()->where(['code' => $coupon])->get();
+
+
+                if (isset($coupon['min_purchase'])) {
+
+                    if ($product_price < $coupon['min_purchase']) {
+                        /*return response()->json([
+                            'status' => false,
+                            'errors' => __('min_purchase to apply coupon is ') . $coupon['min_purchase'],
+                            'message' => __('min_purchase to apply coupon is ') . $coupon['min_purchase'],
+                            'data' => [],
+                            'code' => 407
+                        ], HTTPResponseCodes::Sucess['code']);*/
+                        return __('min_purchase to apply coupon is ') . $coupon['min_purchase'];
+                     //   return (array('status'=>false,'msg'=> ));
+                    }
+
+                }
+                return 200;
+            }
+
         } else {
             $total = Order::where(['user_id' => $user_id, 'coupon_code' => $coupon['code']])->count();
             if ($total < $coupon['limit']) {
@@ -446,5 +480,23 @@ class Helper
         return auth('vendor')->user()->restaurants[0]->id;
     }
 
+    public static function get_vendor_id()
+    {
+        if (auth('vendor')->check()) {
+            return auth('vendor')->id();
+        } else if (auth('vendor_employee')->check()) {
+            return auth('vendor_employee')->user()->vendor_id;
+        }
+        return 0;
+    }
+    public static function get_vendor_data()
+    {
+        if (auth('vendor')->check()) {
+            return auth('vendor')->user();
+        } else if (auth('vendor_employee')->check()) {
+            return auth('vendor_employee')->user()->vendor;
+        }
+        return 0;
+    }
 
 }

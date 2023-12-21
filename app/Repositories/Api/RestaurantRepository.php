@@ -5,10 +5,12 @@ namespace App\Repositories\Api;
 use App\Http\Resources\Api\PopularRestaurantResource;
 use App\Interfaces\Api\RestaurantInterface;
 use App\Models\Category;
+use App\Models\FavRestaurant;
 use App\Models\Food;
 use App\Models\Restaurant;
 use App\Modules\Core\Helper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RestaurantRepository implements RestaurantInterface
@@ -19,20 +21,38 @@ class RestaurantRepository implements RestaurantInterface
 
         // TODO: Implement get_restaurant() method.
 
-        DB::enableQueryLog();
+      //  DB::enableQueryLog();
         $paginator = Restaurant::
-            withOpen()->
-             whereIn('zone_id', $zone_ids)
+            withOpen()
+           // ->whereIn('zone_id', $zone_ids)
             ->Active();
           //  ->type($type)
         if($location!=[]) {
             $paginator = $paginator->WithLocation($location);
             if (($filter_data != []) && ($filter_data != "all")) {
                 foreach ($filter_data as $filter_item => $value) {
-                    $paginator=$paginator->where($filter_item, $value);
+                    if($filter_item=="name") {
+                        $paginator = $paginator->where($filter_item, 'like', '%' . $value . '%');
+                        $paginator = $paginator->orwhere('footer_text','like', '%' . $value . '%');
+                    }else if($filter_item=='order_count'){
+                        $paginator =$paginator->orderBy($filter_item,$value);
+                    }else if($filter_item=='high_rate'){
+                        $paginator =$paginator->Rate();
+
+                    }else if($filter_item=='delivery_time'){
+                        $paginator =$paginator->orderBy($filter_item,$value);
+                    }else if($filter_item=='arrange_order'){
+                        $paginator =$paginator->orderBy('name',$value);
+                    }
+                        else {
+                        $paginator = $paginator->where($filter_item, $value);
+                    }
 
                 }
             }
+        }else{
+
+            $paginator->whereIn('zone_id', $zone_ids);
         }
          /* whereHas(function ($query) use($location){
               if($location['lat'] !== null && $location['lng'] !== null){
@@ -47,10 +67,10 @@ class RestaurantRepository implements RestaurantInterface
            // ->orderBy('open', 'desc')
         $paginator=$paginator->orderBy('created_at', 'desc');
           $paginator1=  $paginator->paginate($limit, ['*'], 'page', $offset);
-
+//print_r($paginator1); exit;
         $result1=Helper::restaurant_data_formatting($paginator1,true);
-            //$query = DB::getQueryLog();
-            //print_r($query);exit;
+       //  $query= DB::getQueryLog();
+      //print_r($query); exit;
        // if(count($paginator->items())==0)
          //   return [];
         /*$paginator->count();*/
@@ -143,6 +163,44 @@ class RestaurantRepository implements RestaurantInterface
             ->get();
 
             return($restaurants);
+    }
+    public function get_user_fav_restaurant($request)
+    {
+        // TODO: Implement get_user_fav_restaurant() method.
+        $limit=$request->limit?$request->limit:6;
+        $offset=$request->offset?$request->offset:0;
+        $user_id= Auth::guard('api')->user()->id;
+         $data= FavRestaurant::with(['restaurant'=>function ($query) use($user_id) {
+             $query->withOpen();
+                 //  ->orderBy('open', 'desc');
+         }
+         ])->where('user_id',$user_id)->orderBy('id','asc') ->paginate($limit, ['*'], 'page', $offset);
+     $result=[];
+       foreach($data as $dt){
+           //print_r($dt->restaurant); exit;
+           $result1=Helper::restaurant_data_formatting($dt->restaurant, false);
+           $result[]= new PopularRestaurantResource($result1);
+       }
+       return $result;
+        // return PopularRestaurantResource::collection($data);
+    }
+
+
+    public function add_fav_restaurant($request){
+
+        $user_id= Auth::guard('api')->user()->id;
+        $restaurant_id=$request->restaurant_id;
+       $check_add= FavRestaurant::where(['user_id'=>$user_id,'restaurant_id'=>$restaurant_id])->get()->toArray();
+
+        if($check_add==[]) {
+
+            FavRestaurant::insert(['user_id' => $user_id, 'restaurant_id' => $restaurant_id]);
+
+            return true;
+        }else{
+
+            return false;
+        }
     }
 
 

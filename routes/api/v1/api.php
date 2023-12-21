@@ -4,12 +4,15 @@ use App\Http\Controllers\Api\V1\BannerController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CompilationController;
 use App\Http\Controllers\Api\V1\FoodController;
-use App\Http\Controllers\Api\V1\OrderControler;
 use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\RestaurantController;
 use App\Http\Controllers\Api\V1\ReviewController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\ZoneController;
+use App\Http\Controllers\Api\V1\ConversationController;
+use App\Http\Controllers\Api\V1\SearchController;
+use App\Http\Controllers\StripeController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::namespace('Api\V1\Auth')->prefix('auth')->group (function() {
 
     route::post('login','AuthUserController@login')->name('login_api')->withoutMiddleware([auth::class,'auth_api']);
@@ -37,6 +41,7 @@ Route::namespace('Api\V1\Auth')->prefix('auth')->group (function() {
     route::post('refresh','AuthUserController@refresh')->name('refresh_api')/*->withoutMiddleware([auth::class,'auth_api'])*/;
     route::post('refresh','AuthUserController@refresh')->name('refresh_api')/*->withoutMiddleware([auth::class,'auth_api'])*/;
     route::post('check-login','AuthUserController@checkLogin')->name('check-login')/*->withoutMiddleware([auth::class,'auth_api'])*/;
+    route::post('update-device-token','AuthUserController@updateDeviceToken')->name('update-fcm');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api\V1'], function () {
@@ -56,7 +61,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\V1'], function () {
       Route::put('reset-password', 'PasswordResetController@reset_password_submit');*/
     //});
 });
-
+/* home search*/
+Route::get('/home-search', [SearchController::class, 'home_search'])->withoutMiddleware('auth_api');
+Route::get('/advanced-rest-search', [SearchController::class, 'advanced_rest_search'])->withoutMiddleware('auth_api');
 /* get zones*/
 Route::get('/zones', [ZoneController::class, 'get_zones'])->withoutMiddleware('auth_api');
 Route::get('/get-banner', [BannerController::class, 'get_banner'])->withoutMiddleware('auth_api');
@@ -75,7 +82,11 @@ Route::namespace('Api\V1')->prefix('restaurants')->group (function() {
     Route::get('/popular', [RestaurantController::class, 'get_popular_restaurants'])->name('popular-restaurants') ->withoutMiddleware('auth_api');;
     Route::get('/details/{id}', [RestaurantController::class, 'get_details'])->name('details-restaurants')->withoutMiddleware('auth_api');;
     Route::get('/latest', [RestaurantController::class, 'get_latest'])->name('latest-restaurants')->withoutMiddleware('auth_api');
+    Route::group(['middleware'=>['auth_api:api']], function () {
 
+        Route::get('/get-user-fav-restaurant', [RestaurantController::class, 'get_user_fav_restaurant'])->name('get_user_fav_restaurant');
+        Route::post('/add-fav-restaurant', [RestaurantController::class, 'add_fav_restaurant'])->name('add_fav_restaurant');
+    });
 });
 
 Route::namespace('Api\V1')->prefix('compilations')->group (function() {
@@ -86,7 +97,7 @@ Route::namespace('Api\V1')->prefix('food')->withoutMiddleware('auth_api')->group
     Route::get('/list', [FoodController::class, 'get_food'])->name('list-food');
     Route::get('/single-food', [FoodController::class, 'single_food'])->name('single-food');
 });
-Route::namespace('Api\V1')->prefix('order')->group (function() {+
+Route::namespace('Api\V1')->prefix('order')->group (function() {
     Route::group(['middleware'=>['auth_api:api']], function () {
         Route::post('/cart', [OrderController::class, 'cart_order'])->name('cart-order');
         Route::get('/pervious-address',[OrderController::class,'get_pervious_address'])->name('pervious-address');
@@ -96,8 +107,40 @@ Route::namespace('Api\V1')->prefix('order')->group (function() {+
         Route::get('/cancel-order',[OrderController::class,'cancel_order'])->name('cancel-order');
         Route::get('/get-order-details',[OrderController::class,'get_order_details'])->name('get-order-details');
         //  Route::get('/single-food', [FoodController::class, 'single_food'])->name('single-food');
+        Route::post('/check-coupon', [OrderController::class, 'check_coupon']);
+        Route::post('/calcualate-order', [OrderController::class, 'calcualate_order_amount']);
+
+        Route::post('/payment-link', [OrderController::class, 'generatePaymentLink']);
+        Route::post('/payment/callback', [OrderController::class, 'paymentCallback']);
+        Route::post('/sucess', [OrderController::class, 'success']);
     });
 });
+Route::namespace('Api\V1')->prefix('payment')->group (function() {
+    Route::group(['middleware' => ['auth_api:api']], function () {
+        Route::post('/create-payment-link', [PaymentController::class, 'pay']);
+        Route::get('/status', [PaymentController::class, 'status']);
+        Route::post('/create-payment-wallet-link', [PaymentController::class, 'create_payment_wallet_link']);
+        Route::get('/wallet-status', [PaymentController::class, 'wallet_status']);
+        Route::get('/payment-method', [PaymentController::class, 'payment_method']);
+        Route::get('/list-wallet-transaction', [PaymentController::class, 'transactions']);
+    });
+
+     //   Route::get('/after-payment/{reference}', [PaymentController::class, 'afterPayment'])->name('payment.complete')->withoutMiddleware([auth::class,'auth_api']);
+
+});
+
+// Chatting
+
+    Route::namespace('Api\V1')->prefix('message')->group (function() {
+        Route::group(['middleware' => ['auth_api:api']], function () {
+            Route::get('list', [ConversationController::class,'conversations']);
+            Route::get('search-list', [ConversationController::class,'get_searched_conversations']);
+            Route::get('details', [ConversationController::class,'messages']);
+            Route::post('send', [ConversationController::class,'messages_store']);
+            Route::post('chat-image', [ConversationController::class,'chat_image']);
+         });
+     });
+
 
 Route::namespace('Api\V1')->prefix('user')->group (function() {
     Route::group(['middleware'=>['auth_api:api']], function () {
@@ -115,6 +158,13 @@ Route::namespace('Api\V1')->prefix('review')->group (function() {
     Route::get('/get-restaurant-review',[ReviewController::class,'get_restaurant_review'])->name('get-restaurant-review');
     });
 });
+Route::namespace('/')->prefix('stripe')->group (function() {
+    Route::group(['middleware'=>['auth_api:api']], function () {
+        Route::post('/charge', [StripeController::class, 'charge']);
+        Route::post('make-payment',[StripeController::class,'makePayment']);
+    });
+});
+
 
 
 /*get banners*/

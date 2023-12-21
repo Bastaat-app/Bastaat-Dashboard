@@ -11,6 +11,8 @@ interface  RestaurantInterface
     public function  get_popular($zone_ids,$filter_data, $limit , $offset,$location);
     public  function  get_details($id);
     public function get_latest($zone_ids,$filter_data,$limit,$location);
+    public function get_user_fav_restaurant($request);
+    public function add_fav_restaurant($request);
 
 
 

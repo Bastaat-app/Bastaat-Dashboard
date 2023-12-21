@@ -24,7 +24,7 @@
 <script src="{{asset('assets/js/pages/form-advanced.init.js')}}"></script>
 <!-- Dashboar 1 init js-->
 <script src="{{asset('assets/js/pages/dashboard-1.init.js')}}"></script>
-
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
 <script>
 /*

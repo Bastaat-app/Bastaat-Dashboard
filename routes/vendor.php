@@ -4,6 +4,7 @@ use App\Http\Controllers\Vendor\CategoryController;
 use App\Http\Controllers\Vendor\OrderController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\CustomerController;
+use App\Http\Controllers\Vendor\ConversationController;
 use Illuminate\Support\Facades\Route;
 
 App::setLocale('ar');
@@ -80,7 +81,15 @@ Route::group(['namespace' => 'App\Http\Controllers\Vendor', 'as' => 'vendor.'], 
             //  Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');
             //   Route::post('search', 'PlaceController@search')->name('search');
         });
+
+        // message
+        Route::group(['prefix' => 'message', 'as' => 'message.'], function () {
+            Route::get('list', 'ConversationController@list_index')->name('list');
+            Route::post('store/{user_id}/{user_type}', 'ConversationController@store')->name('store');
+            Route::get('view/{conversation_id}/{user_id}', 'ConversationController@view')->name('view');
+        });
     });
+
 
   /*  Route::group(['middleware' => ['vendor']], function () {
         Route::get('/', function () {

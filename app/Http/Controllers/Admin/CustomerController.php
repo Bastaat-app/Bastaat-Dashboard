@@ -47,7 +47,7 @@ class CustomerController extends BaseController
         if(isset($request['type']))
             $status= !$status;
         $data= $this->repository->change_status($id,$status);
-
-        return back()->with('success','Copoun Status Changed succesfully');
+        session()->flash('success', __('Status Changed succesfully'));
+       //return back()->with('success','Copoun Status Changed succesfully');
     }
 }

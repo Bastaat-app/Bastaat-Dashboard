@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\FavRestautantRequest;
 use App\Http\Requests\Api\LatestRestaurantRequest;
 use App\Http\Requests\Api\PopularRestaurantRequest;
 use App\Http\Resources\Api\PopularRestaurantResource;
@@ -10,6 +11,7 @@ use App\Modules\Core\HTTPResponseCodes;
 use App\Repositories\Api\RestaurantRepository;
 use App\Traits\LocationTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RestaurantController extends Controller
 {
@@ -155,6 +157,39 @@ class RestaurantController extends Controller
                  'code'=>HTTPResponseCodes::BadRequest['code']
              ],HTTPResponseCodes::Sucess['code']);
          }*/
+    }
+
+    public function get_user_fav_restaurant(Request $request){
+
+        $rest=new RestaurantRepository();
+        $restaurants = $rest->get_user_fav_restaurant($request);
+        return response()->json([
+            'status' => HTTPResponseCodes::Sucess['status'],
+            'message'=>HTTPResponseCodes::Sucess['message'],
+            'errors' => [],
+            'data' => $restaurants,
+            'code'=>HTTPResponseCodes::Sucess['code']
+        ],HTTPResponseCodes::Sucess['code']);
+    }
+    public function add_fav_restaurant(FavRestautantRequest $request){
+
+        $rest=new RestaurantRepository();
+        $return1= $rest->add_fav_restaurant($request);
+        if($return1==false){
+            return response()->json([
+                'status' =>false,
+                'errors'=>__('added_before'),
+                'message' =>__('added_before'),
+                'code'=>HTTPResponseCodes::BadRequest['code']
+            ],HTTPResponseCodes::Sucess['code']);
+        }
+        return response()->json([
+            'status' => HTTPResponseCodes::Sucess['status'],
+            'message'=>HTTPResponseCodes::Sucess['message'],
+            'errors' => [],
+            'data' => [],
+            'code'=>HTTPResponseCodes::Sucess['code']
+        ],HTTPResponseCodes::Sucess['code']);
     }
 }
 

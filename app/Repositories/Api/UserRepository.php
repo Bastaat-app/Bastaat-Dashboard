@@ -13,6 +13,7 @@ use App\Models\Food;
 use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UserRepository implements UseInterface
@@ -24,7 +25,7 @@ class UserRepository implements UseInterface
         // TODO: Implement list_cats() method.
         if($request->has('address_id'))
             $address_id=$request->address_id;
-        $address[ 'user_id']=auth()->user()->id;
+        $address[ 'user_id']=Auth::->user()->id;
         if($request->has('contact_person_number'))
         $address[ 'contact_person_number']=$request->contact_person_number;
         if($request->has('address'))

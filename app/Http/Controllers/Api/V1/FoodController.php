@@ -15,6 +15,7 @@ class FoodController extends Controller
     use LocationTrait;
     public function get_food(FoodRequest $request)
     {
+        $filter_data=[];
         $limit= $request->limit;
         $offset=$request->offset;
         $restaurant_id=$request->restaurant_id;
@@ -31,8 +32,10 @@ class FoodController extends Controller
         $location=[];
         if($request->filled('lati')&& $request->filled('lati'))
             $location= array('lat' => $request['lati'], 'lng' => $request['longi']);
+        if($request->has('search'))
+            $filter_data=['name'=>$request->search];
         $food=new FoodRepository();
-       $foods= $food->get_food($zone_ids,$restaurant_id,$category_ids,$limit,$offset,$location);
+       $foods= $food->get_food($zone_ids,$restaurant_id,$category_ids,$limit,$offset,$location,$filter_data);
         return response()->json([
             'status' => HTTPResponseCodes::Sucess['status'],
             'message'=>HTTPResponseCodes::Sucess['message'],
@@ -71,5 +74,6 @@ class FoodController extends Controller
             ],HTTPResponseCodes::Sucess['code']);
             }
     }
+
 
 }

@@ -70,7 +70,7 @@
                                 </td>
                                 <td>{{$order->order_amount}} </td>
                                 <td>
-                                    <span class="badge  @if($order->order_status=='pending') {{'bg-warning rounded-pill'}}@elseif($order->order_status=='delivered'){{'bg-soft-success text-success'}}@elseif($order->order_status=='canceled'){{'bg-danger rounded-pill '}}@elseif($order->order_status=='processing'){{'bg-warning rounded-pill'}}@endif">@if($order->order_status=='pending') {{__('pending')}}@elseif($order->order_status=='delivered'){{__('delivered')}} @elseif($order->order_status=='canceled'){{__('canceled')}}  @elseif($order->order_status=='processing'){{__('processing')}} @endif </span>
+                                    <span class="badge  @if($order->order_status=='pending') {{'bg-warning rounded-pill'}}@elseif($order->order_status=='delivered'){{'bg-soft-success text-success'}}@elseif($order->order_status=='canceled'||$order->order_status=='refunded'){{'bg-danger rounded-pill '}}@elseif($order->order_status=='processing'){{'bg-warning rounded-pill'}}@endif">@if($order->order_status=='pending') {{__('pending')}}@elseif($order->order_status=='delivered'){{__('delivered')}} @elseif($order->order_status=='canceled'){{__('canceled')}}  @elseif($order->order_status=='processing'){{__('processing')}} @elseif($order->order_status=='refunded'){{__('refunded')}} @endif </span>
                                 </td>
                                 <td>
                                     <a href="{{route('admin.order.details',['id'=>$order->id])}}" class="action-icon">
@@ -80,7 +80,12 @@
                             </tr>
                             @endforeach
                             @else
-                                {{__('no data available')}}
+                                <tr>
+                                    <td colspan="9" class="text-center">
+                                        {{__('no data available')}}
+                                    </td>
+                                </tr>
+
                             @endif
                             </tbody>
                         </table>

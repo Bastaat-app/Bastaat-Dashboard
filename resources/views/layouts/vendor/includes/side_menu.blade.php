@@ -110,7 +110,7 @@
 
             <li class="menu-title"> المساعدة</li>
             <li class="menu-item">
-                <a href="apps-chat.html" class="menu-link">
+                <a href="{{ route('vendor.message.list') }}"  class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="message-square"></i>
                 </span>
